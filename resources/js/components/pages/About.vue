@@ -8,6 +8,7 @@
 </template>
 
 <script setup>
+import { useStoreAuth } from "../../store/auth";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
