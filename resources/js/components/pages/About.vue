@@ -8,22 +8,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { useStoreAuth } from "../../store/auth";
 import { useRouter } from "vue-router";
 
+const { user } = useStoreAuth();
 const router = useRouter();
-const user = ref({ name: "", email: "" });
-
-onMounted(() => {
-  axios
-    .get("/api/user")
-    .then((res) => {
-      user.value = res.data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
 
 const logout = () => {
   axios
