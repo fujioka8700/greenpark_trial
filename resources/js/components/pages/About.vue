@@ -10,9 +10,22 @@
 <script setup>
 import { useStoreAuth } from "../../store/auth";
 import { useRouter } from "vue-router";
+import { reactive, onMounted } from "vue";
 
-const { user } = useStoreAuth();
 const router = useRouter();
+
+const user = reactive({
+  name: "",
+  email: "",
+});
+
+onMounted(async () => {
+  const store = useStoreAuth();
+  await store.currentUser();
+
+  user.name = store.user.name;
+  user.email = store.user.email;
+});
 
 const logout = () => {
   axios

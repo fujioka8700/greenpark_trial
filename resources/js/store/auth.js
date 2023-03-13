@@ -7,18 +7,12 @@ export const useStoreAuth = defineStore("auth", {
 
   actions: {
     async currentUser() {
-      const isLoggedIn = await axios
+      await axios
         .get("/api/user")
         .then((res) => {
           this.user = res.data;
-          // console.log(res.data);
-          return true;
         })
-        .catch((err) => {
-          // console.log(err);
-          return false;
-        });
-      return isLoggedIn;
+        .catch((err) => {});
     },
   },
 });
