@@ -14,5 +14,14 @@ export const useStoreAuth = defineStore("auth", {
         })
         .catch((err) => {});
     },
+
+    logout() {
+      axios
+        .post("/api/logout")
+        .then((res) => {
+          this.router.push("/login");
+        })
+        .catch((err) => {});
+    },
   },
 });
