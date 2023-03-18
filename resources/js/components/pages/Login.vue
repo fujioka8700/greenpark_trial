@@ -1,8 +1,8 @@
 <template>
   <div>
     <h2>LoginView</h2>
-    <p>{{ getUserMessage }}</p>
-    <form @submit.prevent="login">
+    <p>{{ errorMessage }}</p>
+    <form @submit.prevent="auth.login(email, pass)">
       <label>
         <input type="email" v-model="email" placeholder="email" />
       </label>
@@ -16,35 +16,15 @@
 </template>
 
 <script setup>
+import { useStoreAuth } from "../../store/auth";
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 
-const router = useRouter();
+const auth = useStoreAuth();
+const { errorMessage } = storeToRefs(auth);
+
 const email = ref("");
 const pass = ref("");
-const getUserMessage = ref("");
-
-const login = () => {
-  axios
-    .get("/sanctum/csrf-cookie")
-    .then((res) => {
-      axios
-        .post("/api/login", {
-          email: email.value,
-          password: pass.value,
-        })
-        .then((res) => {
-          if (res.data.status_code == 200) {
-            router.push("/about");
-          }
-          getUserMessage.value = "ログインに失敗しました。";
-        })
-        .catch((err) => {
-          getUserMessage.value = "ログインに失敗しました。";
-        });
-    })
-    .catch((err) => {});
-};
 </script>
 
 <style lang="scss" scoped></style>
