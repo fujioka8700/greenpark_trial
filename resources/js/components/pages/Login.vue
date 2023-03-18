@@ -6,6 +6,7 @@
       <label>
         <input type="email" v-model="email" placeholder="email" />
       </label>
+      <br />
       <label>
         <input type="password" v-model="pass" placeholder="password" />
       </label>

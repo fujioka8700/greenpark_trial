@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>RegisterView</h2>
-    <!-- <p>{{ errorMessage }}</p> -->
+    <p>{{ errorMessage }}</p>
     <form @submit.prevent="auth.register(name, email, pass)">
       <label>
         <input type="text" v-model="name" placeholder="name" />
@@ -22,9 +22,11 @@
 
 <script setup>
 import { useStoreAuth } from "../../store/auth";
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
 
 const auth = useStoreAuth();
+const { errorMessage } = storeToRefs(auth);
 
 const name = ref("");
 const email = ref("");
