@@ -48,5 +48,9 @@ export const useStoreAuth = defineStore("auth", {
         })
         .catch((err) => {});
     },
+
+    register(name, email, pass) {
+      console.log(name, email, pass);
+    },
   },
 });
