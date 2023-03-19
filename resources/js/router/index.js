@@ -23,6 +23,11 @@ const router = createRouter({
       name: "Register",
       component: () => import("../components/pages/Register.vue"),
     },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: () => import("../components/pages/NotFound.vue"),
+    },
   ],
 });
 
