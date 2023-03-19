@@ -20,8 +20,8 @@ pinia.use(({ store }) => {
 app.use(pinia);
 
 const getAuth = async () => {
-  const store = useStoreAuth();
-  await store.currentUser();
+  const auth = useStoreAuth();
+  await auth.currentUser();
 
   app.use(router);
   app.mount("#app");
