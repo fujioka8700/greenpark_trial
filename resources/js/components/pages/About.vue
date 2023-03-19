@@ -19,11 +19,11 @@ const user = reactive({
 });
 
 onMounted(async () => {
-  const store = useStoreAuth();
-  await store.currentUser();
+  const auth = useStoreAuth();
+  await auth.currentUser();
 
-  user.name = store.user.name;
-  user.email = store.user.email;
+  user.name = auth.user.name;
+  user.email = auth.user.email;
 });
 </script>
 
