@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Plant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StorePlantPostRequest;
 
 class PlantController extends Controller
 {
@@ -18,9 +20,13 @@ class PlantController extends Controller
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request)
+  public function store(StorePlantPostRequest $request)
   {
-    //
+    $user = Auth::user();
+
+    $plant = $user->plants()->create($request->all());
+
+    return response()->json($plant, 201);
   }
 
   /**
