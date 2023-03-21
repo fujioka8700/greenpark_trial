@@ -25,4 +25,4 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
 Route::post('/register', [RegisterController::class, 'register']);
 
-Route::apiResource('plant', PlantController::class);
+Route::apiResource('plants', PlantController::class);

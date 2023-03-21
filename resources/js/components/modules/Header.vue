@@ -3,9 +3,12 @@
     <h1>タイトル</h1>
     <ul>
       <li><RouterLink :to="{ name: 'Home' }">ホーム</RouterLink></li>
-      <li v-if="user">
-        <RouterLink :to="{ name: 'About' }">{{ user.name }}</RouterLink>
-      </li>
+      <div v-if="user">
+        <li><RouterLink :to="{ name: 'StorePlant' }">植物登録</RouterLink></li>
+        <li>
+          <RouterLink :to="{ name: 'About' }">{{ user.name }}</RouterLink>
+        </li>
+      </div>
       <div v-else>
         <li><RouterLink :to="{ name: 'Register' }">会員登録</RouterLink></li>
         <li><RouterLink :to="{ name: 'Login' }">ログイン</RouterLink></li>
