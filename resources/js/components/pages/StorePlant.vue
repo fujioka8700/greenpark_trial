@@ -4,7 +4,12 @@
     <p>{{ errorMessage }}</p>
     <form @submit.prevent="storePlants">
       <label>
-        <input type="text" v-model="name" placeholder="name" required />
+        <!-- <input type="text" v-model="name" placeholder="name" required /> -->
+        <input type="text" v-model="name" placeholder="name" />
+      </label>
+      <br />
+      <label>
+        <input type="file" @change="fileSelected" />
       </label>
       <br />
       <button type="submit">登録する</button>
@@ -18,8 +23,14 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const name = ref("");
 const errorMessage = ref("");
+const name = ref("");
+const fileInfo = ref("");
+
+const fileSelected = (event) => {
+  fileInfo.value = event.target.files[0];
+  console.log(fileInfo.value);
+};
 
 const storePlants = () => {
   axios
@@ -28,11 +39,15 @@ const storePlants = () => {
     })
     .then((result) => {
       console.log(result);
+
       router.push({ name: "Home" });
     })
     .catch((err) => {
       console.log(err);
-      errorMessage.value = "登録できませんでした。";
+
+      const response = err.response;
+
+      errorMessage.value = response.data.message;
     });
 };
 </script>
