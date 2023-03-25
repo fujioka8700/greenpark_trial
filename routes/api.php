@@ -25,4 +25,6 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
 Route::post('/register', [RegisterController::class, 'register']);
 
+Route::get('/plants/search', [PlantController::class, 'search']);
+
 Route::apiResource('plants', PlantController::class);

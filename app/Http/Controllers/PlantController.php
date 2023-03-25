@@ -23,6 +23,7 @@ class PlantController extends Controller
   public function store(StorePlantPostRequest $request)
   {
     $path = $request->file->store('public/image');
+    $path = str_replace('public/', '/storage/', $path);
 
     $user = Auth::user();
 
@@ -56,5 +57,26 @@ class PlantController extends Controller
   public function destroy(Plant $plant)
   {
     //
+  }
+
+  /**
+   * 植物を検索します。
+   */
+  public function search(Request $request)
+  {
+    #キーワード受け取り
+    $keyword = $request->input('keyword');
+
+    #クエリ生成
+    $query = Plant::query();
+
+    #もしキーワードがあったら
+    if (!empty($keyword)) {
+      $query->where('name', 'like', '%' . $keyword . '%');
+    }
+
+    $data = $query->orderBy('created_at', 'desc')->paginate(10);
+
+    return response()->json($data, 200);
   }
 }

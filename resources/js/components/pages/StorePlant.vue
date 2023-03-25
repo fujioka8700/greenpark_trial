@@ -4,10 +4,9 @@
     <ul>
       <li v-for="message in errorMessages">{{ message }}</li>
     </ul>
-    <form @submit.prevent="storePlants" enctype="multipart/form-data">
+    <form @submit.prevent="storePlants">
       <label>
-        <!-- <input type="text" v-model="name" placeholder="name" required /> -->
-        <input type="text" v-model="name" placeholder="name" />
+        <input type="text" v-model="name" placeholder="name" required />
       </label>
       <br />
       <label>

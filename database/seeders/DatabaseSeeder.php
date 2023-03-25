@@ -33,6 +33,6 @@ class DatabaseSeeder extends Seeder
 
     $users->prepend($user);
 
-    Plant::factory(50)->recycle($users)->create();
+    Plant::factory(10)->recycle($users)->create();
   }
 }

@@ -17,9 +17,12 @@ class PlantFactory extends Factory
    */
   public function definition(): array
   {
+    $path = fake()->image(storage_path('app/public/image'), 640, 480);
+    $path = str_replace('/workspace/storage/app/public/', '/storage/', $path);
+
     return [
       'name' => fake()->realText(10),
-      'file_path' => fake()->image(storage_path('app/public/image'), 640, 480),
+      'file_path' => $path,
       'user_id' => User::factory(),
     ];
   }
