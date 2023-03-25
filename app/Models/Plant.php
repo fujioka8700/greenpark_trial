@@ -11,7 +11,7 @@ class Plant extends Model
   use HasFactory;
 
   protected $fillable = [
-    'name',
+    'name', 'file_path',
   ];
 
   /**

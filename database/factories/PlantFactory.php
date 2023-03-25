@@ -19,6 +19,7 @@ class PlantFactory extends Factory
   {
     return [
       'name' => fake()->realText(10),
+      'file_path' => fake()->image(storage_path('app/public/image'), 640, 480),
       'user_id' => User::factory(),
     ];
   }

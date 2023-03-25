@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plant;
+use App\Http\Requests\StorePlantPostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StorePlantPostRequest;
 
 class PlantController extends Controller
 {
@@ -22,9 +22,14 @@ class PlantController extends Controller
    */
   public function store(StorePlantPostRequest $request)
   {
+    $path = $request->file->store('public/image');
+
     $user = Auth::user();
 
-    $plant = $user->plants()->create($request->all());
+    $plant = $user->plants()->create([
+      'name' => $request->name,
+      'file_path' => $path,
+    ]);
 
     return response()->json($plant, 201);
   }
