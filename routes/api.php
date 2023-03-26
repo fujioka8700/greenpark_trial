@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\PlantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
+Route::post('/register', [RegisterController::class, 'register']);
+
+Route::get('/plants/search', [PlantController::class, 'search']);
+
+Route::apiResource('plants', PlantController::class);

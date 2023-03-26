@@ -17,7 +17,7 @@ class LoginController extends Controller
     if (Auth::attempt($credentials)) {
       return response()->json(['status_code' => 200, 'message' => 'success'], 200);
     } else {
-      return response()->json(['status_code' => 500, 'message' => 'Unauthorized'], 200);
+      return response()->json(['status_code' => 500, 'message' => 'Unauthorized'], 500);
     }
   }
 
