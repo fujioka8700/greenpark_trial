@@ -39,7 +39,7 @@ class PlantControllerTest extends TestCase
     $path = Plant::all()->find(1)->file_path;
 
     // アップロードされたファイルが保存されているか
-    Storage::disk('local')->assertExists("public/image/{$dummy->hashName()}");
+    Storage::disk('local')->assertExists("public/images/{$dummy->hashName()}");
 
     $response->assertStatus(201)->assertJson([
       'name' => $name,

@@ -22,7 +22,7 @@ class PlantController extends Controller
    */
   public function store(StorePlantPostRequest $request)
   {
-    $path = $request->file->store('public/image');
+    $path = $request->file->store('public/images');
     $path = str_replace('public/', '/storage/', $path);
 
     $user = Auth::user();

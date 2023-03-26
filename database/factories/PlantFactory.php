@@ -17,8 +17,8 @@ class PlantFactory extends Factory
    */
   public function definition(): array
   {
-    $path = fake()->image(storage_path('app/public/image'), 640, 480);
-    $path = str_replace('/workspace/storage/app/public/', '/storage/', $path);
+    $path = fake()->image(storage_path('app/public/images'), 640, 480);
+    $path = preg_replace('/(.*)public/', '/storage', $path);
 
     return [
       'name' => fake()->realText(10),
