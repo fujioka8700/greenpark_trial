@@ -4,7 +4,7 @@
     <ul>
       <li v-for="message in errorMessages">{{ message }}</li>
     </ul>
-    <form @submit.prevent="storePlants">
+    <form @submit.prevent="sendButton">
       <label>
         <input type="text" v-model="name" placeholder="name" required />
       </label>
@@ -24,39 +24,47 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+/**
+ * @type {Array} 植物登録前のエラー
+ */
 const errorMessages = ref([]);
-const name = ref("");
-const fileInfo = ref("");
 
-// ヘッダー定義
+/**
+ * @type {String} 登録する植物名
+ */
+const name = ref("");
+
+/**
+ * @type {Object} 登録するファイル
+ */
+const fileInfo = ref({});
+
+/** axios ヘッダー定義 */
 const config = {
   headers: {
     "content-type": "multipart/form-data",
   },
 };
 
+/**
+ * 登録するファイルの情報を変更する
+ * @param {Object} event ファイル情報
+ */
 const fileSelected = (event) => {
   fileInfo.value = event.target.files[0];
-
-  console.log(fileInfo.value);
 };
 
-const storePlants = () => {
-  const formData = new FormData();
-
-  formData.append("name", name.value);
-  formData.append("file", fileInfo.value);
-
+/**
+ * 登録する植物の情報を送信する
+ * @param {Object} formData
+ */
+const storePlant = (formData) => {
   axios
     .post("/api/plants", formData, config)
     .then((result) => {
-      console.log(result);
-
       router.push({ name: "Home" });
     })
     .catch((err) => {
-      console.log(err);
-
       errorMessages.value = [];
 
       const response = err.response;
@@ -67,6 +75,18 @@ const storePlants = () => {
         errorMessages.value.push(error);
       });
     });
+};
+
+/**
+ * 植物を登録するボタン
+ */
+const sendButton = () => {
+  const formData = new FormData();
+
+  formData.append("name", name.value);
+  formData.append("file", fileInfo.value);
+
+  storePlant(formData);
 };
 </script>
 
