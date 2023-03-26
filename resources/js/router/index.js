@@ -1,19 +1,62 @@
+import { useStoreAuth } from "../store/auth";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: "/login",
-      name: "Login",
-      component: () => import("../components/pages/Login.vue"),
+      path: "/",
+      name: "Home",
+      component: () => import("../components/pages/Home.vue"),
     },
     {
       path: "/about",
       name: "About",
       component: () => import("../components/pages/About.vue"),
+      beforeEnter: async (to, from) => {
+        const auth = useStoreAuth();
+        await auth.currentUser();
+
+        const isAuthenticated = auth.user;
+
+        // 未認証なら、Aboutページは表示させない。
+        if (!isAuthenticated && to.name !== "Home") {
+          return { name: "Home" };
+        }
+      },
+    },
+    {
+      path: "/login",
+      name: "Login",
+      component: () => import("../components/pages/Login.vue"),
+    },
+    {
+      path: "/register",
+      name: "Register",
+      component: () => import("../components/pages/Register.vue"),
+    },
+    {
+      path: "/store-plant",
+      name: "StorePlant",
+      component: () => import("../components/pages/StorePlant.vue"),
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: () => import("../components/pages/NotFound.vue"),
     },
   ],
+});
+
+router.beforeEach((to, from) => {
+  const auth = useStoreAuth();
+
+  const isAuthenticated = auth.user;
+
+  // 認証済みなら、ログインページと会員登録ページは、表示させない。
+  if (isAuthenticated && (to.name === "Login" || to.name === "Register")) {
+    return { name: "Home" };
+  }
 });
 
 export default router;

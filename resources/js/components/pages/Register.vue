@@ -1,8 +1,12 @@
 <template>
   <div>
-    <h2>LoginView</h2>
+    <h2>RegisterView</h2>
     <p>{{ errorMessage }}</p>
-    <form @submit.prevent="auth.login(email, pass)">
+    <form @submit.prevent="auth.register(name, email, pass)">
+      <label>
+        <input type="text" v-model="name" placeholder="name" />
+      </label>
+      <br />
       <label>
         <input type="email" v-model="email" placeholder="email" />
       </label>
@@ -11,7 +15,7 @@
         <input type="password" v-model="pass" placeholder="password" />
       </label>
       <br />
-      <button type="submit">ログイン</button>
+      <button type="submit">登録</button>
     </form>
   </div>
 </template>
@@ -24,6 +28,7 @@ import { ref } from "vue";
 const auth = useStoreAuth();
 const { errorMessage } = storeToRefs(auth);
 
+const name = ref("");
 const email = ref("");
 const pass = ref("");
 </script>

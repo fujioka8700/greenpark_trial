@@ -3,37 +3,28 @@
     <h2>AboutView</h2>
     <p>名前: {{ user.name }}</p>
     <p>メールアドレス: {{ user.email }}</p>
-    <button type="button" @click="logout">ログアウト</button>
+    <button type="button" @click="auth.logout">ログアウト</button>
   </div>
 </template>
 
 <script setup>
 import { useStoreAuth } from "../../store/auth";
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { reactive, onMounted } from "vue";
 
-const router = useRouter();
-const user = ref({ name: "", email: "" });
+const auth = useStoreAuth();
 
-onMounted(() => {
-  axios
-    .get("/api/user")
-    .then((res) => {
-      user.value = res.data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+const user = reactive({
+  name: "",
+  email: "",
 });
 
-const logout = () => {
-  axios
-    .post("/api/logout")
-    .then((res) => {
-      router.push("/login");
-    })
-    .catch((err) => {});
-};
+onMounted(async () => {
+  const auth = useStoreAuth();
+  await auth.currentUser();
+
+  user.name = auth.user.name;
+  user.email = auth.user.email;
+});
 </script>
 
 <style lang="scss" scoped></style>
