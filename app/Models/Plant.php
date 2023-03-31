@@ -20,7 +20,7 @@ class Plant extends Model
   ];
 
   /**
-   * 1対多のplantsテーブル(子テーブル)でusersテーブル(親テーブル)のリレーションを定義
+   * 多対1のplantsテーブル(子テーブル)でusersテーブル(親テーブル)のリレーションを定義
    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
    */
   public function user()
