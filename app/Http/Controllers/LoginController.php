@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+  /**
+   * ユーザーをログインする。
+   * ログインできない場合は、ステータスコード500を返す。
+   * @param Request $request
+   * @return array
+   */
   public function login(Request $request)
   {
     $credentials = $request->validate([
@@ -21,6 +27,10 @@ class LoginController extends Controller
     }
   }
 
+  /**
+   * ユーザーをログアウトする。
+   * @return array
+   */
   public function logout()
   {
     Auth::logout();
