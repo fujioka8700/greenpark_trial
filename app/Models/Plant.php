@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,7 +24,7 @@ class Plant extends Model
    * 多対1のplantsテーブル(子テーブル)でusersテーブル(親テーブル)のリレーションを定義
    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
    */
-  public function user()
+  public function user(): BelongsTo
   {
     return $this->belongsTo(User::class);
   }
