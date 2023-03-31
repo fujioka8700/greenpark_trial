@@ -6,9 +6,12 @@ use App\Models\Plant;
 use App\Http\Requests\StorePlantPostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class PlantController extends Controller
 {
+  const DISPLAY_NUMBER = 10; // 検索後、表示する植物の数
+
   /**
    * Display a listing of the resource.
    */
@@ -34,7 +37,7 @@ class PlantController extends Controller
       'file_path' => $path,
     ]);
 
-    return response()->json($plant, 201);
+    return response()->json($plant, Response::HTTP_CREATED);
   }
 
   /**
@@ -68,19 +71,19 @@ class PlantController extends Controller
    */
   public function search(Request $request)
   {
-    #キーワード受け取り
+    /* キーワード受け取り */
     $keyword = $request->input('keyword');
 
-    #クエリ生成
+    /* クエリ生成 */
     $query = Plant::query();
 
-    #もしキーワードがあったら
+    /* もしキーワードがあったら */
     if (!empty($keyword)) {
       $query->where('name', 'like', '%' . $keyword . '%');
     }
 
-    $data = $query->orderBy('created_at', 'desc')->paginate(10);
+    $data = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
 
-    return response()->json($data, 200);
+    return response()->json($data, Response::HTTP_OK);
   }
 }

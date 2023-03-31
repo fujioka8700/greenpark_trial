@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
 {
@@ -17,13 +18,19 @@ class LoginController extends Controller
   {
     $credentials = $request->validate([
       'email' => 'required|email',
-      'password' => 'required'
+      'password' => 'required',
     ]);
 
     if (Auth::attempt($credentials)) {
-      return response()->json(['status_code' => 200, 'message' => 'success'], 200);
+      return response()->json([
+        'status_code' => Response::HTTP_OK,
+        'message' => 'success',
+      ], Response::HTTP_OK);
     } else {
-      return response()->json(['status_code' => 500, 'message' => 'Unauthorized'], 500);
+      return response()->json([
+        'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+        'message' => 'Unauthorized',
+      ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -35,6 +42,9 @@ class LoginController extends Controller
   {
     Auth::logout();
 
-    return response()->json(['status_code' => 200, 'message' => 'Logged out'], 200);
+    return response()->json([
+      'status_code' => Response::HTTP_OK,
+      'message' => 'Logged out',
+    ], Response::HTTP_OK);
   }
 }

@@ -21,11 +21,14 @@ class RegisterController extends Controller
     $validator = Validator::make($request->all(), [
       'name' => 'required',
       'email' => 'required|email|unique:users',
-      'password' => 'required'
+      'password' => 'required',
     ]);
 
     if ($validator->fails()) {
-      return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
+      return response()->json(
+        $validator->messages(),
+        Response::HTTP_UNPROCESSABLE_ENTITY
+      );
     }
 
     User::create([
@@ -34,6 +37,9 @@ class RegisterController extends Controller
       'password' => Hash::make($request->password),
     ]);
 
-    return response()->json('User registration completed', Response::HTTP_OK);
+    return response()->json(
+      'User registration completed',
+      Response::HTTP_OK
+    );
   }
 }
