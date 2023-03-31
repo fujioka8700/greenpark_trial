@@ -18,7 +18,9 @@ class PlantController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
+   * 植物を登録する。
+   * @param \App\Http\Requests\StorePlantPostRequest $request
+   * @return \Illuminate\Http\JsonResponse
    */
   public function store(StorePlantPostRequest $request)
   {
@@ -60,7 +62,9 @@ class PlantController extends Controller
   }
 
   /**
-   * 植物を検索します。
+   * 植物を検索する。
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\JsonResponse
    */
   public function search(Request $request)
   {

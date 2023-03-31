@@ -10,8 +10,8 @@ class LoginController extends Controller
   /**
    * ユーザーをログインする。
    * ログインできない場合は、ステータスコード500を返す。
-   * @param Request $request
-   * @return array
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\JsonResponse
    */
   public function login(Request $request)
   {
@@ -29,11 +29,12 @@ class LoginController extends Controller
 
   /**
    * ユーザーをログアウトする。
-   * @return array
+   * @return \Illuminate\Http\JsonResponse
    */
   public function logout()
   {
     Auth::logout();
+
     return response()->json(['status_code' => 200, 'message' => 'Logged out'], 200);
   }
 }
