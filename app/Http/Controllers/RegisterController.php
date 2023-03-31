@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ class RegisterController extends Controller
    * @param \Illuminate\Http\Request $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function register(Request $request)
+  public function register(Request $request): JsonResponse
   {
     $validator = Validator::make($request->all(), [
       'name' => 'required',

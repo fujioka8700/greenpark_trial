@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,7 +15,7 @@ class LoginController extends Controller
    * @param \Illuminate\Http\Request $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function login(Request $request)
+  public function login(Request $request): JsonResponse
   {
     $credentials = $request->validate([
       'email' => 'required|email',
@@ -38,7 +39,7 @@ class LoginController extends Controller
    * ユーザーをログアウトする。
    * @return \Illuminate\Http\JsonResponse
    */
-  public function logout()
+  public function logout(): JsonResponse
   {
     Auth::logout();
 

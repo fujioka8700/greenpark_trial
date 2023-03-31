@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Plant;
 use App\Http\Requests\StorePlantPostRequest;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,7 +26,7 @@ class PlantController extends Controller
    * @param \App\Http\Requests\StorePlantPostRequest $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function store(StorePlantPostRequest $request)
+  public function store(StorePlantPostRequest $request): JsonResponse
   {
     $path = $request->file->store('public/images');
     $path = str_replace('public/', '/storage/', $path);
@@ -69,7 +70,7 @@ class PlantController extends Controller
    * @param \Illuminate\Http\Request $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function search(Request $request)
+  public function search(Request $request): JsonResponse
   {
     /* キーワード受け取り */
     $keyword = $request->input('keyword');
