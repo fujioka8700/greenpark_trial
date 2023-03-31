@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class PlantFactory extends Factory
 {
   const IMAGE_WIDTH = 640;  // テスト画像の幅
-  const IMAGE_HEIGHT = 640; // テスト画像の高さ
+  const IMAGE_HEIGHT = 480; // テスト画像の高さ
   const WORD_COUNT = 10;    // 植物名の文字上限
 
   /**
