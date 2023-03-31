@@ -10,6 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
 {
+  /**
+   * ユーザー情報を登録する。
+   * 登録失敗の時は、ステータスコード422を返す。
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\JsonResponse
+   */
   public function register(Request $request)
   {
     $validator = Validator::make($request->all(), [
