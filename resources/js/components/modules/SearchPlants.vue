@@ -9,14 +9,16 @@
       <button type="submit">検索</button>
     </form>
     <div>
-      <PlantItems />
+      <RouterView />
     </div>
   </div>
 </template>
 
 <script setup>
-import PlantItems from "./PlantItems.vue";
 import { ref, provide } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 /** @type {string} 検索する植物名 */
 const keyword = ref("");
@@ -39,7 +41,11 @@ const searchPlants = () => {
     .then((result) => {
       console.log(result);
 
+      /** 検索結果を provide で使用する */
       searchResults.value = result.data;
+
+      /** 検索結果は、/plants で表示する */
+      router.push({ name: "PlantItems" });
     })
     .catch((err) => {
       console.log(err);
