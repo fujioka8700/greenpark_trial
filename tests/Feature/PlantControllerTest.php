@@ -61,4 +61,34 @@ class PlantControllerTest extends TestCase
       ],
     ]);
   }
+
+  public function test_植物を検索する(): void
+  {
+    Storage::fake('local');
+
+    $name = $this->faker()->text(10);
+    $dummy = UploadedFile::fake()->image('dummy.jpg', 640, 480);
+
+    $this->actingAs($this->user)->postJson('/api/plants', [
+      'name' => $name,
+      'file' => $dummy,
+    ]);
+
+    Storage::disk('local')->assertExists("public/images/{$dummy->hashName()}");
+
+    // 検索する文字列を生成
+    $serchKeyWord = substr($name, 0, 1);
+
+    $response = $this->getJson('/api/plants/search', [
+      'keyword' => $serchKeyWord,
+    ]);
+
+    $response->assertStatus(200)->assertJson([
+      'data' => [
+        [
+          'file_path' => '/storage/images/' . $dummy->hashName(),
+        ]
+      ]
+    ]);
+  }
 }
