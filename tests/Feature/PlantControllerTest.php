@@ -15,7 +15,7 @@ class PlantControllerTest extends TestCase
   use RefreshDatabase;
   use WithFaker;
 
-  public $user;
+  private $user; // 新規ユーザー
 
   protected function setUp(): void
   {
@@ -29,14 +29,14 @@ class PlantControllerTest extends TestCase
     Storage::fake('local');
 
     $name = $this->faker()->text(10);
-    $dummy = UploadedFile::fake()->create('dummy.jpg');
+    $dummy = UploadedFile::fake()->image('dummy.jpg', 640, 480);
 
     $response = $this->actingAs($this->user)->postJson('/api/plants', [
       'name' => $name,
       'file' => $dummy,
     ]);
 
-    $path = Plant::all()->find(1)->file_path;
+    $path = Plant::first()->file_path;
 
     // アップロードされたファイルが保存されているか
     Storage::disk('local')->assertExists("public/images/{$dummy->hashName()}");
