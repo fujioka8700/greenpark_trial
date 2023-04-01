@@ -3,11 +3,16 @@ import { HTTP_OK } from "../util";
 
 export const useStoreAuth = defineStore("auth", {
   state: () => ({
+    /** @type {Object} ログインユーザーの情報 */
     user: null,
+    /** @type {string} ログイン失敗時のエラーメッセージ */
     errorMessage: null,
   }),
 
   actions: {
+    /**
+     * ログイン中のユーザー情報を取得する
+     */
     async currentUser() {
       await axios
         .get("/api/user")
@@ -17,6 +22,11 @@ export const useStoreAuth = defineStore("auth", {
         .catch((err) => {});
     },
 
+    /**
+     * ログインする
+     * @param {string} email ログインするメールアドレス
+     * @param {string} pass  ログインするためのパスワード
+     */
     login(email, pass) {
       axios
         .get("/sanctum/csrf-cookie")
@@ -42,6 +52,9 @@ export const useStoreAuth = defineStore("auth", {
         .catch((err) => {});
     },
 
+    /**
+     * ログアウトする
+     */
     logout() {
       this.user = null;
 
@@ -53,6 +66,12 @@ export const useStoreAuth = defineStore("auth", {
         .catch((err) => {});
     },
 
+    /**
+     * 新たなユーザーを登録する
+     * @param {string} name  新ユーザーの名前
+     * @param {string} email 新ユーザーのメールアドレス
+     * @param {string} pass  新ユーザーのパスワード
+     */
     register(name, email, pass) {
       axios
         .post("/api/register", {

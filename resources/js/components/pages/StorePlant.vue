@@ -24,22 +24,16 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-/**
- * @type {Array} 植物登録前のエラー
- */
+/** @type {string[]} 植物登録時のエラー */
 const errorMessages = ref([]);
 
-/**
- * @type {String} 登録する植物名
- */
+/** @type {string} 登録する植物名 */
 const name = ref("");
 
-/**
- * @type {Object} 登録するファイル
- */
+/** @type {Object} 登録するファイル */
 const fileInfo = ref({});
 
-/** axios ヘッダー定義 */
+/** @type {Object} axios ヘッダー定義 */
 const config = {
   headers: {
     "content-type": "multipart/form-data",
@@ -69,6 +63,7 @@ const storePlant = (formData) => {
 
       const response = err.response;
 
+      /** エラー内容を抽出して配列にする */
       Object.keys(response.data.errors).forEach((data) => {
         const error = response.data.errors[data][0];
 
