@@ -72,13 +72,13 @@ class PlantController extends Controller
    */
   public function search(Request $request): JsonResponse
   {
-    /* キーワード受け取り */
+    /** キーワード受け取り */
     $keyword = $request->input('keyword');
 
-    /* クエリ生成 */
+    /** クエリ生成 */
     $query = Plant::query();
 
-    /* もしキーワードがあったら */
+    /** もしキーワードがあったら */
     if (!empty($keyword)) {
       $query->where('name', 'like', '%' . $keyword . '%');
     }

@@ -59,11 +59,12 @@ const storePlant = (formData) => {
       router.push({ name: "Home" });
     })
     .catch((err) => {
+      /** エラー内容をクリアにする */
       errorMessages.value = [];
 
       const response = err.response;
 
-      /** エラー内容を抽出して配列にする */
+      /** エラー内容を抽出して整形した配列にする */
       Object.keys(response.data.errors).forEach((data) => {
         const error = response.data.errors[data][0];
 
@@ -76,6 +77,7 @@ const storePlant = (formData) => {
  * 植物を登録するボタン
  */
 const sendButton = () => {
+  /** @type {Object} 登録する植物の情報 */
   const formData = new FormData();
 
   formData.append("name", name.value);

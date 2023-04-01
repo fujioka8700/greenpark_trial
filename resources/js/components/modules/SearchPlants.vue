@@ -18,11 +18,17 @@
 import PlantItems from "./PlantItems.vue";
 import { ref, provide } from "vue";
 
+/** @type {string} 検索する植物名 */
 const keyword = ref("");
+
+/** @type {Object[]} 検索後の植物 */
 const searchResults = ref({});
 
 provide("searchResults", searchResults);
 
+/**
+ * 登録している植物を検索する
+ */
 const searchPlants = () => {
   axios
     .get("/api/plants/search", {

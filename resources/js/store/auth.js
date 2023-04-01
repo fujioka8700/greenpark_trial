@@ -5,6 +5,7 @@ export const useStoreAuth = defineStore("auth", {
   state: () => ({
     /** @type {Object} ログインユーザーの情報 */
     user: null,
+
     /** @type {string} ログイン失敗時のエラーメッセージ */
     errorMessage: null,
   }),

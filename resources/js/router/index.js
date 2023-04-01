@@ -14,12 +14,13 @@ const router = createRouter({
       name: "About",
       component: () => import("../components/pages/About.vue"),
       beforeEnter: async (to, from) => {
+        /** ログイン中のユーザー情報を取得する */
         const auth = useStoreAuth();
         await auth.currentUser();
 
         const isAuthenticated = auth.user;
 
-        // 未認証なら、Aboutページは表示させない。
+        /** 未ログインなら、Aboutページは表示させない。 */
         if (!isAuthenticated && to.name !== "Home") {
           return { name: "Home" };
         }
@@ -49,11 +50,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
+  /** ログイン中のユーザー情報を取得する */
   const auth = useStoreAuth();
 
   const isAuthenticated = auth.user;
 
-  // 認証済みなら、ログインページと会員登録ページは、表示させない。
+  /** ログイン済みなら、ログインページと会員登録ページは、表示させない。 */
   if (isAuthenticated && (to.name === "Login" || to.name === "Register")) {
     return { name: "Home" };
   }
