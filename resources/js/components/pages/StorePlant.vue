@@ -10,7 +10,17 @@
       </label>
       <br />
       <label>
-        <input type="file" @change="fileSelected" />
+        <input type="file" @change="fileSelected" required />
+      </label>
+      <br />
+      <label>
+        <textarea
+          v-model="description"
+          cols="30"
+          rows="10"
+          placeholder="説明"
+          required
+        ></textarea>
       </label>
       <br />
       <button type="submit">登録する</button>
@@ -27,11 +37,14 @@ const router = useRouter();
 /** @type {string[]} 植物登録時のエラー */
 const errorMessages = ref([]);
 
-/** @type {string} 登録する植物名 */
+/** @type {string} 登録する植物の名前 */
 const name = ref("");
 
 /** @type {Object} 登録するファイル */
 const fileInfo = ref({});
+
+/** @type {string} 登録する植物の説明 */
+const description = ref("");
 
 /** @type {Object} axios ヘッダー定義 */
 const config = {
@@ -59,12 +72,12 @@ const storePlant = (formData) => {
       router.push({ name: "Home" });
     })
     .catch((err) => {
-      /** エラー内容をクリアにする */
+      // エラー内容をクリアにする
       errorMessages.value = [];
 
       const response = err.response;
 
-      /** エラー内容を抽出して整形した配列にする */
+      // エラー内容を抽出して整形した配列にする
       Object.keys(response.data.errors).forEach((data) => {
         const error = response.data.errors[data][0];
 
@@ -80,8 +93,10 @@ const sendButton = () => {
   /** @type {Object} 登録する植物の情報 */
   const formData = new FormData();
 
+  /** 植物の情報を formData に追加する */
   formData.append("name", name.value);
   formData.append("file", fileInfo.value);
+  formData.append("description", description.value);
 
   storePlant(formData);
 };

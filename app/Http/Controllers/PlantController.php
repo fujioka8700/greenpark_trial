@@ -36,6 +36,7 @@ class PlantController extends Controller
     $plant = $user->plants()->create([
       'name' => $request->name,
       'file_path' => $path,
+      'description' => $request->description,
     ]);
 
     return response()->json($plant, Response::HTTP_CREATED);

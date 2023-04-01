@@ -16,6 +16,7 @@ return new class extends Migration
       $table->string('name');
       $table->unsignedBigInteger('user_id');
       $table->string('file_path');
+      $table->text('description');
       $table->timestamps();
 
       $table->foreign('user_id')->references('id')->on('users');

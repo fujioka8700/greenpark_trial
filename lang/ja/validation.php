@@ -143,6 +143,9 @@ return [
     'file' => [
       'file' => 'ファイルを指定してください。',
     ],
+    'description' => [
+      'required' => '説明文を記入してください。',
+    ],
   ],
 
   /*
@@ -159,6 +162,7 @@ return [
   'attributes' => [
     'name' => '名前',
     'file' => 'ファイル',
+    'description' => '説明',
   ],
 
 ];

@@ -18,6 +18,7 @@ class Plant extends Model
   protected $fillable = [
     'name',
     'file_path',
+    'description',
   ];
 
   /**

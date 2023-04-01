@@ -30,10 +30,12 @@ class PlantControllerTest extends TestCase
 
     $name = $this->faker()->text(10);
     $dummy = UploadedFile::fake()->image('dummy.jpg', 640, 480);
+    $description = $this->faker()->text(100);
 
     $response = $this->actingAs($this->user)->postJson('/api/plants', [
       'name' => $name,
       'file' => $dummy,
+      'description' => $description,
     ]);
 
     $path = Plant::first()->file_path;
@@ -44,6 +46,7 @@ class PlantControllerTest extends TestCase
     $response->assertStatus(201)->assertJson([
       'name' => $name,
       'file_path' => $path,
+      'description' => $description,
     ]);
   }
 
@@ -68,10 +71,12 @@ class PlantControllerTest extends TestCase
 
     $name = $this->faker()->text(10);
     $dummy = UploadedFile::fake()->image('dummy.jpg', 640, 480);
+    $description = $this->faker()->text(100);
 
     $this->actingAs($this->user)->postJson('/api/plants', [
       'name' => $name,
       'file' => $dummy,
+      'description' => $description,
     ]);
 
     Storage::disk('local')->assertExists("public/images/{$dummy->hashName()}");
@@ -87,7 +92,9 @@ class PlantControllerTest extends TestCase
       'current_page' => 1,
       'data' => [
         [
+          'name' => $name,
           'file_path' => '/storage/images/' . $dummy->hashName(),
+          'description' => $description,
         ]
       ]
     ]);
