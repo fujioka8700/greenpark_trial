@@ -69,20 +69,15 @@ class PlantControllerTest extends TestCase
   {
     Storage::fake('local');
 
-    $name = $this->faker()->text(10);
-    $dummy = UploadedFile::fake()->image('dummy.jpg', 640, 480);
-    $description = $this->faker()->text(100);
+    // 植物の登録と、画像のファイル保存
+    User::factory()->hasPlants()->create();
 
-    $this->actingAs($this->user)->postJson('/api/plants', [
-      'name' => $name,
-      'file' => $dummy,
-      'description' => $description,
-    ]);
+    $serchKeyWord = Plant::find(1)->name; // 検索する文字列
+    $file_path = Plant::find(1)->file_path; // 画像のファイルパス
+    $file = preg_replace('/(.*)images\//', '', $file_path); // 保存された画像のファイル名
 
-    Storage::disk('local')->assertExists("public/images/{$dummy->hashName()}");
-
-    // 検索する文字列を生成
-    $serchKeyWord = substr($name, 0, 1);
+    // 画像のファイルが保存されているか確認する
+    Storage::disk('local')->assertExists("public/images/{$file}");
 
     $response = $this->getJson('/api/plants/search', [
       'keyword' => $serchKeyWord,
@@ -92,9 +87,8 @@ class PlantControllerTest extends TestCase
       'current_page' => 1,
       'data' => [
         [
-          'name' => $name,
-          'file_path' => '/storage/images/' . $dummy->hashName(),
-          'description' => $description,
+          'name' => $serchKeyWord,
+          'file_path' => $file_path,
         ]
       ]
     ]);

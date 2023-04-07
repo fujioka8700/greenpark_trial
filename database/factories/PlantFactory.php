@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Plant>
@@ -22,11 +23,15 @@ class PlantFactory extends Factory
    */
   public function definition(): array
   {
-    $path = fake()->image(
-      storage_path('app/public/images'),
+    $file = UploadedFile::fake()->image(
+      'plant.jpg',
       self::IMAGE_WIDTH,
       self::IMAGE_HEIGHT
     );
+
+    $path = $file->store('public/images');
+
+    // ファイルパスを変更して、画像にアクセスできるようにする
     $path = preg_replace('/(.*)public/', '/storage', $path);
 
     return [
