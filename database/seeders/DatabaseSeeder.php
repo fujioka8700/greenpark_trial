@@ -40,7 +40,8 @@ class DatabaseSeeder extends Seeder
     $users->prepend($user);
 
     /** 植物の色を作成 */
-    $colors = Color::factory(self::COLORS_COUNT)->create();
+    // $colors = Color::factory(self::COLORS_COUNT)->create();
+    $colors = Color::all();
 
     /** 1対多 ユーザー 対 植物
      *  多対多 植物 対 色
