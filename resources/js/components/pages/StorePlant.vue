@@ -13,6 +13,12 @@
         <input type="file" @change="fileSelected" required />
       </label>
       <br />
+      <ul>
+        <li v-for="color in colors" :key="color.id">
+          <input type="checkbox" :id="color.id" />
+          <label :for="color.id">{{ color.name }}</label>
+        </li>
+      </ul>
       <label>
         <textarea
           v-model="description"
@@ -29,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -46,11 +52,23 @@ const fileInfo = ref({});
 /** @type {string} 登録する植物の説明 */
 const description = ref("");
 
+/** @type {Object} 花の色、一覧 */
+const colors = ref({});
+
 /** @type {Object} axios ヘッダー定義 */
 const config = {
   headers: {
     "content-type": "multipart/form-data",
   },
+};
+
+/**
+ * 花の色、一覧を取得する
+ */
+const colorsList = () => {
+  axios.get("/api/colors").then((result) => {
+    colors.value = result.data;
+  });
 };
 
 /**
@@ -93,13 +111,18 @@ const sendButton = () => {
   /** @type {Object} 登録する植物の情報 */
   const formData = new FormData();
 
-  /** 植物の情報を formData に追加する */
+  // 植物の情報を formData に追加する
   formData.append("name", name.value);
   formData.append("file", fileInfo.value);
   formData.append("description", description.value);
 
   storePlant(formData);
 };
+
+onMounted(() => {
+  // 花の色、一覧を取得する
+  colorsList();
+});
 </script>
 
 <style lang="scss" scoped></style>

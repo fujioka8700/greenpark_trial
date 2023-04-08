@@ -12,6 +12,15 @@ class Color extends Model
   use HasFactory;
 
   /**
+   * 配列に含めない属性
+   * @var array
+   */
+  protected $hidden = [
+    'created_at',
+    'updated_at'
+  ];
+
+  /**
    * 多対多 Plants と Colors
    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
    */

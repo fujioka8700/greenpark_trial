@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Color;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ColorController extends Controller
 {
   /**
-   * Display a listing of the resource.
+   * 花の色、一覧を取得する。
+   * @return \Illuminate\Http\JsonResponse
    */
-  public function index()
+  public function index(): JsonResponse
   {
-    //
+    $colors = Color::all();
+
+    return response()->json($colors, Response::HTTP_OK);
   }
 
   /**
