@@ -45,7 +45,7 @@ class User extends Authenticatable
   ];
 
   /**
-   * 1対多のusersテーブル(親テーブル)でplantsテーブル(子テーブル)のリレーションを定義
+   * 1対多 users(親) 対 plants(子)
    * @return \Illuminate\Database\Eloquent\Relations\HasMany
    */
   public function plants(): HasMany

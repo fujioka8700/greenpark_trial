@@ -11,15 +11,10 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('plants', function (Blueprint $table) {
+    Schema::create('colors', function (Blueprint $table) {
       $table->id();
       $table->string('name');
-      $table->unsignedBigInteger('user_id');
-      $table->string('file_path');
-      $table->text('description');
       $table->timestamps();
-
-      $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
     });
   }
 
@@ -28,6 +23,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('plants');
+    Schema::dropIfExists('colors');
   }
 };

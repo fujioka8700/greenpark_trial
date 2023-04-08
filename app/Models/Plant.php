@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Color;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,11 +24,20 @@ class Plant extends Model
   ];
 
   /**
-   * 多対1のplantsテーブル(子テーブル)でusersテーブル(親テーブル)のリレーションを定義
+   * 多対1 plants(子) 対 users(親)
    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
    */
   public function user(): BelongsTo
   {
     return $this->belongsTo(User::class);
+  }
+
+  /**
+   * 多対多 plants と colors
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+   */
+  public function colors(): BelongsToMany
+  {
+    return $this->belongsToMany(Color::class);
   }
 }
