@@ -57,11 +57,14 @@ class PlantController extends Controller
   }
 
   /**
-   * Display the specified resource.
+   * 1つ植物と、リレーションしているものを取得する
    */
   public function show(Plant $plant)
   {
-    //
+    // 植物と、紐付いている色を取得する
+    $plant = $plant->with('colors')->find($plant->id);
+
+    return response()->json($plant, Response::HTTP_OK);
   }
 
   /**

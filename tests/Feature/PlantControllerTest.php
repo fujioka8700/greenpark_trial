@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Plant;
+use App\Models\Color;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
@@ -91,6 +92,31 @@ class PlantControllerTest extends TestCase
           'file_path' => $file_path,
         ]
       ]
+    ]);
+  }
+
+  public function test_1つの植物を返す(): void
+  {
+    Storage::fake('local');
+
+    // ランダムに、紐づける色を決定する
+    $colors = Color::all()->random(random_int(1, 9));
+
+    // 植物を1つ登録（画像ファイルも保存）し、色を紐づける
+    $plants = Plant::factory(1)->hasAttached($colors)->recycle($this->user)->create();
+    $plant = $plants->first();
+
+    // 紐づけした色を、配列にする
+    $plantColor = [];
+    foreach ($plant->colors as $color) {
+      array_push($plantColor, ['name' => $color->name]);
+    }
+
+    $response = $this->getJson("/api/plants/{$plant->id}");
+
+    $response->assertStatus(200)->assertJson([
+      'name' => $plant->name,
+      'colors' => $plantColor,
     ]);
   }
 }
