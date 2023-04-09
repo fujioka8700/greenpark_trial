@@ -38,6 +38,6 @@ class Plant extends Model
    */
   public function colors(): BelongsToMany
   {
-    return $this->belongsToMany(Color::class);
+    return $this->belongsToMany(Color::class)->withTimestamps();
   }
 }

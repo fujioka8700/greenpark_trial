@@ -163,6 +163,7 @@ return [
     'name' => '名前',
     'file' => 'ファイル',
     'description' => '説明',
+    'colors' => '花の色',
   ],
 
 ];

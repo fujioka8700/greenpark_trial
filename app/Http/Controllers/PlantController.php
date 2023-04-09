@@ -28,16 +28,30 @@ class PlantController extends Controller
    */
   public function store(StorePlantPostRequest $request): JsonResponse
   {
+    // 画像ファイルを保存する
     $path = $request->file->store('public/images');
-    $path = str_replace('public/', '/storage/', $path);
 
+    // 画像ファイルを表示できるパスに変換する
+    $path = str_replace('public/', 'storage/', $path);
+
+    // ログイン中のユーザー
     $user = Auth::user();
 
+    // 植物を登録する
     $plant = $user->plants()->create([
       'name' => $request->name,
       'file_path' => $path,
       'description' => $request->description,
     ]);
+
+    // 花の色がある場合は、花の色を保存する
+    if (isset($request->colors)) {
+      // 花の色を文字列から、配列へ変換する
+      $colors = explode(",", $request->colors);
+
+      // 登録した植物と、花の色を紐付ける
+      $plant->colors()->attach($colors);
+    }
 
     return response()->json($plant, Response::HTTP_CREATED);
   }

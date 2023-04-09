@@ -15,7 +15,12 @@
       <br />
       <ul>
         <li v-for="color in colors" :key="color.id">
-          <input type="checkbox" :id="color.id" />
+          <input
+            type="checkbox"
+            :id="color.id"
+            :value="color.id"
+            v-model="colorsCheckedValues"
+          />
           <label :for="color.id">{{ color.name }}</label>
         </li>
       </ul>
@@ -54,6 +59,9 @@ const description = ref("");
 
 /** @type {Object} 花の色、一覧 */
 const colors = ref({});
+
+/** @type {Array} 指定した花の色 */
+const colorsCheckedValues = ref([]);
 
 /** @type {Object} axios ヘッダー定義 */
 const config = {
@@ -115,6 +123,7 @@ const sendButton = () => {
   formData.append("name", name.value);
   formData.append("file", fileInfo.value);
   formData.append("description", description.value);
+  formData.append("colors", colorsCheckedValues.value);
 
   storePlant(formData);
 };

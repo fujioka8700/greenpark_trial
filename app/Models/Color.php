@@ -21,11 +21,11 @@ class Color extends Model
   ];
 
   /**
-   * 多対多 Plants と Colors
+   * 多対多 plants と colors
    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
    */
   public function plants(): BelongsToMany
   {
-    return $this->belongsToMany(Plant::class);
+    return $this->belongsToMany(Plant::class)->withTimestamps();
   }
 }
