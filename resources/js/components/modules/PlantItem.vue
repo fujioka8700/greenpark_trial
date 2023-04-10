@@ -1,25 +1,33 @@
 <template>
   <div>
-    <h4>ばら</h4>
-    <img src="dummy.jpg" alt="" />
-    <p>ばらの説明文。</p>
-    <p>{{ plantId }}</p>
+    <h4>{{ plant.name }}</h4>
+    <img :src="`../${plant.file_path}`" alt="" />
+    <ul>
+      <li v-for="color in plant.colors" :key="color.id">{{ color.name }}</li>
+    </ul>
+    <p class="m-plant-item-description">
+      {{ plant.description }}
+    </p>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
+
 const props = defineProps({
   /** @type {String} 植物のid */
   plantId: String,
 });
+
+/** @type {Object} 植物の情報 */
+const plant = ref({});
 
 /**
  * 1つの植物と、リレーションしているものを取得する
  */
 const getPlant = () => {
   axios.get(`/api/plants/${props.plantId}`).then((result) => {
-    console.log(result);
+    plant.value = result.data;
   });
 };
 
@@ -29,4 +37,9 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.m-plant-item-description {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+</style>
