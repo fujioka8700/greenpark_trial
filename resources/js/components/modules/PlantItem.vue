@@ -1,12 +1,14 @@
 <template>
   <div>
-    <h4>{{ plant.name }}</h4>
-    <img :src="`../${plant.file_path}`" alt="" />
+    <h4>{{ plantInfo.name }}</h4>
+    <img :src="`../${plantInfo.file_path}`" alt="" />
     <ul>
-      <li v-for="color in plant.colors" :key="color.id">{{ color.name }}</li>
+      <li v-for="color in plantInfo.colors" :key="color.id">
+        {{ color.name }}
+      </li>
     </ul>
     <p class="m-plant-item-description">
-      {{ plant.description }}
+      {{ plantInfo.description }}
     </p>
   </div>
 </template>
@@ -20,14 +22,14 @@ const props = defineProps({
 });
 
 /** @type {Object} 植物の情報 */
-const plant = ref({});
+const plantInfo = ref({});
 
 /**
  * 1つの植物と、リレーションしているものを取得する
  */
 const getPlant = () => {
   axios.get(`/api/plants/${props.plantId}`).then((result) => {
-    plant.value = result.data;
+    plantInfo.value = result.data;
   });
 };
 
