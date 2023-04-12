@@ -10,7 +10,12 @@ const router = createRouter({
       component: () => import("../components/pages/Home.vue"),
       children: [
         {
-          path: "/plants",
+          path: "",
+          name: "PlantPlaces",
+          component: () => import("../components/modules/PlantPlaces.vue"),
+        },
+        {
+          path: "/plants/search",
           name: "PlantItems",
           component: () => import("../components/modules/PlantItems.vue"),
         },

@@ -5,7 +5,7 @@
       <li v-for="item in searchResults.data" :key="item.id">
         <RouterLink :to="{ name: 'PlantItem', params: { plantId: item.id } }">
           <p>{{ item.name }}</p>
-          <img :src="item.file_path" alt="" />
+          <img :src="`../${item.file_path}`" alt="" />
         </RouterLink>
       </li>
     </ul>
