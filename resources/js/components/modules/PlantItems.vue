@@ -28,7 +28,7 @@ onMounted(() => {
   }
 
   // パンくずリストに「図鑑検索結果」を追加する
-  breadCrumbs.push({ text: "図鑑検索結果", to: "/plants/search" });
+  breadCrumbs.push({ text: "図鑑検索結果", to: { name: "PlantItems" } });
 });
 </script>
 

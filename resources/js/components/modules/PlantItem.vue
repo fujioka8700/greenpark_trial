@@ -44,7 +44,12 @@ onMounted(async () => {
   // パンくずリストに植物名を追加する
   breadCrumbs.push({
     text: plantInfo.value.name,
-    to: `/plants/${plantInfo.value.id}`,
+    to: {
+      name: "PlantItem",
+      params: {
+        plantId: plantInfo.value.id,
+      },
+    },
   });
 });
 </script>
