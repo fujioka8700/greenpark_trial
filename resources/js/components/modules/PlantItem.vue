@@ -14,6 +14,7 @@
 </template>
 
 <script setup>
+import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { onMounted, ref } from "vue";
 
 const props = defineProps({
@@ -21,21 +22,30 @@ const props = defineProps({
   plantId: String,
 });
 
+// パンくずリストはStoreに保存している
+const breadCrumbs = useStoreBreadCrumbs();
+
 /** @type {Object} 植物の情報 */
 const plantInfo = ref({});
 
 /**
  * 1つの植物と、リレーションしているものを取得する
  */
-const getPlant = () => {
-  axios.get(`/api/plants/${props.plantId}`).then((result) => {
+const getPlant = async () => {
+  await axios.get(`/api/plants/${props.plantId}`).then((result) => {
     plantInfo.value = result.data;
   });
 };
 
-onMounted(() => {
+onMounted(async () => {
   // 1つの植物と、リレーションしているものを取得する
-  getPlant();
+  await getPlant();
+
+  // パンくずリストに植物名を追加する
+  breadCrumbs.push({
+    text: plantInfo.value.name,
+    to: `/plants/${plantInfo.value.id}`,
+  });
 });
 </script>
 

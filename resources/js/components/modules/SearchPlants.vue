@@ -59,9 +59,6 @@ const searchPlants = () => {
       // 検索結果を provide で使用する
       searchResults.value = result.data;
 
-      // パンくずリストに「図鑑検索結果」を追加する
-      breadCrumbs.push({ text: "図鑑検索結果", to: "/plants/search" });
-
       // 検索結果は、/plants/search で表示する
       router.push({ name: "PlantItems" });
     })

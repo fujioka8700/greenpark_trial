@@ -13,9 +13,23 @@
 </template>
 
 <script setup>
-import { inject } from "vue";
+import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
+import { onMounted, inject } from "vue";
 
 const searchResults = inject("searchResults");
+
+// パンくずリストはStoreに保存している
+const breadCrumbs = useStoreBreadCrumbs();
+
+onMounted(() => {
+  // パンくずリストに、植物名があればリセットする
+  if (breadCrumbs.items.length >= 3) {
+    breadCrumbs.$reset();
+  }
+
+  // パンくずリストに「図鑑検索結果」を追加する
+  breadCrumbs.push({ text: "図鑑検索結果", to: "/plants/search" });
+});
 </script>
 
 <style lang="scss" scoped></style>
