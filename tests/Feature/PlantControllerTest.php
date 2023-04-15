@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Plant;
+use App\Models\Color;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +16,7 @@ class PlantControllerTest extends TestCase
   use RefreshDatabase;
   use WithFaker;
 
-  public $user;
+  private $user; // 新規ユーザー
 
   protected function setUp(): void
   {
@@ -29,21 +30,24 @@ class PlantControllerTest extends TestCase
     Storage::fake('local');
 
     $name = $this->faker()->text(10);
-    $dummy = UploadedFile::fake()->create('dummy.jpg');
+    $dummy = UploadedFile::fake()->image('dummy.jpg', 640, 480);
+    $description = $this->faker()->text(100);
 
     $response = $this->actingAs($this->user)->postJson('/api/plants', [
       'name' => $name,
       'file' => $dummy,
+      'description' => $description,
     ]);
 
-    $path = Plant::all()->find(1)->file_path;
+    $path = Plant::first()->file_path;
 
     // アップロードされたファイルが保存されているか
-    Storage::disk('local')->assertExists("public/image/{$dummy->hashName()}");
+    Storage::disk('local')->assertExists("public/images/{$dummy->hashName()}");
 
     $response->assertStatus(201)->assertJson([
       'name' => $name,
       'file_path' => $path,
+      'description' => $description,
     ]);
   }
 
@@ -59,6 +63,60 @@ class PlantControllerTest extends TestCase
         'name' => ['名前は必ず指定してください。'],
         'file' => ['ファイルは必ず指定してください。'],
       ],
+    ]);
+  }
+
+  public function test_植物を検索する(): void
+  {
+    Storage::fake('local');
+
+    // 植物の登録と、画像のファイル保存
+    User::factory()->hasPlants()->create();
+
+    $serchKeyWord = Plant::find(1)->name; // 検索する文字列
+    $file_path = Plant::find(1)->file_path; // 画像のファイルパス
+    $file = preg_replace('/(.*)images\//', '', $file_path); // 保存された画像のファイル名
+
+    // 画像のファイルが保存されているか確認する
+    Storage::disk('local')->assertExists("public/images/{$file}");
+
+    $response = $this->getJson('/api/plants/search', [
+      'keyword' => $serchKeyWord,
+    ]);
+
+    $response->assertStatus(200)->assertJson([
+      'current_page' => 1,
+      'data' => [
+        [
+          'name' => $serchKeyWord,
+          'file_path' => $file_path,
+        ]
+      ]
+    ]);
+  }
+
+  public function test_1つの植物を返す(): void
+  {
+    Storage::fake('local');
+
+    // ランダムに、紐づける色を決定する
+    $colors = Color::all()->random(random_int(1, 9));
+
+    // 植物を1つ登録（画像ファイルも保存）し、色を紐づける
+    $plants = Plant::factory(1)->hasAttached($colors)->recycle($this->user)->create();
+    $plant = $plants->first();
+
+    // 紐づけした色を、配列にする
+    $plantColor = [];
+    foreach ($plant->colors as $color) {
+      array_push($plantColor, ['name' => $color->name]);
+    }
+
+    $response = $this->getJson("/api/plants/{$plant->id}");
+
+    $response->assertStatus(200)->assertJson([
+      'name' => $plant->name,
+      'colors' => $plantColor,
     ]);
   }
 }

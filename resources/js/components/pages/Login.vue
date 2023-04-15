@@ -24,7 +24,10 @@ import { ref } from "vue";
 const auth = useStoreAuth();
 const { errorMessage } = storeToRefs(auth);
 
+/** @type {string} ログインするユーザー */
 const email = ref("");
+
+/** @type {string} ログインするためのパスワード */
 const pass = ref("");
 </script>
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Plant;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -44,9 +45,10 @@ class User extends Authenticatable
   ];
 
   /**
-   * 1対多のusersテーブル(親テーブル)でplantsテーブル(子テーブル)のリレーションを定義
+   * 1対多 users(親) 対 plants(子)
+   * @return \Illuminate\Database\Eloquent\Relations\HasMany
    */
-  public function plants()
+  public function plants(): HasMany
   {
     return $this->hasMany(Plant::class);
   }

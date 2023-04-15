@@ -28,8 +28,13 @@ import { ref } from "vue";
 const auth = useStoreAuth();
 const { errorMessage } = storeToRefs(auth);
 
+/** @type {string} 新ユーザーの名前 */
 const name = ref("");
+
+/** @type {string} 新ユーザーのメールアドレス */
 const email = ref("");
+
+/** @type {string} 新ユーザーのパスワード */
 const pass = ref("");
 </script>
 
