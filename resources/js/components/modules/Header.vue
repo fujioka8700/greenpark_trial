@@ -2,7 +2,7 @@
   <div>
     <h1>タイトル</h1>
     <ul>
-      <li><RouterLink :to="{ name: 'Home' }">ホーム</RouterLink></li>
+      <li><RouterLink :to="{ name: 'PlantPlaces' }">ホーム</RouterLink></li>
       <div v-if="user">
         <li><RouterLink :to="{ name: 'StorePlant' }">植物登録</RouterLink></li>
         <li>

@@ -9,20 +9,43 @@
       <button type="submit">検索</button>
     </form>
     <div>
-      <PlantItems />
+      <v-breadcrumbs :items="breadCrumbs.items" divider=">"></v-breadcrumbs>
+    </div>
+    <div>
+      <RouterView />
     </div>
   </div>
 </template>
 
 <script setup>
-import PlantItems from "./PlantItems.vue";
-import { ref, provide } from "vue";
+import { ref, provide, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 
+const router = useRouter();
+const route = useRoute();
+
+// パンくずリストはStoreに保存している
+const breadCrumbs = useStoreBreadCrumbs();
+
+watch(route, () => {
+  // 「図鑑トップ」をクリックした時、
+  // パンくずリストのStoreをリセットする
+  if (route.path === "/") {
+    breadCrumbs.$reset();
+  }
+});
+
+/** @type {string} 検索する植物名 */
 const keyword = ref("");
-const searchResults = ref({});
 
+/** @type {Object[]} 検索後の植物 */
+const searchResults = ref({});
 provide("searchResults", searchResults);
 
+/**
+ * 登録している植物を検索する
+ */
 const searchPlants = () => {
   axios
     .get("/api/plants/search", {
@@ -33,7 +56,11 @@ const searchPlants = () => {
     .then((result) => {
       console.log(result);
 
+      // 検索結果を provide で使用する
       searchResults.value = result.data;
+
+      // 検索結果は、/plants/search で表示する
+      router.push({ name: "PlantItems" });
     })
     .catch((err) => {
       console.log(err);

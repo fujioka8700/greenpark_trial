@@ -24,6 +24,8 @@ class StorePlantPostRequest extends FormRequest
     return [
       'name' => 'required|string|unique:plants|max:255',
       'file' => 'required|file|image',
+      'description' => 'required|string|max:255',
+      'colors' => 'nullable',
     ];
   }
 }

@@ -14,11 +14,15 @@ import { reactive, onMounted } from "vue";
 const auth = useStoreAuth();
 
 const user = reactive({
+  /** @type {string} ログインユーザーの名前 */
   name: "",
+
+  /** @type {string} ログインユーザーのメールアドレス */
   email: "",
 });
 
 onMounted(async () => {
+  /** コンポーネントをマウント時に、ログインユーザーの情報を取得する */
   const auth = useStoreAuth();
   await auth.currentUser();
 
