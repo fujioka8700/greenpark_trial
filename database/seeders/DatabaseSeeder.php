@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Plant;
 use App\Models\Color;
+use App\Models\Place;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -39,23 +40,38 @@ class DatabaseSeeder extends Seeder
     /** ログインしやすいユーザーを1番目に追加 */
     $users->prepend($user);
 
-    /** 植物の色を作成 */
+    /** 植物の色 */
     // $colors = Color::factory(self::COLORS_COUNT)->create();
     $colors = Color::all();
 
-    /** 1対多 ユーザー 対 植物
-     *  多対多 植物 対 色
-     *   ・植物を作成するユーザーはランダム
-     *   ・植物の色数はランダム(1～9)
-     *  テーブルの作成
+    /** 植物の生育場所 */
+    $places = Place::all();
+
+    /**
+     * 1対多 ユーザー 対 植物
+     * 植物を作成するユーザーはランダム
      */
     // Plant::factory(self::PLANTS_COUNT)->hasAttached($colors)->recycle($users)->create();
     Plant::factory(self::PLANTS_COUNT)
       ->recycle($users)
       ->create()
-      ->each(fn ($plant) =>
-      $plant
-        ->colors()
-        ->attach($colors->random(random_int(1, 9))));
+      ->each(
+        function ($plant) use ($colors, $places) {
+          /**
+           * 多対多 植物 対 色
+           * 植物の色はランダム(白～その他)
+           */
+          $plant
+            ->colors()
+            ->attach($colors->random(random_int(1, $colors->count())));
+          /**
+           * 多対多 植物 対 生育場所
+           * 植物の生育場所はランダム(街路～社寺)
+           */
+          $plant
+            ->places()
+            ->attach($places->random(random_int(1, $places->count())));
+        }
+      );
   }
 }
