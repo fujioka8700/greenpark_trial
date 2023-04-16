@@ -10,9 +10,6 @@ class ColorControllerTest extends TestCase
 {
   use RefreshDatabase;
 
-  /**
-   * A basic feature test example.
-   */
   public function test_花の色、一覧取得する(): void
   {
     $response = $this->getJson('/api/colors');

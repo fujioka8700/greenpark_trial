@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PlantController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\PlaceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +33,4 @@ Route::get('/plants/search', [PlantController::class, 'search']);
 
 Route::apiResource('plants', PlantController::class);
 Route::apiResource('colors', ColorController::class);
+Route::apiResource('places', PlaceController::class);
