@@ -53,6 +53,15 @@ class PlantController extends Controller
       $plant->colors()->attach($colors);
     }
 
+    // 良く生えている場所を保存する
+    if (isset($request->places)) {
+      // 良く生えている場所を、配列へ変換する
+      $places = explode(",", $request->places);
+
+      // 登録した植物と、良く生えている場所を紐付ける
+      $plant->places()->attach($places);
+    }
+
     return response()->json($plant, Response::HTTP_CREATED);
   }
 

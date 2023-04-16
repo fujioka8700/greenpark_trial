@@ -33,10 +33,19 @@ class PlantControllerTest extends TestCase
     $dummy = UploadedFile::fake()->image('dummy.jpg', 640, 480);
     $description = $this->faker()->text(100);
 
+    // 良く生えている場所を、「街路・公園・社寺」から選ぶ
+    $array = [1, 2, 3];
+    $response = [];
+    foreach (array_rand($array, random_int(2, count($array))) as $key) {
+      $response[] = $array[$key];
+    }
+    $places = implode(',', $response);
+
     $response = $this->actingAs($this->user)->postJson('/api/plants', [
       'name' => $name,
       'file' => $dummy,
       'description' => $description,
+      'places' => $places,
     ]);
 
     $path = Plant::first()->file_path;

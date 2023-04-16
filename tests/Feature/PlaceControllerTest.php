@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Plant;
-use App\Models\Place;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -17,6 +17,8 @@ class PlaceControllerTest extends TestCase
   protected function setUp(): void
   {
     parent::setUp();
+
+    Storage::fake('local');
 
     // ユーザー1人、作成
     $user = User::factory()->create();

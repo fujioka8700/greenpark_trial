@@ -164,6 +164,7 @@ return [
     'file' => 'ファイル',
     'description' => '説明',
     'colors' => '花の色',
+    'places' => '良く生えている場所',
   ],
 
 ];

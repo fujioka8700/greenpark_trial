@@ -16,7 +16,12 @@
       <p>良く生えている場所</p>
       <ul>
         <li v-for="place in places" :key="place.id">
-          <input type="checkbox" :id="place.id" :value="place.id" />
+          <input
+            type="checkbox"
+            :id="place.id"
+            :value="place.id"
+            v-model="placesCheckedValues"
+          />
           <label :for="place.id">{{ place.name }}</label>
         </li>
       </ul>
@@ -73,6 +78,9 @@ const places = ref({});
 
 /** @type {Array} 指定した花の色 */
 const colorsCheckedValues = ref([]);
+
+/** @type {Array} 指定した良く生えている場所 */
+const placesCheckedValues = ref([]);
 
 /** @type {Object} axios ヘッダー定義 */
 const config = {
@@ -143,6 +151,7 @@ const sendButton = () => {
   formData.append("name", name.value);
   formData.append("file", fileInfo.value);
   formData.append("description", description.value);
+  formData.append("places", placesCheckedValues.value);
   formData.append("colors", colorsCheckedValues.value);
 
   storePlant(formData);
