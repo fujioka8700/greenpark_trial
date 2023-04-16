@@ -13,6 +13,14 @@
         <input type="file" @change="fileSelected" required />
       </label>
       <br />
+      <p>良く生えている場所</p>
+      <ul>
+        <li v-for="place in places" :key="place.id">
+          <input type="checkbox" :id="place.id" :value="place.id" />
+          <label :for="place.id">{{ place.name }}</label>
+        </li>
+      </ul>
+      <p>花の色</p>
       <ul>
         <li v-for="color in colors" :key="color.id">
           <input
@@ -60,6 +68,9 @@ const description = ref("");
 /** @type {Object} 花の色、一覧 */
 const colors = ref({});
 
+/** @type {Object} 良く生えている場所、一覧 */
+const places = ref({});
+
 /** @type {Array} 指定した花の色 */
 const colorsCheckedValues = ref([]);
 
@@ -68,6 +79,15 @@ const config = {
   headers: {
     "content-type": "multipart/form-data",
   },
+};
+
+/**
+ * 良く生えている場所、一覧を取得する
+ */
+const placesList = () => {
+  axios.get("/api/places").then((result) => {
+    places.value = result.data;
+  });
 };
 
 /**
@@ -131,6 +151,9 @@ const sendButton = () => {
 onMounted(() => {
   // 花の色、一覧を取得する
   colorsList();
+
+  // 良く生えている場所、一覧を取得する
+  placesList();
 });
 </script>
 
