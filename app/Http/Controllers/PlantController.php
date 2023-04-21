@@ -70,8 +70,8 @@ class PlantController extends Controller
    */
   public function show(Plant $plant)
   {
-    // 植物と、紐付いている色を取得する
-    $plant = $plant->with('colors')->find($plant->id);
+    // 植物と、紐付いている色、生育場所を取得する
+    $plant = $plant->with(['colors', 'places'])->find($plant->id);
 
     return response()->json($plant, Response::HTTP_OK);
   }
