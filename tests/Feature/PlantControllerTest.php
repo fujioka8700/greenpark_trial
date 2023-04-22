@@ -76,7 +76,7 @@ class PlantControllerTest extends TestCase
     ]);
   }
 
-  public function test_植物を検索する(): void
+  public function test_植物を名前で検索し、一覧を取得する(): void
   {
     Storage::fake('local');
 
@@ -90,9 +90,10 @@ class PlantControllerTest extends TestCase
     // 画像のファイルが保存されているか確認する
     Storage::disk('local')->assertExists("public/images/{$file}");
 
-    $response = $this->getJson('/api/plants/search', [
-      'keyword' => $serchKeyWord,
-    ]);
+    $response = $this->getJson(route(
+      'search.plant',
+      ['keyword' => $serchKeyWord],
+    ));
 
     $response->assertStatus(200)->assertJson([
       'current_page' => 1,
@@ -141,6 +142,34 @@ class PlantControllerTest extends TestCase
       'name' => $plant->name,
       'colors' => $plantColors,
       'places' => $plantPlaces,
+    ]);
+  }
+
+
+  public function test_生育場所で検索し、一覧を取得する(): void
+  {
+    Storage::fake('local');
+
+    // 生育場所を街路にする
+    $places = Place::where('name', '街路')->get();
+
+    $plants = Plant::factory(1)
+      ->hasAttached($places)
+      ->recycle($this->user)->create();
+
+    // 街路、生け垣で検索する
+    $response = $this->getJson(route(
+      'search.places',
+      ['places' => ['街路', '生け垣']]
+    ));
+
+    $response->assertStatus(200)->assertJson([
+      'current_page' => 1,
+      'data' => [
+        [
+          'name' => $plants->first()->name,
+        ],
+      ]
     ]);
   }
 }

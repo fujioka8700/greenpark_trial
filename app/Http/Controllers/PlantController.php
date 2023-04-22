@@ -100,7 +100,7 @@ class PlantController extends Controller
   public function search(Request $request): JsonResponse
   {
     /** キーワード受け取り */
-    $keyword = $request->input('keyword');
+    $keyword = $request->query('keyword');
 
     /** クエリ生成 */
     $query = Plant::query();
@@ -108,6 +108,26 @@ class PlantController extends Controller
     /** もしキーワードがあったら */
     if (!empty($keyword)) {
       $query->where('name', 'like', '%' . $keyword . '%');
+    }
+
+    $data = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
+
+    return response()->json($data, Response::HTTP_OK);
+  }
+
+  public function searchPlaces(Request $request)
+  {
+    // 生育場所、受け取り
+    $places = $request->query('places');
+
+    $query = '';
+
+    // もし生育場所があったら
+    if (!empty($places)) {
+      // リレーション先の生育場所を、IN(含まれる)で複数の一致を判定する
+      $query = Plant::whereHas('places', function ($query) use ($places) {
+        $query->whereIn('name', $places);
+      });
     }
 
     $data = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
