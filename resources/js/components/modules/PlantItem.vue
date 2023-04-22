@@ -3,6 +3,11 @@
     <h4>{{ plantInfo.name }}</h4>
     <img :src="`../${plantInfo.file_path}`" alt="" />
     <ul>
+      <li v-for="place in plantInfo.places" :key="place.id">
+        {{ place.name }}
+      </li>
+    </ul>
+    <ul>
       <li v-for="color in plantInfo.colors" :key="color.id">
         {{ color.name }}
       </li>
