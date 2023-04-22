@@ -1,13 +1,15 @@
 <template>
   <div>
     <h3>植物を検索</h3>
-    <form @submit.prevent="searchPlants">
-      <label>
-        <input type="text" v-model="keyword" placeholder="keyword" />
-      </label>
-      <br />
-      <button type="submit">検索</button>
-    </form>
+    <v-sheet width="300">
+      <v-form @submit.prevent="searchPlants">
+        <v-text-field
+          v-model="keyword"
+          label="植物の名前を入力してください"
+        ></v-text-field>
+        <v-btn type="submit" block class="mt-1">検索する</v-btn>
+      </v-form>
+    </v-sheet>
     <div>
       <v-breadcrumbs :items="breadCrumbs.items" divider=">"></v-breadcrumbs>
     </div>
