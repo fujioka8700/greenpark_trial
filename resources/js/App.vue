@@ -2,7 +2,9 @@
   <div>
     <v-app>
       <Header />
-      <RouterView />
+      <v-main>
+        <RouterView />
+      </v-main>
     </v-app>
   </div>
 </template>
