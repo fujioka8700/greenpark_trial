@@ -20,7 +20,10 @@
 </template>
 
 <script setup>
-const emit = defineEmits(["changeSearchResults"]);
+import { inject } from "vue";
+
+/** @type {Function} Provide の searchResults を変更する */
+const changeResults = inject("changeResults");
 
 /**
  * 生育場所で植物を検索する
@@ -34,8 +37,11 @@ const searchPlaces = (places) => {
       },
     })
     .then((result) => {
-      // 親コンポーネント(SearchPlants.vue)にデータを渡す
-      emit("changeSearchResults", result.data);
+      // Provide の searchResults を変更し、検索結果を表示する
+      changeResults(result.data);
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
 

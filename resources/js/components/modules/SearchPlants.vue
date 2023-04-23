@@ -14,7 +14,7 @@
       <v-breadcrumbs :items="breadCrumbs.items" divider=">"></v-breadcrumbs>
     </div>
     <div>
-      <RouterView @changeSearchResults="changeResults" />
+      <RouterView />
     </div>
   </div>
 </template>
@@ -37,14 +37,6 @@ const keyword = ref("");
 const searchResults = ref({});
 provide("searchResults", searchResults);
 
-watch(route, () => {
-  // 「図鑑トップ」をクリックした時、
-  // パンくずリストのStoreをリセットする
-  if (route.path === "/") {
-    breadCrumbs.$reset();
-  }
-});
-
 /**
  * 子コンポーネントで検索した結果を表示する
  * @param {Object} result 検索結果
@@ -55,6 +47,15 @@ const changeResults = (result) => {
   // 検索結果は、/plants/search で表示する
   router.push({ name: "PlantItems" });
 };
+provide("changeResults", changeResults);
+
+watch(route, () => {
+  // 「図鑑トップ」をクリックした時、
+  // パンくずリストのStoreをリセットする
+  if (route.path === "/") {
+    breadCrumbs.$reset();
+  }
+});
 
 /**
  * 登録している植物を検索する
