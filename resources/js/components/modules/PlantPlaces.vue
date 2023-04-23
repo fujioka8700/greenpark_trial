@@ -20,10 +20,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-
-/** @type {Array} 検索する生育場所 */
-const places = ref([]);
+const emit = defineEmits(["changeSearchResults"]);
 
 /**
  * 生育場所で植物を検索する
@@ -37,7 +34,8 @@ const searchPlaces = (places) => {
       },
     })
     .then((result) => {
-      console.log(result);
+      // 親コンポーネント(SearchPlants.vue)にデータを渡す
+      emit("changeSearchResults", result.data);
     });
 };
 
