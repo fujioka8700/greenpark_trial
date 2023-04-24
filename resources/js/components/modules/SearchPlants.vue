@@ -1,15 +1,25 @@
 <template>
   <div>
-    <h3>植物を検索</h3>
-    <v-sheet width="300">
-      <v-form @submit.prevent="searchPlants">
+    <v-card
+      class="mx-auto my-5 px-3 py-3"
+      max-width="544"
+      color="grey-lighten-4"
+    >
+      <v-form class="d-flex align-center" @submit.prevent="searchPlants">
         <v-text-field
+          class="mr-3"
+          label="花の名前から検索する"
           v-model="keyword"
-          label="植物の名前を入力してください"
+          hide-details="auto"
+          density="comfortable"
         ></v-text-field>
-        <v-btn type="submit" block class="mt-1">検索する</v-btn>
+
+        <v-btn color="success" size="large" type="submit" variant="elevated">
+          <v-icon icon="mdi-magnify"></v-icon>検索
+        </v-btn>
       </v-form>
-    </v-sheet>
+    </v-card>
+
     <div>
       <v-breadcrumbs :items="breadCrumbs.items" divider=">"></v-breadcrumbs>
     </div>

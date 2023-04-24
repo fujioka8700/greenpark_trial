@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>HomeView</h2>
     <SearchPlants />
   </div>
 </template>

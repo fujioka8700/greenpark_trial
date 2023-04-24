@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar :elevation="2" color="green" density="compact">
+    <v-app-bar :elevation="2" color="success" density="compact">
       <v-app-bar-title>
         <RouterLink
           class="text-decoration-none text-white"
