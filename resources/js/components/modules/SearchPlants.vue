@@ -1,10 +1,6 @@
 <template>
   <div>
-    <v-card
-      class="mx-auto my-5 px-3 py-3"
-      max-width="544"
-      color="grey-lighten-4"
-    >
+    <v-card class="mx-auto px-3 py-3" max-width="544" color="grey-lighten-4">
       <v-form class="d-flex align-center" @submit.prevent="searchPlants">
         <v-text-field
           class="mr-3"
@@ -24,7 +20,15 @@
       <v-breadcrumbs :items="breadCrumbs.items" divider=">"></v-breadcrumbs>
     </div>
     <div>
-      <RouterView />
+      <v-row>
+        <v-col cols="8" class="bg-red">
+          <RouterView />
+        </v-col>
+
+        <v-col cols="4" class="bg-blue">
+          <p>ここにピックアップ情報</p>
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
