@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-app-bar :elevation="2" color="success" density="compact">
+  <v-app-bar :elevation="2" color="success" density="compact">
+    <v-container class="d-flex align-center">
       <v-app-bar-title>
         <RouterLink
           class="text-decoration-none text-white"
@@ -8,8 +8,9 @@
           >植物図鑑</RouterLink
         >
       </v-app-bar-title>
-      <template v-slot:append>
-        <div v-if="user">
+
+      <div>
+        <template v-if="user">
           <v-btn variant="text">
             <RouterLink
               class="text-decoration-none text-white"
@@ -24,8 +25,8 @@
               >{{ user.name }}</RouterLink
             ></v-btn
           >
-        </div>
-        <div v-else>
+        </template>
+        <template v-else>
           <v-btn variant="text">
             <RouterLink
               class="text-decoration-none text-white"
@@ -40,10 +41,10 @@
               >ログイン</RouterLink
             ></v-btn
           >
-        </div>
-      </template>
-    </v-app-bar>
-  </div>
+        </template>
+      </div>
+    </v-container>
+  </v-app-bar>
 </template>
 
 <script setup>

@@ -1,36 +1,38 @@
 <template>
-  <div>
-    <v-card class="mx-auto px-3 py-3" max-width="544" color="grey-lighten-4">
-      <v-form class="d-flex align-center" @submit.prevent="searchPlants">
-        <v-text-field
-          class="mr-3"
-          label="花の名前から検索する"
-          v-model="keyword"
-          hide-details="auto"
-          density="comfortable"
-        ></v-text-field>
+  <v-app>
+    <v-container>
+      <v-card class="mx-auto px-3 py-3" max-width="544" color="grey-lighten-4">
+        <v-form class="d-flex align-center" @submit.prevent="searchPlants">
+          <v-text-field
+            class="mr-3"
+            label="花の名前から検索する"
+            v-model="keyword"
+            hide-details="auto"
+            density="comfortable"
+          ></v-text-field>
 
-        <v-btn color="success" size="large" type="submit" variant="elevated">
-          <v-icon icon="mdi-magnify"></v-icon>検索
-        </v-btn>
-      </v-form>
-    </v-card>
+          <v-btn color="success" size="large" type="submit" variant="elevated">
+            <v-icon icon="mdi-magnify"></v-icon>検索
+          </v-btn>
+        </v-form>
+      </v-card>
 
-    <div>
-      <v-breadcrumbs :items="breadCrumbs.items" divider=">"></v-breadcrumbs>
-    </div>
-    <div>
-      <v-row>
-        <v-col cols="8" class="bg-red">
-          <RouterView />
-        </v-col>
+      <div>
+        <v-breadcrumbs :items="breadCrumbs.items" divider=">"></v-breadcrumbs>
+      </div>
+      <div>
+        <v-row>
+          <v-col cols="8" class="bg-red">
+            <RouterView />
+          </v-col>
 
-        <v-col cols="4" class="bg-blue">
-          <p>ここにピックアップ情報</p>
-        </v-col>
-      </v-row>
-    </div>
-  </div>
+          <v-col cols="4" class="bg-blue">
+            <p>ここにピックアップ情報</p>
+          </v-col>
+        </v-row>
+      </div>
+    </v-container>
+  </v-app>
 </template>
 
 <script setup>

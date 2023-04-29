@@ -1,14 +1,10 @@
 <template>
-  <div>
-    <v-app>
-      <Header />
-      <v-main>
-        <v-container>
-          <RouterView />
-        </v-container>
-      </v-main>
-    </v-app>
-  </div>
+  <v-app>
+    <Header />
+    <v-main>
+      <RouterView />
+    </v-main>
+  </v-app>
 </template>
 
 <script setup>
