@@ -3,6 +3,17 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHistory(),
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      // 戻るや進むの場合は、ページ遷移前のスクロール位置を維持する
+      return savedPosition;
+    } else {
+      // ページ遷移時にスクロール位置をトップにする
+      return {
+        top: 0,
+      };
+    }
+  },
   routes: [
     {
       path: "/",
