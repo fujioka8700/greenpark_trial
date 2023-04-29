@@ -22,11 +22,11 @@
       </div>
       <div>
         <v-row>
-          <v-col cols="8" class="bg-red">
+          <v-col cols="12" sm="8">
             <RouterView />
           </v-col>
 
-          <v-col cols="4" class="bg-blue">
+          <v-col cols="12" sm="4" class="bg-blue">
             <p>ここにピックアップ情報</p>
           </v-col>
         </v-row>

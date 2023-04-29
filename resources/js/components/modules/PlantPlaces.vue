@@ -1,25 +1,22 @@
 <template>
-  <div>
-    <ul>
-      <li>
-        <a href="" @click.stop.prevent="createSearchPlaces">街路・生け垣</a>
-      </li>
-      <li>
-        <a href="" @click.stop.prevent="createSearchPlaces">市街地・公園</a>
-      </li>
-      <li>
-        <a href="" @click.stop.prevent="createSearchPlaces">神社・寺院</a>
-      </li>
-      <li>道端・草地</li>
-      <li>空き地・土手</li>
-      <li>田畑・あぜ</li>
-      <li>雑木林・林緑・やぶ</li>
-      <li>水辺・海辺</li>
-    </ul>
-  </div>
+  <v-row>
+    <v-col v-for="placeLink in placeLinks" :key="placeLink" cols="12" sm="4">
+      <v-card
+        class="mx-auto"
+        max-width="344"
+        link
+        @click.stop.prevent="createSearchPlaces(placeLink[0])"
+      >
+        <v-img :src="placeLink[1]" max-height="130" cover></v-img>
+
+        <v-card-title class="text-body-1">{{ placeLink[0] }}</v-card-title>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script setup>
+import { placeLinks } from "../../util";
 import { inject } from "vue";
 
 /** @type {Function} Provide の searchResults を変更する */
@@ -47,13 +44,11 @@ const searchPlaces = (places) => {
 
 /**
  * 生育場所を作成後、検索する
- * @param {Object} event クリックした li 要素
+ * @param {Object} place 検索する生育場所
  */
-const createSearchPlaces = (event) => {
-  const string = event.target.innerText;
-
+const createSearchPlaces = (place) => {
   /** @type {Array} 生育場所 */
-  const places = string.split("・");
+  const places = place.split("・");
 
   searchPlaces(places);
 };
