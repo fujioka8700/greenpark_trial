@@ -18,7 +18,11 @@
       </v-card>
 
       <div>
-        <v-breadcrumbs :items="breadCrumbs.items" divider=">"></v-breadcrumbs>
+        <v-breadcrumbs
+          class="text-caption"
+          :items="breadCrumbs.items"
+          divider=">"
+        ></v-breadcrumbs>
       </div>
       <div>
         <v-row>

@@ -1,15 +1,37 @@
 <template>
-  <div>
-    <h4>植物アイテム</h4>
-    <ul>
-      <li v-for="item in searchResults.data" :key="item.id">
-        <RouterLink :to="{ name: 'PlantItem', params: { plantId: item.id } }">
-          <p>{{ item.name }}</p>
-          <img :src="`../${item.file_path}`" alt="" />
-        </RouterLink>
-      </li>
-    </ul>
-  </div>
+  <h4>検索結果</h4>
+
+  <ul>
+    <li
+      class="my-3"
+      style="list-style: none"
+      v-for="item in searchResults.data"
+      :key="item.id"
+    >
+      <RouterLink
+        class="text-decoration-none"
+        :to="{ name: 'PlantItem', params: { plantId: item.id } }"
+      >
+        <v-card link max-height="200" class="overflow-hidden">
+          <v-card-title class="text-h6 bg-blue-grey-lighten-5">
+            {{ item.name }}
+          </v-card-title>
+
+          <div class="d-flex">
+            <v-avatar class="ma-3" size="125" rounded="0">
+              <v-img :src="`../${item.file_path}`" cover></v-img>
+            </v-avatar>
+
+            <div>
+              <v-card-text class="pa-3 pl-0 text-caption">
+                {{ item.description }}
+              </v-card-text>
+            </div>
+          </div>
+        </v-card>
+      </RouterLink>
+    </li>
+  </ul>
 </template>
 
 <script setup>
@@ -28,7 +50,7 @@ onMounted(() => {
   }
 
   // パンくずリストに「図鑑検索結果」を追加する
-  breadCrumbs.push({ text: "図鑑検索結果", to: { name: "PlantItems" } });
+  breadCrumbs.push({ text: "検索結果", to: { name: "PlantItems" } });
 });
 </script>
 
