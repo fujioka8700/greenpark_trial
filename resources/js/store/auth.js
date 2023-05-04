@@ -43,11 +43,11 @@ export const useStoreAuth = defineStore("auth", {
 
                 this.router.push("/about");
               } else {
-                this.errorMessage = "ログインに失敗しました。";
+                this.errorMessage = "入力項目に不備があります。";
               }
             })
             .catch((err) => {
-              this.errorMessage = "ログインに失敗しました。";
+              this.errorMessage = "入力項目に不備があります。";
             });
         })
         .catch((err) => {});
