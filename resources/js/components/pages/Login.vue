@@ -24,6 +24,7 @@
       <v-form v-model="form" @submit.prevent="onSubmit">
         <v-text-field
           v-model="email"
+          type="email"
           :readonly="loading"
           :rules="[required]"
           class="mb-2"
@@ -32,6 +33,7 @@
         ></v-text-field>
         <v-text-field
           v-model="pass"
+          type="password"
           :readonly="loading"
           :rules="[required]"
           class="mb-2"
@@ -73,10 +75,6 @@ const form = ref(false);
 
 /** @type {boolean} ログイン確認時、ローディングにする */
 const loading = ref(false);
-
-// 開発中、仮のユーザーとパスワード
-email.value = "test@example.com";
-pass.value = "password";
 
 /**
  * バリデーション、必須入力
