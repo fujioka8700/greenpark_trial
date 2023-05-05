@@ -6,53 +6,57 @@
         rounded="0"
         color="red-lighten-5"
         class="mx-auto mb-3"
-        max-width="344"
+        max-width="360"
       >
-        <v-card-title
-          ><span class="text-body-2 text-red-darken-3">{{
-            errorMessage
-          }}</span></v-card-title
-        >
+        <v-card-title class="text-body-2 text-red-darken-3">
+          {{ errorMessage }}
+        </v-card-title>
       </v-card>
     </div>
 
-    <v-card class="mx-auto px-6 py-6" max-width="344">
-      <v-card-item class="pl-2">
-        <v-card-title>ログイン</v-card-title>
-      </v-card-item>
+    <v-sheet color="grey-lighten-3" class="mx-auto pa-2" max-width="360">
+      <v-card class="mx-auto pa-6" max-width="344">
+        <v-card-item class="pl-2 pt-0">
+          <v-card-title class="font-weight-bold text-center">
+            ログイン
+          </v-card-title>
+        </v-card-item>
 
-      <v-form v-model="form" @submit.prevent="onSubmit">
-        <v-text-field
-          v-model="email"
-          type="email"
-          :readonly="loading"
-          :rules="[required]"
-          class="mb-2"
-          clearable
-          label="メールアドレス"
-        ></v-text-field>
-        <v-text-field
-          v-model="pass"
-          type="password"
-          :readonly="loading"
-          :rules="[required]"
-          class="mb-2"
-          clearable
-          label="パスワード"
-        ></v-text-field>
-        <v-btn
-          :disabled="!form"
-          :loading="loading"
-          block
-          color="success"
-          size="large"
-          type="submit"
-          variant="elevated"
-        >
-          ログイン
-        </v-btn>
-      </v-form>
-    </v-card>
+        <v-divider class="mb-5"></v-divider>
+
+        <v-form v-model="form" @submit.prevent="onSubmit">
+          <v-text-field
+            v-model="email"
+            type="email"
+            :readonly="loading"
+            :rules="[required]"
+            class="mb-2"
+            clearable
+            label="メールアドレス"
+          ></v-text-field>
+          <v-text-field
+            v-model="pass"
+            type="password"
+            :readonly="loading"
+            :rules="[required]"
+            class="mb-2"
+            clearable
+            label="パスワード"
+          ></v-text-field>
+          <v-btn
+            :disabled="!form"
+            :loading="loading"
+            block
+            color="success"
+            size="large"
+            type="submit"
+            variant="elevated"
+          >
+            ログイン
+          </v-btn>
+        </v-form>
+      </v-card>
+    </v-sheet>
   </div>
 </template>
 
