@@ -84,7 +84,7 @@ const loading = ref(false);
  * バリデーション、必須入力
  * @param {string} value
  */
-const required = (value) => !!value || "必須です。";
+const required = (value) => !!value || "必須入力です。";
 
 /**
  * ログインできない場合、ローディングを解除する
