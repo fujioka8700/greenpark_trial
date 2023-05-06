@@ -1,16 +1,59 @@
 <template>
-  <div>
-    <h4>{{ plantInfo.name }}</h4>
-    <img :src="`../${plantInfo.file_path}`" alt="" />
-    <ul>
-      <li v-for="color in plantInfo.colors" :key="color.id">
-        {{ color.name }}
-      </li>
-    </ul>
-    <p class="m-plant-item-description">
-      {{ plantInfo.description }}
-    </p>
-  </div>
+  <v-row>
+    <v-col cols="12" sm="6">
+      <v-img cover :src="`../${plantInfo.file_path}`"></v-img>
+    </v-col>
+    <v-col cols="12" sm="6">
+      <v-table>
+        <tbody>
+          <tr>
+            <td class="font-weight-bold text-no-wrap">植物名</td>
+            <td>{{ plantInfo.name }}</td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold text-no-wrap">花の色</td>
+            <td>
+              <template
+                v-for="(color, index) in plantInfo.colors"
+                :key="color.id"
+              >
+                {{ color.name }}
+                <span v-if="index < plantInfo.colors.length - 1"> 、</span>
+              </template>
+            </td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold text-no-wrap">生育地</td>
+            <td>
+              <template
+                v-for="(place, index) in plantInfo.places"
+                :key="place.id"
+              >
+                {{ place.name }}
+                <span v-if="index < plantInfo.places.length - 1"> 、</span>
+              </template>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </v-col>
+  </v-row>
+  <v-row>
+    <v-col cols="12">
+      <v-card variant="text">
+        <v-card-item>
+          <v-card-title
+            class="font-weight-bold bg-blue-grey-lighten-5 pa-1 pl-3"
+            >特徴</v-card-title
+          >
+        </v-card-item>
+
+        <v-card-text class="m-plant-item-description">
+          {{ plantInfo.description }}
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script setup>
@@ -44,7 +87,12 @@ onMounted(async () => {
   // パンくずリストに植物名を追加する
   breadCrumbs.push({
     text: plantInfo.value.name,
-    to: `/plants/${plantInfo.value.id}`,
+    to: {
+      name: "PlantItem",
+      params: {
+        plantId: plantInfo.value.id,
+      },
+    },
   });
 });
 </script>

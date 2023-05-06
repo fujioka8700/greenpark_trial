@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Color;
+use App\Models\Place;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,5 +40,14 @@ class Plant extends Model
   public function colors(): BelongsToMany
   {
     return $this->belongsToMany(Color::class)->withTimestamps();
+  }
+
+  /**
+   * 多対多 plants と places
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+   */
+  public function places(): BelongsToMany
+  {
+    return $this->belongsToMany(Place::class)->withTimestamps();
   }
 }

@@ -13,6 +13,19 @@
         <input type="file" @change="fileSelected" required />
       </label>
       <br />
+      <p>良く生えている場所</p>
+      <ul>
+        <li v-for="place in places" :key="place.id">
+          <input
+            type="checkbox"
+            :id="place.id"
+            :value="place.id"
+            v-model="placesCheckedValues"
+          />
+          <label :for="place.id">{{ place.name }}</label>
+        </li>
+      </ul>
+      <p>花の色</p>
       <ul>
         <li v-for="color in colors" :key="color.id">
           <input
@@ -60,14 +73,29 @@ const description = ref("");
 /** @type {Object} 花の色、一覧 */
 const colors = ref({});
 
+/** @type {Object} 良く生えている場所、一覧 */
+const places = ref({});
+
 /** @type {Array} 指定した花の色 */
 const colorsCheckedValues = ref([]);
+
+/** @type {Array} 指定した良く生えている場所 */
+const placesCheckedValues = ref([]);
 
 /** @type {Object} axios ヘッダー定義 */
 const config = {
   headers: {
     "content-type": "multipart/form-data",
   },
+};
+
+/**
+ * 良く生えている場所、一覧を取得する
+ */
+const placesList = () => {
+  axios.get("/api/places").then((result) => {
+    places.value = result.data;
+  });
 };
 
 /**
@@ -95,7 +123,7 @@ const storePlant = (formData) => {
   axios
     .post("/api/plants", formData, config)
     .then((result) => {
-      router.push({ name: "Home" });
+      router.push({ name: "PlantPlaces" });
     })
     .catch((err) => {
       // エラー内容をクリアにする
@@ -123,6 +151,7 @@ const sendButton = () => {
   formData.append("name", name.value);
   formData.append("file", fileInfo.value);
   formData.append("description", description.value);
+  formData.append("places", placesCheckedValues.value);
   formData.append("colors", colorsCheckedValues.value);
 
   storePlant(formData);
@@ -131,6 +160,9 @@ const sendButton = () => {
 onMounted(() => {
   // 花の色、一覧を取得する
   colorsList();
+
+  // 良く生えている場所、一覧を取得する
+  placesList();
 });
 </script>
 

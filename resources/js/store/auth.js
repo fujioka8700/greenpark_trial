@@ -43,11 +43,11 @@ export const useStoreAuth = defineStore("auth", {
 
                 this.router.push("/about");
               } else {
-                this.errorMessage = "ログインに失敗しました。";
+                this.errorMessage = "入力項目に不備があります。";
               }
             })
             .catch((err) => {
-              this.errorMessage = "ログインに失敗しました。";
+              this.errorMessage = "入力項目に不備があります。";
             });
         })
         .catch((err) => {});
@@ -72,9 +72,10 @@ export const useStoreAuth = defineStore("auth", {
      * @param {string} name  新ユーザーの名前
      * @param {string} email 新ユーザーのメールアドレス
      * @param {string} pass  新ユーザーのパスワード
+     * @retrun {Object} ユーザー登録状態
      */
     register(name, email, pass) {
-      axios
+      const response = axios
         .post("/api/register", {
           name: name,
           email: email,
@@ -86,12 +87,18 @@ export const useStoreAuth = defineStore("auth", {
 
             this.login(email, pass);
           } else {
-            this.errorMessage = "登録を失敗しました。";
+            this.errorMessage = "入力項目に不備があります。";
           }
+
+          return res.data;
         })
         .catch((err) => {
-          this.errorMessage = "登録を失敗しました。";
+          this.errorMessage = "入力項目に不備があります。";
+
+          return err.response.data;
         });
+
+      return response;
     },
   },
 });
