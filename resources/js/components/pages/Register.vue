@@ -1,67 +1,89 @@
 <template>
-  <div>
-    <h2>RegisterView</h2>
-    <p>{{ errorMessage }}</p>
-    <form @submit.prevent="auth.register(name, email, pass)">
-      <label>
-        <input type="text" v-model="name" placeholder="name" />
-      </label>
-      <br />
-      <label>
-        <input type="email" v-model="email" placeholder="email" />
-      </label>
-      <br />
-      <label>
-        <input type="password" v-model="pass" placeholder="password" />
-      </label>
-      <br />
-      <button type="submit">登録</button>
-    </form>
-  </div>
-
-  <div>
-    <v-form v-model="form" @submit.prevent="onSubmit">
-      <v-text-field
-        v-model="name"
-        type="text"
-        label="名前"
-        :rules="[required]"
-        :error="errors.name"
-        :error-messages="errorMessages.name"
-        clearable
-        @keydown="clearError('name')"
-      ></v-text-field>
-      <v-text-field
-        v-model="email"
-        type="email"
-        label="メールアドレス"
-        :rules="[required]"
-        :error="errors.email"
-        :error-messages="errorMessages.email"
-        @keydown="clearError('email')"
-        clearable
-      ></v-text-field>
-      <v-text-field
-        v-model="pass"
-        type="password"
-        label="パスワード"
-        :rules="[required]"
-        :error="errors.password"
-        :error-messages="errorMessages.password"
-        clearable
-        @keydown="clearError('password')"
-      ></v-text-field>
-      <v-btn
-        :disabled="!form"
-        block
-        color="success"
-        size="large"
-        type="submit"
-        variant="elevated"
+  <div class="mt-10">
+    <div v-if="errorMessage">
+      <v-card
+        variant="flat"
+        rounded="0"
+        color="red-lighten-5"
+        class="mx-auto mb-3"
+        max-width="650"
       >
-        会員登録する
-      </v-btn>
-    </v-form>
+        <v-card-title class="text-body-2 text-red-darken-3">
+          {{ errorMessage }}
+        </v-card-title>
+      </v-card>
+    </div>
+
+    <v-sheet color="grey-lighten-3" class="mx-auto pa-2" max-width="650">
+      <v-card class="mx-auto pa-6" max-width="634">
+        <v-card-item class="pt-0">
+          <v-card-title class="font-weight-bold text-center">
+            会員登録
+          </v-card-title>
+
+          <v-card-subtitle class="pt-3">初めてご利用になる方</v-card-subtitle>
+
+          <v-card-text>
+            会員に登録すると、下記のサービスの機能がご利用になれます。
+          </v-card-text>
+
+          <v-card-text class="text-h5 text-center font-weight-bold">
+            植物図鑑
+          </v-card-text>
+        </v-card-item>
+
+        <v-divider class="mb-5"></v-divider>
+
+        <v-sheet class="mx-auto pa-2" max-width="344">
+          <v-form v-model="form" @submit.prevent="onSubmit">
+            <v-text-field
+              v-model="name"
+              type="text"
+              label="名前"
+              :readonly="loading"
+              :rules="[required]"
+              :error="errors.name"
+              :error-messages="errorMessages.name"
+              clearable
+              @keydown="clearError('name')"
+            ></v-text-field>
+            <v-text-field
+              v-model="email"
+              type="email"
+              label="メールアドレス"
+              :readonly="loading"
+              :rules="[required]"
+              :error="errors.email"
+              :error-messages="errorMessages.email"
+              @keydown="clearError('email')"
+              clearable
+            ></v-text-field>
+            <v-text-field
+              v-model="pass"
+              type="password"
+              label="パスワード"
+              :readonly="loading"
+              :rules="[required]"
+              :error="errors.password"
+              :error-messages="errorMessages.password"
+              clearable
+              @keydown="clearError('password')"
+            ></v-text-field>
+            <v-btn
+              :disabled="!form"
+              :loading="loading"
+              block
+              color="success"
+              size="large"
+              type="submit"
+              variant="elevated"
+            >
+              会員登録する
+            </v-btn>
+          </v-form>
+        </v-sheet>
+      </v-card>
+    </v-sheet>
   </div>
 </template>
 
@@ -75,6 +97,9 @@ const { errorMessage } = storeToRefs(auth);
 
 /** @type {boolean} 名前、メール、パスワードの入力確認 */
 const form = ref(false);
+
+/** @type {boolean} 会員登録できるか確認時、テキストの入力不可にする */
+const loading = ref(false);
 
 /** @type {string} 新ユーザーの名前 */
 const name = ref("");
@@ -127,15 +152,33 @@ const toggleValidationErrors = (messages) => {
 };
 
 /**
+ * 会員登録できない場合、ローディングを解除する
+ * @param {string} error
+ */
+const unLoading = (error) => {
+  if (error === null || error) {
+    loading.value = false;
+  }
+};
+
+/**
  * 会員登録をする。
  * 登録できなければ、バリデーションエラーの内容を表示する。
  */
 const onSubmit = async () => {
+  if (!form.value) return;
+
+  // 会員登録できるか確認時、ローディングにし、
+  // テキスト入力を出来ないようにする
+  loading.value = true;
+
   errorMessages.value = await auth.register(
     name.value,
     email.value,
     pass.value
   );
+
+  unLoading(errorMessage.value);
 
   toggleValidationErrors(errorMessages.value);
 };

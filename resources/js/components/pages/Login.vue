@@ -77,7 +77,7 @@ const pass = ref("");
 /** @type {boolean} メール、パスワードの入力確認 */
 const form = ref(false);
 
-/** @type {boolean} ログイン確認時、ローディングにする */
+/** @type {boolean} ログイン確認時、テキスト入力不可にする */
 const loading = ref(false);
 
 /**
