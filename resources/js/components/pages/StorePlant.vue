@@ -123,7 +123,7 @@ const storePlant = (formData) => {
   axios
     .post("/api/plants", formData, config)
     .then((result) => {
-      router.push({ name: "Home" });
+      router.push({ name: "PlantPlaces" });
     })
     .catch((err) => {
       // エラー内容をクリアにする
