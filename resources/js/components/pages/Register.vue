@@ -69,6 +69,14 @@
               clearable
               @keydown="clearError('password')"
             ></v-text-field>
+            <v-text-field
+              v-model="pass2"
+              type="password"
+              label="パスワード(確認)"
+              :readonly="loading"
+              :rules="[required, pwdConfirm]"
+              clearable
+            ></v-text-field>
             <v-btn
               :disabled="!form"
               :loading="loading"
@@ -110,6 +118,9 @@ const email = ref("");
 /** @type {string} 新ユーザーのパスワード */
 const pass = ref("");
 
+/** @type {string} 確認用のパスワード */
+const pass2 = ref("");
+
 /** @type {String[]} バリデーションエラー内容 */
 const errorMessages = ref({
   name: "",
@@ -138,6 +149,13 @@ const clearError = (item) => {
  * @param {string} value
  */
 const required = (value) => !!value || "必須入力です。";
+
+/**
+ * 2つの入力したパスワードが、合致しているか確認する
+ * @param {string} value 確認用のパスワード
+ */
+const pwdConfirm = (value) =>
+  value === pass.value || "パスワードが合っていません。";
 
 /**
  * バリデーションエラー状態にして、送信できないようにする
