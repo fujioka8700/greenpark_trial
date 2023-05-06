@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PlantController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\PlaceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,12 +24,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
 });
 
+// ログイン、ログアウト、会員登録をする
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
 Route::post('/register', [RegisterController::class, 'register']);
 
 // キーワードを入力して植物を検索する
-Route::get('/plants/search', [PlantController::class, 'search']);
+Route::get('/plants/search', [PlantController::class, 'search'])->name('search.plant');
+
+// 生育場所で植物を検索する
+Route::get('/plants/search-places', [PlantController::class, 'searchPlaces'])->name('search.places');
 
 Route::apiResource('plants', PlantController::class);
 Route::apiResource('colors', ColorController::class);
+Route::apiResource('places', PlaceController::class);

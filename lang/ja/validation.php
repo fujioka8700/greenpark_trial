@@ -140,6 +140,9 @@ return [
     'name' => [
       'unique' => '登録済みの植物です。',
     ],
+    'email' => [
+      'unique' => 'このメールアドレスは使用できません。',
+    ],
     'file' => [
       'file' => 'ファイルを指定してください。',
     ],
@@ -160,10 +163,13 @@ return [
     */
 
   'attributes' => [
+    'email' => 'メールアドレス',
+    'password' => 'パスワード',
     'name' => '名前',
     'file' => 'ファイル',
     'description' => '説明',
     'colors' => '花の色',
+    'places' => '良く生えている場所',
   ],
 
 ];

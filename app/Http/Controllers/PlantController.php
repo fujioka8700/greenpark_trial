@@ -53,6 +53,15 @@ class PlantController extends Controller
       $plant->colors()->attach($colors);
     }
 
+    // 良く生えている場所を保存する
+    if (isset($request->places)) {
+      // 良く生えている場所を、配列へ変換する
+      $places = explode(",", $request->places);
+
+      // 登録した植物と、良く生えている場所を紐付ける
+      $plant->places()->attach($places);
+    }
+
     return response()->json($plant, Response::HTTP_CREATED);
   }
 
@@ -61,8 +70,8 @@ class PlantController extends Controller
    */
   public function show(Plant $plant)
   {
-    // 植物と、紐付いている色を取得する
-    $plant = $plant->with('colors')->find($plant->id);
+    // 植物と、紐付いている色、生育場所を取得する
+    $plant = $plant->with(['colors', 'places'])->find($plant->id);
 
     return response()->json($plant, Response::HTTP_OK);
   }
@@ -91,7 +100,7 @@ class PlantController extends Controller
   public function search(Request $request): JsonResponse
   {
     /** キーワード受け取り */
-    $keyword = $request->input('keyword');
+    $keyword = $request->query('keyword');
 
     /** クエリ生成 */
     $query = Plant::query();
@@ -99,6 +108,26 @@ class PlantController extends Controller
     /** もしキーワードがあったら */
     if (!empty($keyword)) {
       $query->where('name', 'like', '%' . $keyword . '%');
+    }
+
+    $data = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
+
+    return response()->json($data, Response::HTTP_OK);
+  }
+
+  public function searchPlaces(Request $request)
+  {
+    // 生育場所、受け取り
+    $places = $request->query('places');
+
+    $query = '';
+
+    // もし生育場所があったら
+    if (!empty($places)) {
+      // リレーション先の生育場所を、IN(含まれる)で複数の一致を判定する
+      $query = Plant::whereHas('places', function ($query) use ($places) {
+        $query->whereIn('name', $places);
+      });
     }
 
     $data = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);

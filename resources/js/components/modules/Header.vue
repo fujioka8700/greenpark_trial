@@ -1,20 +1,50 @@
 <template>
-  <div>
-    <h1>タイトル</h1>
-    <ul>
-      <li><RouterLink :to="{ name: 'PlantPlaces' }">ホーム</RouterLink></li>
-      <div v-if="user">
-        <li><RouterLink :to="{ name: 'StorePlant' }">植物登録</RouterLink></li>
-        <li>
-          <RouterLink :to="{ name: 'About' }">{{ user.name }}</RouterLink>
-        </li>
+  <v-app-bar :elevation="2" color="success" density="compact">
+    <v-container class="d-flex align-center">
+      <v-app-bar-title>
+        <RouterLink
+          class="text-decoration-none text-white"
+          :to="{ name: 'PlantPlaces' }"
+          >植物図鑑</RouterLink
+        >
+      </v-app-bar-title>
+
+      <div>
+        <template v-if="user">
+          <v-btn variant="text">
+            <RouterLink
+              class="text-decoration-none text-white"
+              :to="{ name: 'StorePlant' }"
+              >植物登録</RouterLink
+            ></v-btn
+          >
+          <v-btn variant="text">
+            <RouterLink
+              class="text-decoration-none text-white"
+              :to="{ name: 'About' }"
+              >{{ user.name }}</RouterLink
+            ></v-btn
+          >
+        </template>
+        <template v-else>
+          <v-btn variant="text">
+            <RouterLink
+              class="text-decoration-none text-white"
+              :to="{ name: 'Register' }"
+              >会員登録</RouterLink
+            ></v-btn
+          >
+          <v-btn variant="text">
+            <RouterLink
+              class="text-decoration-none text-white"
+              :to="{ name: 'Login' }"
+              >ログイン</RouterLink
+            ></v-btn
+          >
+        </template>
       </div>
-      <div v-else>
-        <li><RouterLink :to="{ name: 'Register' }">会員登録</RouterLink></li>
-        <li><RouterLink :to="{ name: 'Login' }">ログイン</RouterLink></li>
-      </div>
-    </ul>
-  </div>
+    </v-container>
+  </v-app-bar>
 </template>
 
 <script setup>

@@ -6,7 +6,7 @@ export const useStoreBreadCrumbs = defineStore("breadCrumbs", {
     items: [
       {
         text: "図鑑トップ",
-        to: "/",
+        to: { name: "PlantPlaces" },
       },
     ],
   }),
