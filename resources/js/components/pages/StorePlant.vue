@@ -68,8 +68,7 @@
         label="ファイルを選んでください"
         :error="errors.file"
         :error-messages="errorMessages.file"
-        @input="clearError('file')"
-        @change="fileSelected"
+        @change="changeFile"
       ></v-file-input>
       <v-img :src="url" width="100"></v-img>
       <div>
@@ -207,6 +206,16 @@ const fileSelected = (event) => {
 const clearError = (item) => {
   errors.value[item] = false;
   errorMessages.value[item] = "";
+};
+
+/**
+ * 送信する写真ファイルをセットし、エラーを解除する
+ * @param {Object} event 植物写真のファイル
+ */
+const changeFile = (event) => {
+  fileSelected(event);
+
+  clearError("file");
 };
 
 /**
