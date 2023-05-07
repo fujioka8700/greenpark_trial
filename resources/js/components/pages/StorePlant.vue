@@ -78,9 +78,9 @@
             <v-col
               v-for="place in places"
               :key="place.id"
-              cols="12"
-              sm="4"
-              md="4"
+              cols="4"
+              sm="3"
+              md="3"
             >
               <v-checkbox
                 v-model="placesCheckedValues"
@@ -91,8 +91,30 @@
           </v-row>
         </v-container>
       </div>
+      <div>
+        <p>花の色</p>
+        <v-container fluid>
+          <v-row>
+            <v-col
+              v-for="color in colors"
+              :key="color.id"
+              cols="4"
+              sm="3"
+              md="3"
+            >
+              <v-checkbox
+                v-model="colorsCheckedValues"
+                :label="color.name"
+                :value="color.id"
+              ></v-checkbox>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
 
-      <v-btn type="submit" block class="mt-2">Submit</v-btn>
+      <v-btn type="submit" block color="light-blue-darken-1" class="mt-2">
+        植物を登録する
+      </v-btn>
     </v-form>
   </div>
 </template>
