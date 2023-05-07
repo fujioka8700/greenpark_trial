@@ -10,7 +10,7 @@
       </label>
       <br />
       <label>
-        <input type="file" @change="fileSelected" required />
+        <input type="file" @change="fileSelected" />
       </label>
       <br />
       <p>良く生えている場所</p>
@@ -50,10 +50,20 @@
       <button type="submit">登録する</button>
     </form>
   </div>
+  <div>
+    <v-file-input
+      v-model="image"
+      clearable
+      accept="image/*"
+      label="ファイルを選んでください"
+      @change="fileSelected"
+    ></v-file-input>
+    <v-img :src="url" width="100"></v-img>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -81,6 +91,30 @@ const colorsCheckedValues = ref([]);
 
 /** @type {Array} 指定した良く生えている場所 */
 const placesCheckedValues = ref([]);
+
+/** @type {Object} 植物の写真 */
+const image = ref(null);
+
+/**
+ * ファイルのクリアボタンを押すと、
+ * 選択していたファイルを解除する
+ */
+watch(image, () => {
+  if (image.value[0] == null) {
+    fileInfo.value = {};
+  }
+});
+
+/** @type {string} 植物の写真のURL */
+const url = computed(() => {
+  if (image.value === null) {
+    return;
+  }
+
+  if (image.value[0] != null) {
+    return URL.createObjectURL(image.value[0]);
+  }
+});
 
 /** @type {Object} axios ヘッダー定義 */
 const config = {
