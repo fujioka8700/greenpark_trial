@@ -6,14 +6,14 @@
     </ul>
     <form @submit.prevent="sendButton">
       <label>
-        <input type="text" v-model="name" placeholder="name" required />
+        <input type="text" v-model="name" placeholder="name" />
       </label>
       <br />
       <label>
         <input type="file" @change="fileSelected" />
       </label>
       <br />
-      <p>良く生えている場所</p>
+      <p>よく生えている場所</p>
       <ul>
         <li v-for="place in places" :key="place.id">
           <input
@@ -43,7 +43,6 @@
           cols="30"
           rows="10"
           placeholder="説明"
-          required
         ></textarea>
       </label>
       <br />
@@ -51,14 +50,51 @@
     </form>
   </div>
   <div>
-    <v-file-input
-      v-model="image"
-      clearable
-      accept="image/*"
-      label="ファイルを選んでください"
-      @change="fileSelected"
-    ></v-file-input>
-    <v-img :src="url" width="100"></v-img>
+    <v-form @submit.prevent="sendButton">
+      <v-text-field
+        v-model="name"
+        type="text"
+        label="名前"
+        :rules="[required]"
+        :error="errors.name"
+        :error-messages="errorMessages.name"
+        clearable
+        @keydown="clearError('name')"
+      ></v-text-field>
+      <v-file-input
+        v-model="image"
+        clearable
+        accept="image/*"
+        label="ファイルを選んでください"
+        :error="errors.file"
+        :error-messages="errorMessages.file"
+        @input="clearError('file')"
+        @change="fileSelected"
+      ></v-file-input>
+      <v-img :src="url" width="100"></v-img>
+      <div>
+        <p>よく生えている場所</p>
+        <v-container fluid>
+          <v-row>
+            <v-col
+              v-for="place in places"
+              :key="place.id"
+              cols="12"
+              sm="4"
+              md="4"
+            >
+              <v-checkbox
+                v-model="placesCheckedValues"
+                :label="place.name"
+                :value="place.id"
+              ></v-checkbox>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+
+      <v-btn type="submit" block class="mt-2">Submit</v-btn>
+    </v-form>
   </div>
 </template>
 
@@ -69,7 +105,16 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 /** @type {string[]} 植物登録時のエラー */
-const errorMessages = ref([]);
+const errorMessages = ref({
+  name: "",
+  file: "",
+});
+
+/** @type {boolean[]} 入力部分のエラー状態 */
+const errors = ref({
+  name: false,
+  file: false,
+});
 
 /** @type {string} 登録する植物の名前 */
 const name = ref("");
@@ -83,17 +128,23 @@ const description = ref("");
 /** @type {Object} 花の色、一覧 */
 const colors = ref({});
 
-/** @type {Object} 良く生えている場所、一覧 */
+/** @type {Object} よく生えている場所、一覧 */
 const places = ref({});
 
 /** @type {Array} 指定した花の色 */
 const colorsCheckedValues = ref([]);
 
-/** @type {Array} 指定した良く生えている場所 */
+/** @type {Array} 指定したよく生えている場所 */
 const placesCheckedValues = ref([]);
 
 /** @type {Object} 植物の写真 */
 const image = ref(null);
+
+/**
+ * バリデーション、必須入力
+ * @param {string} value
+ */
+const required = (value) => !!value || "必須入力です。";
 
 /**
  * ファイルのクリアボタンを押すと、
@@ -124,7 +175,7 @@ const config = {
 };
 
 /**
- * 良く生えている場所、一覧を取得する
+ * よく生えている場所、一覧を取得する
  */
 const placesList = () => {
   axios.get("/api/places").then((result) => {
@@ -150,6 +201,15 @@ const fileSelected = (event) => {
 };
 
 /**
+ * エラーをクリアにする
+ * @param {string} item エラーをクリアにするプロパティ
+ */
+const clearError = (item) => {
+  errors.value[item] = false;
+  errorMessages.value[item] = "";
+};
+
+/**
  * 登録する植物の情報を送信する
  * @param {Object} formData
  */
@@ -160,16 +220,12 @@ const storePlant = (formData) => {
       router.push({ name: "PlantPlaces" });
     })
     .catch((err) => {
-      // エラー内容をクリアにする
-      errorMessages.value = [];
-
       const response = err.response;
 
-      // エラー内容を抽出して整形した配列にする
-      Object.keys(response.data.errors).forEach((data) => {
-        const error = response.data.errors[data][0];
-
-        errorMessages.value.push(error);
+      // エラー内容を抽出して、表示できるよう整形する
+      Object.keys(response.data.errors).forEach((item) => {
+        errors.value[item] = true;
+        errorMessages.value[item] = response.data.errors[item];
       });
     });
 };
@@ -195,7 +251,7 @@ onMounted(() => {
   // 花の色、一覧を取得する
   colorsList();
 
-  // 良く生えている場所、一覧を取得する
+  // よく生えている場所、一覧を取得する
   placesList();
 });
 </script>
