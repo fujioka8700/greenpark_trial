@@ -73,6 +73,11 @@
       <v-img :src="url" width="100"></v-img>
       <div>
         <p>よく生えている場所</p>
+        <div v-if="errorMessages.places">
+          <p class="text-error text-caption">
+            {{ errorMessages.places[0] }}
+          </p>
+        </div>
         <v-container fluid>
           <v-row>
             <v-col
@@ -86,6 +91,8 @@
                 v-model="placesCheckedValues"
                 :label="place.name"
                 :value="place.id"
+                :error="errors.places"
+                @change="clearError('places')"
               ></v-checkbox>
             </v-col>
           </v-row>
