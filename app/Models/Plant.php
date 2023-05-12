@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Color;
 use App\Models\Place;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -49,5 +50,23 @@ class Plant extends Model
   public function places(): BelongsToMany
   {
     return $this->belongsToMany(Place::class)->withTimestamps();
+  }
+
+  /**
+   * 植物を登録する
+   * @param \App\Models\User $user
+   * @param \Illuminate\Http\Request $request
+   * @param string $path
+   * @return \App\Models\Plant
+   */
+  public function registerPlant(User $user, Request $request, string $path)
+  {
+    $plant = $user->plants()->create([
+      'name' => $request->name,
+      'file_path' => $path,
+      'description' => $request->description,
+    ]);
+
+    return $plant;
   }
 }

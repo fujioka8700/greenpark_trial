@@ -39,11 +39,7 @@ class PlantController extends Controller
     $user = Auth::user();
 
     // 植物を登録する
-    $plant = $user->plants()->create([
-      'name' => $request->name,
-      'file_path' => $path,
-      'description' => $request->description,
-    ]);
+    $plant = \Plant::registerPlant($user, $request, $path);
 
     // 花の色がある場合は、花の色を保存する
     // 花の色がない場合は、花の色は「その他」として保存する
