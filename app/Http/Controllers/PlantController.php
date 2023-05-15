@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Plant;
 use App\Http\Requests\StorePlantPostRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -38,27 +39,30 @@ class PlantController extends Controller
     $user = Auth::user();
 
     // 植物を登録する
-    $plant = $user->plants()->create([
-      'name' => $request->name,
-      'file_path' => $path,
-      'description' => $request->description,
-    ]);
+    $plant = \Plant::registerPlant($user, $request, $path);
 
     // 花の色がある場合は、花の色を保存する
+    // 花の色がない場合は、花の色は「その他」として保存する
     if (isset($request->colors)) {
       // 花の色を文字列から、配列へ変換する
       $colors = explode(",", $request->colors);
 
       // 登録した植物と、花の色を紐付ける
       $plant->colors()->attach($colors);
+    } else {
+      // その他の色の id を取り出す
+      $other_color = DB::table('colors')->latest('id')->first()->id;
+
+      // 登録した植物に、「その他」として花の色を紐付ける
+      $plant->colors()->attach($other_color);
     }
 
-    // 良く生えている場所を保存する
+    // よく生えている場所を保存する
     if (isset($request->places)) {
-      // 良く生えている場所を、配列へ変換する
+      // よく生えている場所を、配列へ変換する
       $places = explode(",", $request->places);
 
-      // 登録した植物と、良く生えている場所を紐付ける
+      // 登録した植物と、よく生えている場所を紐付ける
       $plant->places()->attach($places);
     }
 
