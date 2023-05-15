@@ -195,6 +195,7 @@ return [
     App\Providers\EventServiceProvider::class,
     App\Providers\RouteServiceProvider::class,
 
+    App\Providers\PlantServiceProvider::class,
   ],
 
   /*
@@ -210,6 +211,8 @@ return [
 
   'aliases' => Facade::defaultAliases()->merge([
     // 'ExampleClass' => App\Example\ExampleClass::class,
+
+    'Plant' => App\Facades\Plant::class,
   ])->toArray(),
 
 ];

@@ -146,9 +146,6 @@ return [
     'file' => [
       'file' => 'ファイルを指定してください。',
     ],
-    'description' => [
-      'required' => '説明文を記入してください。',
-    ],
   ],
 
   /*
@@ -169,7 +166,7 @@ return [
     'file' => 'ファイル',
     'description' => '説明',
     'colors' => '花の色',
-    'places' => '良く生えている場所',
+    'places' => 'よく生えている場所',
   ],
 
 ];
