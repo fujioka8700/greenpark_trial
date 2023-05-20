@@ -58,7 +58,10 @@
 
 <script setup>
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
-import { onMounted, ref } from "vue";
+import { watch, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 const props = defineProps({
   /** @type {String} 植物のid */
@@ -73,16 +76,30 @@ const plantInfo = ref({});
 
 /**
  * 1つの植物と、リレーションしているものを取得する
+ * @param {number} plantId 植物のID
  */
-const getPlant = async () => {
-  await axios.get(`/api/plants/${props.plantId}`).then((result) => {
+const getPlant = async (plantId) => {
+  await axios.get(`/api/plants/${plantId}`).then((result) => {
     plantInfo.value = result.data;
   });
 };
 
+watch(route, async () => {
+  const plantId = route.params.plantId;
+
+  // パスパラメータが植物IDの場合のみ、
+  // 植物の詳細表示を更新する
+  if (plantId !== undefined) {
+    await getPlant(plantId);
+  }
+});
+
 onMounted(async () => {
+  /** @type {number} 植物のID */
+  const plantId = props.plantId;
+
   // 1つの植物と、リレーションしているものを取得する
-  await getPlant();
+  await getPlant(plantId);
 
   // パンくずリストに植物名を追加する
   breadCrumbs.push({
