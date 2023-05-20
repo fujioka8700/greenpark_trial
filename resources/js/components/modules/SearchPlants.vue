@@ -30,7 +30,7 @@
 
           <v-col cols="12" sm="4">
             <p class="pt-4 pb-2">注目の植物たち</p>
-            <v-divider class="pb-4" thickness="3" />
+            <v-divider thickness="3" />
             <Recommend />
           </v-col>
         </v-row>
