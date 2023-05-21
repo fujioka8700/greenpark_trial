@@ -172,4 +172,39 @@ class PlantControllerTest extends TestCase
       ]
     ]);
   }
+
+  public function test_TOP画面「注目の植物たち」で表示する植物(): void
+  {
+    Storage::fake('local');
+
+    // ランダムに、紐づける色を決定する
+    $colors = Color::all()->random(random_int(1, 9));
+
+    // ランダムに、生育場所を紐づける。
+    $places = Place::all()->random(random_int(1, 3));
+
+    // 植物を10個登録（画像ファイルも保存）し、色を紐づける
+    Plant::factory(5)
+      ->hasAttached($colors)
+      ->hasAttached($places)
+      ->recycle($this->user)->create();
+
+    // コレクションから配列作成
+    $plantsArray = Plant::all()->toArray();
+
+    // 配列から名前の配列作成
+    $plantsName = [];
+    foreach ($plantsArray as $key => $value) {
+      array_push($plantsName, $value['name']);
+    }
+
+    $response = $this->getJson(route('recommend.plants'));
+
+    // レスポンス中のどこかに、
+    // 指定JSONデータが含まれているかテストする
+    $random_int = mt_rand(0, 4);
+    $response->assertStatus(200)->assertJsonFragment([
+      'name' => $plantsName[$random_int],
+    ]);
+  }
 }

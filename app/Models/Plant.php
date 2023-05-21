@@ -59,7 +59,7 @@ class Plant extends Model
    * @param string $path
    * @return \App\Models\Plant
    */
-  public function registerPlant(User $user, Request $request, string $path)
+  public function registerPlant(User $user, Request $request, string $path): Plant
   {
     $plant = $user->plants()->create([
       'name' => $request->name,
@@ -68,5 +68,14 @@ class Plant extends Model
     ]);
 
     return $plant;
+  }
+
+  /**
+   * ランダムに5つの植物を取得する
+   * @return array
+   */
+  public function fetchRandomFivePlants(): array
+  {
+    return $this::all()->random(5)->all();
   }
 }

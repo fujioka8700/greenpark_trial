@@ -119,7 +119,12 @@ class PlantController extends Controller
     return response()->json($data, Response::HTTP_OK);
   }
 
-  public function searchPlaces(Request $request)
+  /**
+   * 生育場所で検索し、植物一覧を取得する
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function searchPlaces(Request $request): JsonResponse
   {
     // 生育場所、受け取り
     $places = $request->query('places');
@@ -137,5 +142,16 @@ class PlantController extends Controller
     $data = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
 
     return response()->json($data, Response::HTTP_OK);
+  }
+
+  /**
+   * TOP画面「注目の植物たち」で表示する植物
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function recommendPlants(): JsonResponse
+  {
+    $plants = \Plant::fetchRandomFivePlants();
+
+    return response()->json($plants, Response::HTTP_OK);
   }
 }
