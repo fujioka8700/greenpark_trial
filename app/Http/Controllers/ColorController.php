@@ -9,15 +9,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ColorController extends Controller
 {
+  private $color;
+
+  public function __construct()
+  {
+    $this->color = new Color();
+  }
+
   /**
    * 花の色、一覧を取得する。
    * @return \Illuminate\Http\JsonResponse
    */
   public function index(): JsonResponse
   {
-    $colors = Color::all();
-
-    return response()->json($colors, Response::HTTP_OK);
+    return response()->json($this->color->getAllColors(), Response::HTTP_OK);
   }
 
   /**
