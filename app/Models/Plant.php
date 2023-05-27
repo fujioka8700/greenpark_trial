@@ -78,4 +78,14 @@ class Plant extends Model
   {
     return $this::all()->random(5)->all();
   }
+
+  /**
+   * 1つの植物と、植物に紐づいている情報を取得する。
+   * @param App\Models\Plant $plant
+   * @return App\Models\Plant
+   */
+  public function getOnePlant(Plant $plant): Plant
+  {
+    return $plant->with(['colors', 'places'])->find($plant->id);
+  }
 }

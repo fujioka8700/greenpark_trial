@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PlantService;
 use App\Models\Plant;
 use App\Http\Requests\StorePlantPostRequest;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,15 @@ use Symfony\Component\HttpFoundation\Response;
 class PlantController extends Controller
 {
   const DISPLAY_NUMBER = 10; // 検索後、表示する植物の数
+
+  private $plant;
+  private $plantService;
+
+  public function __construct()
+  {
+    $this->plant = new Plant();
+    $this->plantService = new PlantService();
+  }
 
   /**
    * Display a listing of the resource.
@@ -70,14 +80,13 @@ class PlantController extends Controller
   }
 
   /**
-   * 1つ植物と、リレーションしているものを取得する
+   * 1つ植物の情報を取得する。
+   * @param \App\Models\Plant $plant
+   * @return \Illuminate\Http\JsonResponse
    */
-  public function show(Plant $plant)
+  public function show(Plant $plant): JsonResponse
   {
-    // 植物と、紐付いている色、生育場所を取得する
-    $plant = $plant->with(['colors', 'places'])->find($plant->id);
-
-    return response()->json($plant, Response::HTTP_OK);
+    return response()->json($this->plant->getOnePlant($plant), Response::HTTP_OK);
   }
 
   /**
