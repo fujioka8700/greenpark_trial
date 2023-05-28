@@ -2,7 +2,9 @@
   <v-app>
     <Header />
     <v-main>
-      <RouterView />
+      <v-sheet max-width="1020" class="mx-auto">
+        <RouterView />
+      </v-sheet>
     </v-main>
   </v-app>
 </template>

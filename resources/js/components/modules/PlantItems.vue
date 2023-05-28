@@ -44,8 +44,9 @@ const searchResults = inject("searchResults");
 const breadCrumbs = useStoreBreadCrumbs();
 
 onMounted(() => {
-  // パンくずリストに、植物名があればリセットする
-  if (breadCrumbs.items.length >= 3) {
+  // パンくずリストに、「植物名」か「検索結果」があれば、
+  // パンくずリストをリセットする
+  if (breadCrumbs.items.length >= 2) {
     breadCrumbs.$reset();
   }
 

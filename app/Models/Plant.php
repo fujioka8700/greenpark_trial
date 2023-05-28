@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Color;
 use App\Models\Place;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -53,20 +52,21 @@ class Plant extends Model
   }
 
   /**
-   * 植物を登録する
-   * @param \App\Models\User $user
-   * @param \Illuminate\Http\Request $request
-   * @param string $path
-   * @return \App\Models\Plant
+   * ランダムに5つの植物を取得する
+   * @return array
    */
-  public function registerPlant(User $user, Request $request, string $path)
+  public function fetchRandomFivePlants(): array
   {
-    $plant = $user->plants()->create([
-      'name' => $request->name,
-      'file_path' => $path,
-      'description' => $request->description,
-    ]);
+    return $this::all()->random(5)->all();
+  }
 
-    return $plant;
+  /**
+   * 1つの植物と、植物に紐づいている情報を取得する。
+   * @param App\Models\Plant $plant
+   * @return App\Models\Plant
+   */
+  public function getOnePlant(Plant $plant): Plant
+  {
+    return $plant->with(['colors', 'places'])->find($plant->id);
   }
 }

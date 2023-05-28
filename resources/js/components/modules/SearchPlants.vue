@@ -18,20 +18,20 @@
       </v-card>
 
       <div>
-        <v-breadcrumbs
-          class="text-caption"
-          :items="breadCrumbs.items"
-          divider=">"
-        ></v-breadcrumbs>
-      </div>
-      <div>
         <v-row>
           <v-col cols="12" sm="8">
+            <v-breadcrumbs
+              class="text-caption"
+              :items="breadCrumbs.items"
+              divider=">"
+            ></v-breadcrumbs>
             <RouterView />
           </v-col>
 
-          <v-col cols="12" sm="4" class="bg-blue">
-            <p>ここにピックアップ情報</p>
+          <v-col cols="12" sm="4">
+            <p class="pt-4 pb-2">注目の植物たち</p>
+            <v-divider thickness="3" />
+            <Recommend />
           </v-col>
         </v-row>
       </div>
@@ -40,6 +40,7 @@
 </template>
 
 <script setup>
+import Recommend from "./Recommend.vue";
 import { ref, provide, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
