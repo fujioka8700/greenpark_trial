@@ -22,7 +22,9 @@ class PlaceController extends Controller
    */
   public function index(): JsonResponse
   {
-    return response()->json($this->place->getAllPlaces(), Response::HTTP_OK);
+    $allPlaces = $this->place->getAllPlaces();
+
+    return response()->json($allPlaces, Response::HTTP_OK);
   }
 
   /**
