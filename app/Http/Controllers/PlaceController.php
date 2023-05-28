@@ -9,15 +9,22 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PlaceController extends Controller
 {
+  private $place;
+
+  public function __construct()
+  {
+    $this->place = new Place();
+  }
+
   /**
    * 良く生えている場所、一覧を取得する。
    * @return \Illuminate\Http\JsonResponse
    */
   public function index(): JsonResponse
   {
-    $places = Place::all();
+    $allPlaces = $this->place->getAllPlaces();
 
-    return response()->json($places, Response::HTTP_OK);
+    return response()->json($allPlaces, Response::HTTP_OK);
   }
 
   /**

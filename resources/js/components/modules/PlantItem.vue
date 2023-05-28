@@ -58,33 +58,36 @@
 
 <script setup>
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
-import { onMounted, ref } from "vue";
+import { watch, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+// パンくずリストはStoreに保存している
+const breadCrumbs = useStoreBreadCrumbs();
 
 const props = defineProps({
   /** @type {String} 植物のid */
   plantId: String,
 });
 
-// パンくずリストはStoreに保存している
-const breadCrumbs = useStoreBreadCrumbs();
-
 /** @type {Object} 植物の情報 */
 const plantInfo = ref({});
 
 /**
  * 1つの植物と、リレーションしているものを取得する
+ * @param {number} plantId 植物のID
  */
-const getPlant = async () => {
-  await axios.get(`/api/plants/${props.plantId}`).then((result) => {
+const getPlant = async (plantId) => {
+  await axios.get(`/api/plants/${plantId}`).then((result) => {
     plantInfo.value = result.data;
   });
 };
 
-onMounted(async () => {
-  // 1つの植物と、リレーションしているものを取得する
-  await getPlant();
-
-  // パンくずリストに植物名を追加する
+/**
+ * パンくずリストに検索結果か、植物名を追加する
+ */
+const addBreadCrumbs = () => {
   breadCrumbs.push({
     text: plantInfo.value.name,
     to: {
@@ -94,6 +97,32 @@ onMounted(async () => {
       },
     },
   });
+};
+
+watch(route, async () => {
+  /** @type {number} 植物のID */
+  const plantId = route.params.plantId;
+
+  // パスパラメータが植物IDの場合のみ、
+  // 植物の詳細表示を更新する
+  if (plantId !== undefined) {
+    await getPlant(plantId);
+
+    // パンくずリストが永遠に追加されるため、
+    // パンくずリストの末尾を消しておく
+    breadCrumbs.items.pop();
+
+    addBreadCrumbs();
+  }
+});
+
+onMounted(async () => {
+  /** @type {number} 植物のID */
+  const plantId = props.plantId;
+
+  await getPlant(plantId);
+
+  addBreadCrumbs();
 });
 </script>
 

@@ -18096,6 +18096,17 @@
                         return $instance->registerPlant($user, $request, $path);
         }
                     /**
+         * ランダムに5つの植物を取得する
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function fetchRandomFivePlants()
+        {
+                        /** @var \App\Models\Plant $instance */
+                        return $instance->fetchRandomFivePlants();
+        }
+                    /**
          * Clear the list of booted models so they will be re-booted.
          *
          * @return void 

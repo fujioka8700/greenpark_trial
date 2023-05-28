@@ -6,6 +6,7 @@ use App\Models\Plant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
 class Place extends Model
 {
@@ -27,5 +28,13 @@ class Place extends Model
   public function plants(): BelongsToMany
   {
     return $this->belongsToMany(Plant::class)->withTimestamps();
+  }
+
+  /**
+   * @return \Illuminate\Database\Eloquent\Collection
+   */
+  public function getAllPlaces(): Collection
+  {
+    return $this->all();
   }
 }
