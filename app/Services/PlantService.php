@@ -7,6 +7,8 @@ use App\Models\Plant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PlantService
 {
@@ -108,5 +110,39 @@ class PlantService
 
       $plant->places()->attach($places);
     }
+  }
+
+  /**
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Pagination\LengthAwarePaginator
+   */
+  public function searchPlantName(Request $request): LengthAwarePaginator
+  {
+    $searchKeyword = $this->getKeyword($request);
+
+    $plantQuery = $this->createPlantQueryBuilder();
+
+    if (!empty($searchKeyword)) {
+      $plantQuery->where('name', 'like', '%' . $searchKeyword . '%');
+    }
+
+    return $plantQuery->orderBy('created_at', 'desc')->paginate(Plant::SEARCHES_DISPLAY_NUMBER);
+  }
+
+  /**
+   * @param \Illuminate\Http\Request $request
+   * @return string|null
+   */
+  public function getKeyword(Request $request): string|null
+  {
+    return $request->query('keyword');
+  }
+
+  /**
+   * @return \Illuminate\Database\Eloquent\Builder
+   */
+  public function createPlantQueryBuilder(): Builder
+  {
+    return Plant::query();
   }
 }

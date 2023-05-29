@@ -14,6 +14,8 @@ class Plant extends Model
 {
   use HasFactory;
 
+  const SEARCHES_DISPLAY_NUMBER = 10;
+
   /**
    * createメソッドを使用時、許可する属性
    * @var array<int, string>

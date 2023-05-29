@@ -71,26 +71,15 @@ class PlantController extends Controller
   }
 
   /**
-   * 植物を検索する。
+   * 植物名を検索する。
    * @param \Illuminate\Http\Request $request
    * @return \Illuminate\Http\JsonResponse
    */
   public function search(Request $request): JsonResponse
   {
-    /** キーワード受け取り */
-    $keyword = $request->query('keyword');
+    $searchResults = $this->plantService->searchPlantName($request);
 
-    /** クエリ生成 */
-    $query = Plant::query();
-
-    /** もしキーワードがあったら */
-    if (!empty($keyword)) {
-      $query->where('name', 'like', '%' . $keyword . '%');
-    }
-
-    $data = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
-
-    return response()->json($data, Response::HTTP_OK);
+    return response()->json($searchResults, Response::HTTP_OK);
   }
 
   /**
