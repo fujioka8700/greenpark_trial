@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,10 +12,10 @@ class LoginController extends Controller
   /**
    * ユーザーをログインする。
    * ログインできない場合は、ステータスコード500を返す。
-   * @param \Illuminate\Http\UserRequest $request
+   * @param \App\Http\Requests\LoginRequest $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function login(UserRequest $request): JsonResponse
+  public function login(LoginRequest $request): JsonResponse
   {
     $credentials = $request->input();
 
