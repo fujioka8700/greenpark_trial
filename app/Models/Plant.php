@@ -64,8 +64,8 @@ class Plant extends Model
 
   /**
    * 1つの植物と、植物に紐づいている情報を取得する。
-   * @param App\Models\Plant $plant
-   * @return App\Models\Plant
+   * @param \App\Models\Plant $plant
+   * @return \App\Models\Plant
    */
   public function getOnePlant(Plant $plant): Plant
   {
