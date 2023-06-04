@@ -17,47 +17,50 @@ class PlantControllerTest extends TestCase
   use RefreshDatabase;
   use WithFaker;
 
-  private $user; // 新規ユーザー
+  private $user;
 
   protected function setUp(): void
   {
     parent::setUp();
 
-    $this->user = User::factory()->create();
+    $this->seed(\Database\Seeders\UserSeeder::class);
+
+    $this->user = User::first();
   }
 
   public function test_植物を登録する(): void
   {
     Storage::fake('local');
 
-    $name = $this->faker()->text(10);
-    $dummy = UploadedFile::fake()->image('dummy.jpg', 640, 480);
-    $description = $this->faker()->text(100);
+    $plantName = $this->faker()->text(10);
+    $dummyImage = UploadedFile::fake()->image('dummy.jpg', 640, 480);
+    $plantDescription = $this->faker()->text(100);
 
-    // 良く生えている場所を、「街路・公園・社寺」から選ぶ
-    $array = [1, 2, 3];
-    $response = [];
-    foreach (array_rand($array, random_int(2, count($array))) as $key) {
-      $response[] = $array[$key];
+    $allPlaces = Place::query()->get()->toArray();
+    $randomArray = array_rand($allPlaces, random_int(2, count($allPlaces)));
+
+    foreach ($randomArray as $key) {
+      $zeroOutArray[] = $allPlaces[$key]['id'];
     }
-    $places = implode(',', $response);
+
+    $selectedPlaces = implode(',', $zeroOutArray);
 
     $response = $this->actingAs($this->user)->postJson('/api/plants', [
-      'name' => $name,
-      'file' => $dummy,
-      'description' => $description,
-      'places' => $places,
+      'name' => $plantName,
+      'file' => $dummyImage,
+      'description' => $plantDescription,
+      'places' => $selectedPlaces,
     ]);
 
-    $path = Plant::first()->file_path;
-
     // アップロードされたファイルが保存されているか
-    Storage::disk('local')->assertExists("public/images/{$dummy->hashName()}");
+    Storage::disk('local')->assertExists("public/images/{$dummyImage->hashName()}");
+
+    $filePath = Plant::first()->file_path;
 
     $response->assertStatus(201)->assertJson([
-      'name' => $name,
-      'file_path' => $path,
-      'description' => $description,
+      'name' => $plantName,
+      'file_path' => $filePath,
+      'description' => $plantDescription,
     ]);
   }
 
