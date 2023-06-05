@@ -113,7 +113,11 @@ class PlantController extends Controller
    */
   public function recommendPlants(): JsonResponse
   {
-    $plants = $this->plant->fetchRandomFivePlants();
+    try {
+      $plants = $this->plant->fetchRandomFivePlants();
+    } catch (\Exception $e) {
+      return response()->json($e->getMessage(), Response::HTTP_BAD_REQUEST);
+    }
 
     return response()->json($plants, Response::HTTP_OK);
   }
