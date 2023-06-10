@@ -68,6 +68,9 @@ class DatabaseSeeder extends Seeder
       );
   }
 
+  /**
+   * storage/app/public/images ディレクトリ内の、植物写真のファイルを全て削除する
+   */
   public function deleteAllPlantImages(): void
   {
     $allFiles = Storage::allFiles('public/images/');

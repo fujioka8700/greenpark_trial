@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Plant;
 use App\Models\Color;
 use App\Models\Place;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
@@ -112,14 +113,8 @@ class PlantControllerTest extends TestCase
   {
     Storage::fake('local');
 
-    $relationColors = Color::all()->random(random_int(1, Color::all()->count()));
-    $relationPlaces = Place::all()->random(random_int(1, Place::all()->count()));
-
-    $plants = Plant::factory(1)
-      ->hasAttached($relationColors)
-      ->hasAttached($relationPlaces)
-      ->recycle($this->user)->create();
-
+    $createPlants = 1;
+    $plants = $this->relatedPlants($createPlants);
     $plant = $plants->first();
 
     $plantColors = [];
@@ -171,22 +166,11 @@ class PlantControllerTest extends TestCase
   {
     Storage::fake('local');
 
-    // ランダムに、紐づける色を決定する
-    $colors = Color::all()->random(random_int(1, 9));
+    $createPlants = 5;
+    $this->relatedPlants($createPlants);
 
-    // ランダムに、生育場所を紐づける。
-    $places = Place::all()->random(random_int(1, 3));
-
-    // 植物を10個登録（画像ファイルも保存）し、色を紐づける
-    Plant::factory(5)
-      ->hasAttached($colors)
-      ->hasAttached($places)
-      ->recycle($this->user)->create();
-
-    // コレクションから配列作成
     $plantsArray = Plant::all()->toArray();
 
-    // 配列から名前の配列作成
     $plantsName = [];
     foreach ($plantsArray as $key => $value) {
       array_push($plantsName, $value['name']);
@@ -194,11 +178,29 @@ class PlantControllerTest extends TestCase
 
     $response = $this->getJson(route('recommend.plants'));
 
-    // レスポンス中のどこかに、
-    // 指定JSONデータが含まれているかテストする
-    $random_int = mt_rand(0, 4);
+    $maxValue = max(array_keys($plantsArray));
+    $randomNumber = mt_rand(0, $maxValue);
+
     $response->assertStatus(200)->assertJsonFragment([
-      'name' => $plantsName[$random_int],
+      'name' => $plantsName[$randomNumber],
     ]);
+  }
+
+  /**
+   * 色と生育場所を関連付けした、植物たちを作成する
+   * @param int $number
+   * @return \Illuminate\Database\Eloquent\Collection
+   */
+  public function relatedPlants(int $number): Collection
+  {
+    $relationColors = Color::all()->random(random_int(1, Color::all()->count()));
+    $relationPlaces = Place::all()->random(random_int(1, Place::all()->count()));
+
+    $plants = Plant::factory($number)
+      ->hasAttached($relationColors)
+      ->hasAttached($relationPlaces)
+      ->recycle($this->user)->create();
+
+    return $plants;
   }
 }
