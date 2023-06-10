@@ -83,27 +83,26 @@ class PlantControllerTest extends TestCase
   {
     Storage::fake('local');
 
-    // 植物の登録と、画像のファイル保存
-    User::factory()->hasPlants()->create();
+    $this->seed(\Database\Seeders\PlantSeeder::class);
 
-    $serchKeyWord = Plant::find(1)->name; // 検索する文字列
-    $file_path = Plant::find(1)->file_path; // 画像のファイルパス
-    $file = preg_replace('/(.*)images\//', '', $file_path); // 保存された画像のファイル名
+    $searchKeyWord = Plant::find(1)->name;
+    $filePath = Plant::find(1)->file_path;
+    $fileName = preg_replace('/(.*)images\//', '', $filePath);
 
     // 画像のファイルが保存されているか確認する
-    Storage::disk('local')->assertExists("public/images/{$file}");
+    Storage::disk('local')->assertExists("public/images/{$fileName}");
 
     $response = $this->getJson(route(
       'search.plant',
-      ['keyword' => $serchKeyWord],
+      ['keyword' => $searchKeyWord],
     ));
 
     $response->assertStatus(200)->assertJson([
       'current_page' => 1,
       'data' => [
         [
-          'name' => $serchKeyWord,
-          'file_path' => $file_path,
+          'name' => $searchKeyWord,
+          'file_path' => $filePath,
         ]
       ]
     ]);
