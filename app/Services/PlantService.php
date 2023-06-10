@@ -12,6 +12,15 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PlantService
 {
+  const DISPLAY_NUMBER = 10; // 検索後、表示する植物の数
+
+  private $plant;
+
+  public function __construct()
+  {
+    $this->plant = new Plant();
+  }
+
   /**
    * @param \Illuminate\Http\Request $request
    */
@@ -144,5 +153,23 @@ class PlantService
   public function createPlantQueryBuilder(): Builder
   {
     return Plant::query();
+  }
+
+  /**
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Pagination\LengthAwarePaginator
+   */
+  public function searchPlantsPlaces(Request $request): LengthAwarePaginator
+  {
+    $searchPlaces = $request->query('places');
+    $query = '';
+
+    if (!empty($searchPlaces)) {
+      $query = $this->plant->createPlacesQuery($searchPlaces);
+    }
+
+    $searchResults = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
+
+    return $searchResults;
   }
 }

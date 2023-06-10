@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PlantService;
 use App\Models\Plant;
+use App\Services\PlantService;
 use App\Http\Requests\StorePlantPostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PlantController extends Controller
 {
-  const DISPLAY_NUMBER = 10; // 検索後、表示する植物の数
-
   private $plant;
   private $plantService;
 
@@ -89,22 +87,9 @@ class PlantController extends Controller
    */
   public function searchPlaces(Request $request): JsonResponse
   {
-    // 生育場所、受け取り
-    $places = $request->query('places');
+    $searchResults = $this->plantService->searchPlantsPlaces($request);
 
-    $query = '';
-
-    // もし生育場所があったら
-    if (!empty($places)) {
-      // リレーション先の生育場所を、IN(含まれる)で複数の一致を判定する
-      $query = Plant::whereHas('places', function ($query) use ($places) {
-        $query->whereIn('name', $places);
-      });
-    }
-
-    $data = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
-
-    return response()->json($data, Response::HTTP_OK);
+    return response()->json($searchResults, Response::HTTP_OK);
   }
 
   /**

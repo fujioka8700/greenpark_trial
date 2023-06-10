@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Color;
 use App\Models\Place;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -70,5 +71,16 @@ class Plant extends Model
   public function getOnePlant(Plant $plant): Plant
   {
     return $plant->with(['colors', 'places'])->find($plant->id);
+  }
+
+  /**
+   * @param array
+   * @return \Illuminate\Database\Eloquent\Builder
+   */
+  public function createPlacesQuery(array $searchPlaces): Builder
+  {
+    return $this::whereHas('places', function ($query) use ($searchPlaces) {
+      $query->whereIn('name', $searchPlaces);
+    });
   }
 }
