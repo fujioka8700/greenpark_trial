@@ -108,31 +108,25 @@ class PlantControllerTest extends TestCase
     ]);
   }
 
-  public function test_1つの植物（紐づけした色、生育場所も）を返す(): void
+  public function test_1つの植物（関連付けした色と生育場所）を返す(): void
   {
     Storage::fake('local');
 
-    // ランダムに、紐づける色を決定する
-    $colors = Color::all()->random(random_int(1, 9));
+    $relationColors = Color::all()->random(random_int(1, Color::all()->count()));
+    $relationPlaces = Place::all()->random(random_int(1, Place::all()->count()));
 
-    // ランダムに、生育場所を紐づける。
-    $places = Place::all()->random(random_int(1, 3));
-
-    // 植物を1つ登録（画像ファイルも保存）し、色を紐づける
     $plants = Plant::factory(1)
-      ->hasAttached($colors)
-      ->hasAttached($places)
+      ->hasAttached($relationColors)
+      ->hasAttached($relationPlaces)
       ->recycle($this->user)->create();
 
     $plant = $plants->first();
 
-    // 紐づけした色を、配列にする
     $plantColors = [];
     foreach ($plant->colors as $color) {
       array_push($plantColors, ['name' => $color->name]);
     }
 
-    // 紐づけした生育場所を、配列にする
     $plantPlaces = [];
     foreach ($plant->places as $place) {
       array_push($plantPlaces, ['name' => $place->name]);
@@ -148,18 +142,16 @@ class PlantControllerTest extends TestCase
   }
 
 
-  public function test_生育場所で検索し、一覧を取得する(): void
+  public function test_生育場所「街路・生け垣」で検索し、一覧を取得する(): void
   {
     Storage::fake('local');
 
-    // 生育場所を街路にする
-    $places = Place::where('name', '街路')->get();
+    $relationPlaces = Place::where('name', '街路')->get();
 
     $plants = Plant::factory(1)
-      ->hasAttached($places)
+      ->hasAttached($relationPlaces)
       ->recycle($this->user)->create();
 
-    // 街路、生け垣で検索する
     $response = $this->getJson(route(
       'search.places',
       ['places' => ['街路', '生け垣']]
