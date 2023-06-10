@@ -7,7 +7,6 @@ use App\Models\Plant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PlantService
@@ -128,14 +127,18 @@ class PlantService
   public function searchPlantName(Request $request): LengthAwarePaginator
   {
     $searchKeyword = $this->getKeyword($request);
-
-    $plantQuery = $this->createPlantQueryBuilder();
+    $plantQuery = '';
 
     if (!empty($searchKeyword)) {
-      $plantQuery->where('name', 'like', '%' . $searchKeyword . '%');
+      // $plantQuery->where('name', 'like', '%' . $searchKeyword . '%');
+      $plantQuery = $this->plant->createPlantNameQuery($searchKeyword);
+    } else {
+      $plantQuery = $this->plant->createPlantQueryBuilder();
     }
 
-    return $plantQuery->orderBy('created_at', 'desc')->paginate(Plant::SEARCHES_DISPLAY_NUMBER);
+    $searchResults = $plantQuery->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
+
+    return $searchResults;
   }
 
   /**
@@ -145,14 +148,6 @@ class PlantService
   public function getKeyword(Request $request): string|null
   {
     return $request->query('keyword');
-  }
-
-  /**
-   * @return \Illuminate\Database\Eloquent\Builder
-   */
-  public function createPlantQueryBuilder(): Builder
-  {
-    return Plant::query();
   }
 
   /**

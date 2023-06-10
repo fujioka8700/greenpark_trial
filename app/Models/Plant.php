@@ -15,8 +15,6 @@ class Plant extends Model
 {
   use HasFactory;
 
-  const SEARCHES_DISPLAY_NUMBER = 10;
-
   /**
    * createメソッドを使用時、許可する属性
    * @var array<int, string>
@@ -74,7 +72,7 @@ class Plant extends Model
   }
 
   /**
-   * @param array
+   * @param array $searchPlaces
    * @return \Illuminate\Database\Eloquent\Builder
    */
   public function createPlacesQuery(array $searchPlaces): Builder
@@ -82,5 +80,22 @@ class Plant extends Model
     return $this::whereHas('places', function ($query) use ($searchPlaces) {
       $query->whereIn('name', $searchPlaces);
     });
+  }
+
+  /**
+   * @param string $searchKeyword
+   * @return \Illuminate\Database\Eloquent\Builder
+   */
+  public function createPlantNameQuery(string $searchKeyword): Builder
+  {
+    return $this->query()->where('name', 'like', '%' . $searchKeyword . '%');
+  }
+
+  /**
+   * @return \Illuminate\Database\Eloquent\Builder
+   */
+  public function createPlantQueryBuilder(): Builder
+  {
+    return $this::query();
   }
 }
