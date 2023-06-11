@@ -22,11 +22,11 @@ class StorePlantPostRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'name' => 'required|string|unique:plants|max:255',
-      'file' => 'required|file|image',
-      'description' => 'required|string|max:255',
-      'places' => 'required|string|max:255',
-      'colors' => 'nullable',
+      'name' => 'required|string|unique:plants|max:50',
+      'file' => 'required|file|image|max:1000',
+      'description' => 'required|string|max:1000',
+      'places' => 'required|string',
+      'colors' => 'nullable|string',
     ];
   }
 }
