@@ -98,4 +98,13 @@ class Plant extends Model
   {
     return $this::query();
   }
+
+  /**
+   * @param int $plantId
+   * @return int
+   */
+  public function destroyPlantAndRelations(int $plantId): int
+  {
+    return $this::destroy($plantId);
+  }
 }

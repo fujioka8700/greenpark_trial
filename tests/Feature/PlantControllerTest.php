@@ -186,6 +186,20 @@ class PlantControllerTest extends TestCase
     ]);
   }
 
+  public function test_1つの植物を削除する(): void
+  {
+    Storage::fake('local');
+
+    $createPlants = 3;
+    $plants = $this->relatedPlants($createPlants);
+
+    $response = $this->actingAs($this->user)->deleteJson("/api/plants/{$plants->first()->id}");
+
+    $response->assertStatus(200)->assertSee(1);
+
+    $this->assertEquals(Plant::all()->count(), $plants->count() - 1);
+  }
+
   /**
    * 色と生育場所を関連付けした、植物たちを作成する
    * @param int $number

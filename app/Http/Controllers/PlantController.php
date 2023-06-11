@@ -16,6 +16,11 @@ class PlantController extends Controller
 
   public function __construct()
   {
+    $this->middleware('auth')->only([
+      'store',
+      'destroy',
+    ]);
+
     $this->plant = new Plant();
     $this->plantService = new PlantService();
   }
@@ -65,7 +70,9 @@ class PlantController extends Controller
    */
   public function destroy(Plant $plant)
   {
-    //
+    $destroyResult = $this->plant->destroyPlantAndRelations($plant->id);
+
+    return response()->json($destroyResult, Response::HTTP_OK);
   }
 
   /**
