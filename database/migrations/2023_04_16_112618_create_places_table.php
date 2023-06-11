@@ -21,8 +21,22 @@ return new class extends Migration
     // 「良く生えている場所」は事前に用意しておく
     DB::table('places')->insert([
       ['name' => '街路'],
+      ['name' => '生け垣'],
+      ['name' => '市街地'],
       ['name' => '公園'],
-      ['name' => '社寺'],
+      ['name' => '神社'],
+      ['name' => '寺院'],
+      ['name' => '道端'],
+      ['name' => '草地'],
+      ['name' => '空き地'],
+      ['name' => '土手'],
+      ['name' => '田畑'],
+      ['name' => 'あぜ'],
+      ['name' => '雑木林'],
+      ['name' => '林緑'],
+      ['name' => 'やぶ'],
+      ['name' => '水辺'],
+      ['name' => '海辺'],
     ]);
   }
 
