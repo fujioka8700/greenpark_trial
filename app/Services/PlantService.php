@@ -174,7 +174,7 @@ class PlantService
    */
   public function deletePlantImage(string $filePath): void
   {
-    $deleteFilePath = str_replace('/storage', 'public', $filePath);
+    $deleteFilePath = preg_replace('/(.*)storage/', 'public', $filePath);
 
     Storage::delete($deleteFilePath);
   }
