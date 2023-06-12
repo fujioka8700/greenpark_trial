@@ -72,6 +72,10 @@ class PlantController extends Controller
   {
     $destroyResult = $this->plant->destroyPlantAndRelations($plant->id);
 
+    if ($destroyResult == true) {
+      $this->plantService->deletePlantImage($plant->file_path);
+    }
+
     return response()->json($destroyResult, Response::HTTP_OK);
   }
 

@@ -7,6 +7,7 @@ use App\Models\Plant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PlantService
@@ -130,7 +131,6 @@ class PlantService
     $plantQuery = '';
 
     if (!empty($searchKeyword)) {
-      // $plantQuery->where('name', 'like', '%' . $searchKeyword . '%');
       $plantQuery = $this->plant->createPlantNameQuery($searchKeyword);
     } else {
       $plantQuery = $this->plant->createPlantQueryBuilder();
@@ -166,5 +166,16 @@ class PlantService
     $searchResults = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
 
     return $searchResults;
+  }
+
+  /**
+   * 登録した植物を削除する際、保存した画像ファイルも削除する
+   * @param string $filePath
+   */
+  public function deletePlantImage(string $filePath): void
+  {
+    $deleteFilePath = str_replace('/storage', 'public', $filePath);
+
+    Storage::delete($deleteFilePath);
   }
 }
