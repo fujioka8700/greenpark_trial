@@ -54,14 +54,21 @@
       </v-card>
     </v-col>
   </v-row>
+  <div v-if="auth.user && auth.user.id === plantInfo.user_id">
+    <DestroyButton :destroyPlantId="plantId" />
+  </div>
 </template>
 
 <script setup>
+import DestroyButton from "./DestroyButton.vue";
+import { useStoreAuth } from "../../store/auth";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { watch, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
+
+const auth = useStoreAuth();
 
 // パンくずリストはStoreに保存している
 const breadCrumbs = useStoreBreadCrumbs();

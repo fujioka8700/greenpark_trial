@@ -22,7 +22,9 @@ class ColorController extends Controller
    */
   public function index(): JsonResponse
   {
-    return response()->json($this->color->getAllColors(), Response::HTTP_OK);
+    $allColors = $this->color->getAllColors();
+
+    return response()->json($allColors, Response::HTTP_OK);
   }
 
   /**

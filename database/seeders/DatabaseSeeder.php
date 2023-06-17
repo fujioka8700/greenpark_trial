@@ -8,17 +8,20 @@ use App\Models\Color;
 use App\Models\Place;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
   const USERS_COUNT = 5; // 作成するユーザー数
-  const PLANTS_COUNT = 3; // 作成する植物数
+  const PLANTS_COUNT = 10; // 作成する植物数
 
   /**
    * Seed the application's database.
    */
   public function run(): void
   {
+    $this->deleteAllPlantImages();
+
     /** ログインしやすいユーザーの作成 */
     $user = User::factory()->create([
       'name' => 'Test User',
@@ -42,7 +45,7 @@ class DatabaseSeeder extends Seeder
      * 植物を作成するユーザーはランダム
      */
     Plant::factory(self::PLANTS_COUNT)
-      ->recycle($users)
+      ->recycle($user)
       ->create()
       ->each(
         function ($plant) use ($colors, $places) {
@@ -63,5 +66,19 @@ class DatabaseSeeder extends Seeder
             ->attach($places->random(random_int(1, $places->count())));
         }
       );
+  }
+
+  /**
+   * storage/app/public/images ディレクトリ内の、植物写真のファイルを全て削除する
+   */
+  public function deleteAllPlantImages(): void
+  {
+    $allFiles = Storage::allFiles('public/images/');
+
+    $notDeleteFile = array_search('public/images/.gitignore', $allFiles, true);
+
+    array_splice($allFiles, $notDeleteFile, 1);
+
+    Storage::delete($allFiles);
   }
 }

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Plant;
 use App\Models\Color;
 use App\Models\Place;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
@@ -17,47 +18,50 @@ class PlantControllerTest extends TestCase
   use RefreshDatabase;
   use WithFaker;
 
-  private $user; // 新規ユーザー
+  private $user;
 
   protected function setUp(): void
   {
     parent::setUp();
 
-    $this->user = User::factory()->create();
+    $this->seed(\Database\Seeders\UserSeeder::class);
+
+    $this->user = User::first();
   }
 
   public function test_植物を登録する(): void
   {
     Storage::fake('local');
 
-    $name = $this->faker()->text(10);
-    $dummy = UploadedFile::fake()->image('dummy.jpg', 640, 480);
-    $description = $this->faker()->text(100);
+    $plantName = $this->faker()->text(10);
+    $dummyImage = UploadedFile::fake()->image('dummy.jpg', 640, 480);
+    $plantDescription = $this->faker()->text(100);
 
-    // 良く生えている場所を、「街路・公園・社寺」から選ぶ
-    $array = [1, 2, 3];
-    $response = [];
-    foreach (array_rand($array, random_int(2, count($array))) as $key) {
-      $response[] = $array[$key];
+    $allPlaces = Place::query()->get()->toArray();
+    $randomArray = array_rand($allPlaces, random_int(2, count($allPlaces)));
+
+    foreach ($randomArray as $key) {
+      $zeroOutArray[] = $allPlaces[$key]['id'];
     }
-    $places = implode(',', $response);
+
+    $selectedPlaces = implode(',', $zeroOutArray);
 
     $response = $this->actingAs($this->user)->postJson('/api/plants', [
-      'name' => $name,
-      'file' => $dummy,
-      'description' => $description,
-      'places' => $places,
+      'name' => $plantName,
+      'file' => $dummyImage,
+      'description' => $plantDescription,
+      'places' => $selectedPlaces,
     ]);
 
-    $path = Plant::first()->file_path;
-
     // アップロードされたファイルが保存されているか
-    Storage::disk('local')->assertExists("public/images/{$dummy->hashName()}");
+    Storage::disk('local')->assertExists("public/images/{$dummyImage->hashName()}");
+
+    $filePath = Plant::first()->file_path;
 
     $response->assertStatus(201)->assertJson([
-      'name' => $name,
-      'file_path' => $path,
-      'description' => $description,
+      'name' => $plantName,
+      'file_path' => $filePath,
+      'description' => $plantDescription,
     ]);
   }
 
@@ -80,57 +84,44 @@ class PlantControllerTest extends TestCase
   {
     Storage::fake('local');
 
-    // 植物の登録と、画像のファイル保存
-    User::factory()->hasPlants()->create();
+    $this->seed(\Database\Seeders\PlantSeeder::class);
 
-    $serchKeyWord = Plant::find(1)->name; // 検索する文字列
-    $file_path = Plant::find(1)->file_path; // 画像のファイルパス
-    $file = preg_replace('/(.*)images\//', '', $file_path); // 保存された画像のファイル名
+    $searchKeyWord = Plant::find(1)->name;
+    $filePath = Plant::find(1)->file_path;
+    $fileName = preg_replace('/(.*)images\//', '', $filePath);
 
     // 画像のファイルが保存されているか確認する
-    Storage::disk('local')->assertExists("public/images/{$file}");
+    Storage::disk('local')->assertExists("public/images/{$fileName}");
 
     $response = $this->getJson(route(
       'search.plant',
-      ['keyword' => $serchKeyWord],
+      ['keyword' => $searchKeyWord],
     ));
 
     $response->assertStatus(200)->assertJson([
       'current_page' => 1,
       'data' => [
         [
-          'name' => $serchKeyWord,
-          'file_path' => $file_path,
+          'name' => $searchKeyWord,
+          'file_path' => $filePath,
         ]
       ]
     ]);
   }
 
-  public function test_1つの植物（紐づけした色、生育場所も）を返す(): void
+  public function test_1つの植物（関連付けした色と生育場所）を返す(): void
   {
     Storage::fake('local');
 
-    // ランダムに、紐づける色を決定する
-    $colors = Color::all()->random(random_int(1, 9));
-
-    // ランダムに、生育場所を紐づける。
-    $places = Place::all()->random(random_int(1, 3));
-
-    // 植物を1つ登録（画像ファイルも保存）し、色を紐づける
-    $plants = Plant::factory(1)
-      ->hasAttached($colors)
-      ->hasAttached($places)
-      ->recycle($this->user)->create();
-
+    $createPlants = 1;
+    $plants = $this->relatedPlants($createPlants);
     $plant = $plants->first();
 
-    // 紐づけした色を、配列にする
     $plantColors = [];
     foreach ($plant->colors as $color) {
       array_push($plantColors, ['name' => $color->name]);
     }
 
-    // 紐づけした生育場所を、配列にする
     $plantPlaces = [];
     foreach ($plant->places as $place) {
       array_push($plantPlaces, ['name' => $place->name]);
@@ -146,18 +137,16 @@ class PlantControllerTest extends TestCase
   }
 
 
-  public function test_生育場所で検索し、一覧を取得する(): void
+  public function test_生育場所「街路・生け垣」で検索し、一覧を取得する(): void
   {
     Storage::fake('local');
 
-    // 生育場所を街路にする
-    $places = Place::where('name', '街路')->get();
+    $relationPlaces = Place::where('name', '街路')->get();
 
     $plants = Plant::factory(1)
-      ->hasAttached($places)
+      ->hasAttached($relationPlaces)
       ->recycle($this->user)->create();
 
-    // 街路、生け垣で検索する
     $response = $this->getJson(route(
       'search.places',
       ['places' => ['街路', '生け垣']]
@@ -177,22 +166,11 @@ class PlantControllerTest extends TestCase
   {
     Storage::fake('local');
 
-    // ランダムに、紐づける色を決定する
-    $colors = Color::all()->random(random_int(1, 9));
+    $createPlants = 5;
+    $this->relatedPlants($createPlants);
 
-    // ランダムに、生育場所を紐づける。
-    $places = Place::all()->random(random_int(1, 3));
-
-    // 植物を10個登録（画像ファイルも保存）し、色を紐づける
-    Plant::factory(5)
-      ->hasAttached($colors)
-      ->hasAttached($places)
-      ->recycle($this->user)->create();
-
-    // コレクションから配列作成
     $plantsArray = Plant::all()->toArray();
 
-    // 配列から名前の配列作成
     $plantsName = [];
     foreach ($plantsArray as $key => $value) {
       array_push($plantsName, $value['name']);
@@ -200,11 +178,43 @@ class PlantControllerTest extends TestCase
 
     $response = $this->getJson(route('recommend.plants'));
 
-    // レスポンス中のどこかに、
-    // 指定JSONデータが含まれているかテストする
-    $random_int = mt_rand(0, 4);
+    $maxValue = max(array_keys($plantsArray));
+    $randomNumber = mt_rand(0, $maxValue);
+
     $response->assertStatus(200)->assertJsonFragment([
-      'name' => $plantsName[$random_int],
+      'name' => $plantsName[$randomNumber],
     ]);
+  }
+
+  public function test_1つの植物を削除する(): void
+  {
+    Storage::fake('local');
+
+    $createPlants = 3;
+    $plants = $this->relatedPlants($createPlants);
+
+    $response = $this->actingAs($this->user)->deleteJson("/api/plants/{$plants->first()->id}");
+
+    $response->assertStatus(200)->assertSee(1);
+
+    $this->assertEquals(Plant::all()->count(), $plants->count() - 1);
+  }
+
+  /**
+   * 色と生育場所を関連付けした、植物たちを作成する
+   * @param int $number
+   * @return \Illuminate\Database\Eloquent\Collection
+   */
+  public function relatedPlants(int $number): Collection
+  {
+    $relationColors = Color::all()->random(random_int(1, Color::all()->count()));
+    $relationPlaces = Place::all()->random(random_int(1, Place::all()->count()));
+
+    $plants = Plant::factory($number)
+      ->hasAttached($relationColors)
+      ->hasAttached($relationPlaces)
+      ->recycle($this->user)->create();
+
+    return $plants;
   }
 }
