@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class DatabaseSeeder extends Seeder
 {
   const USERS_COUNT = 5; // 作成するユーザー数
-  const PLANTS_COUNT = 5; // 作成する植物数
+  const PLANTS_COUNT = 10; // 作成する植物数
 
   /**
    * Seed the application's database.
@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
      * 植物を作成するユーザーはランダム
      */
     Plant::factory(self::PLANTS_COUNT)
-      ->recycle($users)
+      ->recycle($user)
       ->create()
       ->each(
         function ($plant) use ($colors, $places) {

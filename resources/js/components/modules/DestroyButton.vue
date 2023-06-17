@@ -25,8 +25,10 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useStorePlant } from "../../store/plant";
 
 const router = useRouter();
+const plant = useStorePlant();
 
 const props = defineProps({
   destroyPlantId: String,
@@ -37,10 +39,18 @@ const dialog = ref(false);
 /**
  * @param {Number} plantId 削除する植物のid
  */
-const destroyOnePlant = (plantId) => {
-  axios.delete(`/api/plants/${plantId}`).then((response) => {
-    router.push({ name: "PlantPlaces" });
-  });
+const destroyOnePlant = async (plantId) => {
+  const destroyResult = await axios
+    .delete(`/api/plants/${plantId}`)
+    .then((response) => {
+      router.push({ name: "PlantPlaces" });
+
+      return true;
+    });
+
+  if (destroyResult === true) {
+    plant.setDestroyedPlantId(plantId);
+  }
 };
 </script>
 
