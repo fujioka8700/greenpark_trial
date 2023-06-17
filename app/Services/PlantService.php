@@ -7,9 +7,20 @@ use App\Models\Plant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PlantService
 {
+  const DISPLAY_NUMBER = 10; // 検索後、表示する植物の数
+
+  private $plant;
+
+  public function __construct()
+  {
+    $this->plant = new Plant();
+  }
+
   /**
    * @param \Illuminate\Http\Request $request
    */
@@ -108,5 +119,63 @@ class PlantService
 
       $plant->places()->attach($places);
     }
+  }
+
+  /**
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Pagination\LengthAwarePaginator
+   */
+  public function searchPlantName(Request $request): LengthAwarePaginator
+  {
+    $searchKeyword = $this->getKeyword($request);
+    $plantQuery = '';
+
+    if (!empty($searchKeyword)) {
+      $plantQuery = $this->plant->createPlantNameQuery($searchKeyword);
+    } else {
+      $plantQuery = $this->plant->createPlantQueryBuilder();
+    }
+
+    $searchResults = $plantQuery->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
+
+    return $searchResults;
+  }
+
+  /**
+   * @param \Illuminate\Http\Request $request
+   * @return string|null
+   */
+  public function getKeyword(Request $request): string|null
+  {
+    return $request->query('keyword');
+  }
+
+  /**
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Pagination\LengthAwarePaginator
+   */
+  public function searchPlantsPlaces(Request $request): LengthAwarePaginator
+  {
+    $searchPlaces = $request->query('places');
+    $query = '';
+
+    if (!empty($searchPlaces)) {
+      $query = $this->plant->createPlacesQuery($searchPlaces);
+    }
+
+    $searchResults = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
+
+    return $searchResults;
+  }
+
+  /**
+   * 登録した植物を削除する際、保存した画像ファイルも削除する
+   * @param string $filePath
+   */
+  public function deletePlantImage(string $filePath): void
+  {
+    $deleteFilePath = preg_replace('/(.*)storage/', 'public', $filePath);
+
+    Storage::delete($deleteFilePath);
   }
 }

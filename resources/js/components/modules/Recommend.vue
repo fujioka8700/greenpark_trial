@@ -29,6 +29,12 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
+import { onBeforeRouteUpdate } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useStorePlant } from "../../store/plant";
+
+const plant = useStorePlant();
+const { destroyedPlantId } = storeToRefs(plant);
 
 /** @type {Object} 注目の植物たち */
 const recommendPlants = ref({});
@@ -51,8 +57,26 @@ const fetchRecommendedPlants = () => {
   });
 };
 
+/**
+ * 「注目の植物たち」リストの中に、
+ * 削除された植物があれば、リストから消す
+ * @param {Object} recommendList 注目の植物たちのリスト
+ * @param {Number} destroyedPlantId 削除した植物id
+ */
+const removeFromRecommendPlantsList = (recommendList, destroyedPlantId) => {
+  recommendList.forEach((element, index) => {
+    if (element.id == destroyedPlantId) {
+      recommendPlants.value.splice(index, 1);
+    }
+  });
+};
+
 onMounted(() => {
   fetchRecommendedPlants();
+});
+
+onBeforeRouteUpdate(() => {
+  removeFromRecommendPlantsList(recommendPlants.value, destroyedPlantId.value);
 });
 </script>
 

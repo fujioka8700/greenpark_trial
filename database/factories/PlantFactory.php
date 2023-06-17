@@ -11,8 +11,8 @@ use Illuminate\Http\UploadedFile;
  */
 class PlantFactory extends Factory
 {
-  const IMAGE_WIDTH = 640;  // テスト画像の幅
-  const IMAGE_HEIGHT = 480; // テスト画像の高さ
+  const IMAGE_WIDTH = 640;  // ダミー画像の幅
+  const IMAGE_HEIGHT = 480; // ダミー画像の高さ
   const NAME_COUNT = 10;    // 植物名の文字上限
   const DESC_COUNT = 100;   // 植物説明の文字上限
 
@@ -23,20 +23,20 @@ class PlantFactory extends Factory
    */
   public function definition(): array
   {
-    $file = UploadedFile::fake()->image(
-      'plant.jpg',
+    $dummyImage = UploadedFile::fake()->image(
+      'dummy.jpg',
       self::IMAGE_WIDTH,
       self::IMAGE_HEIGHT
     );
 
-    $path = $file->store('public/images');
+    $filePath = $dummyImage->store('public/images');
 
     // ファイルパスを変更して、画像にアクセスできるようにする
-    $path = preg_replace('/(.*)public/', '/storage', $path);
+    $replacedFilePath = preg_replace('/(.*)public/', '/storage', $filePath);
 
     return [
       'name' => fake()->realText(self::NAME_COUNT),
-      'file_path' => $path,
+      'file_path' => $replacedFilePath,
       'user_id' => User::factory(),
       'description' => fake()->realText(self::DESC_COUNT),
     ];

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePlantPostRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
@@ -22,11 +22,8 @@ class StorePlantPostRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'name' => 'required|string|unique:plants|max:50',
-      'file' => 'required|file|image|max:1000',
-      'description' => 'required|string|max:1000',
-      'places' => 'required|string',
-      'colors' => 'nullable|string',
+      'email' => 'required|email',
+      'password' => 'required',
     ];
   }
 }

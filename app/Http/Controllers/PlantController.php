@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PlantService;
 use App\Models\Plant;
+use App\Services\PlantService;
 use App\Http\Requests\StorePlantPostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -11,13 +11,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PlantController extends Controller
 {
-  const DISPLAY_NUMBER = 10; // 検索後、表示する植物の数
-
   private $plant;
   private $plantService;
 
   public function __construct()
   {
+    $this->middleware('auth')->only([
+      'store',
+      'destroy',
+    ]);
+
     $this->plant = new Plant();
     $this->plantService = new PlantService();
   }
@@ -67,30 +70,25 @@ class PlantController extends Controller
    */
   public function destroy(Plant $plant)
   {
-    //
+    $destroyResult = $this->plant->destroyPlantAndRelations($plant->id);
+
+    if ($destroyResult == true) {
+      $this->plantService->deletePlantImage($plant->file_path);
+    }
+
+    return response()->json($destroyResult, Response::HTTP_OK);
   }
 
   /**
-   * 植物を検索する。
+   * 植物名を検索する。
    * @param \Illuminate\Http\Request $request
    * @return \Illuminate\Http\JsonResponse
    */
   public function search(Request $request): JsonResponse
   {
-    /** キーワード受け取り */
-    $keyword = $request->query('keyword');
+    $searchResults = $this->plantService->searchPlantName($request);
 
-    /** クエリ生成 */
-    $query = Plant::query();
-
-    /** もしキーワードがあったら */
-    if (!empty($keyword)) {
-      $query->where('name', 'like', '%' . $keyword . '%');
-    }
-
-    $data = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
-
-    return response()->json($data, Response::HTTP_OK);
+    return response()->json($searchResults, Response::HTTP_OK);
   }
 
   /**
@@ -100,22 +98,9 @@ class PlantController extends Controller
    */
   public function searchPlaces(Request $request): JsonResponse
   {
-    // 生育場所、受け取り
-    $places = $request->query('places');
+    $searchResults = $this->plantService->searchPlantsPlaces($request);
 
-    $query = '';
-
-    // もし生育場所があったら
-    if (!empty($places)) {
-      // リレーション先の生育場所を、IN(含まれる)で複数の一致を判定する
-      $query = Plant::whereHas('places', function ($query) use ($places) {
-        $query->whereIn('name', $places);
-      });
-    }
-
-    $data = $query->orderBy('created_at', 'desc')->paginate(self::DISPLAY_NUMBER);
-
-    return response()->json($data, Response::HTTP_OK);
+    return response()->json($searchResults, Response::HTTP_OK);
   }
 
   /**
@@ -124,7 +109,11 @@ class PlantController extends Controller
    */
   public function recommendPlants(): JsonResponse
   {
-    $plants = $this->plant->fetchRandomFivePlants();
+    try {
+      $plants = $this->plant->fetchRandomFivePlants();
+    } catch (\Exception $e) {
+      return response()->json($e->getMessage(), Response::HTTP_BAD_REQUEST);
+    }
 
     return response()->json($plants, Response::HTTP_OK);
   }

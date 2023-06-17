@@ -2,11 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
 
 class RegisterControllerTest extends TestCase
 {
@@ -28,7 +27,7 @@ class RegisterControllerTest extends TestCase
     // 正常に登録完了できているか確認。
     $response->assertStatus(200)->assertSeeText('User registration completed');
 
-    $registeredUser = User::where('name', $name)->get()->first();
+    $registeredUser = \App\Models\User::where('name', $name)->get()->first();
 
     // ユーザーが正しく登録できているか確認。
     $this->assertEquals($name, $registeredUser->name);

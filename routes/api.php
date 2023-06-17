@@ -38,6 +38,6 @@ Route::get('/plants/search-places', [PlantController::class, 'searchPlaces'])->n
 // TOP画面「注目の植物たち」で表示する植物
 Route::get('/plants/recommend', [PlantController::class, 'recommendPlants'])->name('recommend.plants');
 
-Route::apiResource('plants', PlantController::class, ['except' => ['index', 'update', 'destroy']]);
+Route::apiResource('plants', PlantController::class, ['except' => ['index', 'update']]);
 Route::apiResource('colors', ColorController::class, ['only' => ['index']]);
 Route::apiResource('places', PlaceController::class, ['only' => ['index']]);

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Color;
 use App\Models\Place;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -62,11 +63,48 @@ class Plant extends Model
 
   /**
    * 1つの植物と、植物に紐づいている情報を取得する。
-   * @param App\Models\Plant $plant
-   * @return App\Models\Plant
+   * @param \App\Models\Plant $plant
+   * @return \App\Models\Plant
    */
   public function getOnePlant(Plant $plant): Plant
   {
     return $plant->with(['colors', 'places'])->find($plant->id);
+  }
+
+  /**
+   * @param array $searchPlaces
+   * @return \Illuminate\Database\Eloquent\Builder
+   */
+  public function createPlacesQuery(array $searchPlaces): Builder
+  {
+    return $this::whereHas('places', function ($query) use ($searchPlaces) {
+      $query->whereIn('name', $searchPlaces);
+    });
+  }
+
+  /**
+   * @param string $searchKeyword
+   * @return \Illuminate\Database\Eloquent\Builder
+   */
+  public function createPlantNameQuery(string $searchKeyword): Builder
+  {
+    return $this->query()->where('name', 'like', '%' . $searchKeyword . '%');
+  }
+
+  /**
+   * @return \Illuminate\Database\Eloquent\Builder
+   */
+  public function createPlantQueryBuilder(): Builder
+  {
+    return $this::query();
+  }
+
+  /**
+   * @param int $plantId
+   * @return int
+   */
+  public function destroyPlantAndRelations(int $plantId): int
+  {
+    return $this::destroy($plantId);
   }
 }
