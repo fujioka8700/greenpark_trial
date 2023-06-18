@@ -64,9 +64,10 @@ import DestroyButton from "./DestroyButton.vue";
 import { useStoreAuth } from "../../store/auth";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { watch, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 
 const auth = useStoreAuth();
 
@@ -82,28 +83,47 @@ const props = defineProps({
 const plantInfo = ref({});
 
 /**
+ * 植物が存在しなければ、NotFoundページへ遷移する
+ * @param {boolean} beingPlant
+ */
+const moveToNotFound = (beingPlant) => {
+  if (beingPlant === false) {
+    router.push({ name: "NotFound" });
+  }
+};
+
+/**
  * 1つの植物と、リレーションしているものを取得する
  * @param {number} plantId 植物のID
+ * @return {boolean} 植物の有無
  */
 const getPlant = async (plantId) => {
-  await axios.get(`/api/plants/${plantId}`).then((result) => {
-    plantInfo.value = result.data;
-  });
+  return await axios
+    .get(`/api/plants/${plantId}`)
+    .then((result) => {
+      plantInfo.value = result.data;
+      return true;
+    })
+    .catch((result) => {
+      return false;
+    });
 };
 
 /**
  * パンくずリストに検索結果か、植物名を追加する
  */
 const addBreadCrumbs = () => {
-  breadCrumbs.push({
-    text: plantInfo.value.name,
-    to: {
-      name: "PlantItem",
-      params: {
-        plantId: plantInfo.value.id,
+  if (plantInfo.value.name !== undefined) {
+    breadCrumbs.push({
+      text: plantInfo.value.name,
+      to: {
+        name: "PlantItem",
+        params: {
+          plantId: plantInfo.value.id,
+        },
       },
-    },
-  });
+    });
+  }
 };
 
 watch(route, async () => {
@@ -127,7 +147,9 @@ onMounted(async () => {
   /** @type {number} 植物のID */
   const plantId = props.plantId;
 
-  await getPlant(plantId);
+  const beingPlant = await getPlant(plantId);
+
+  moveToNotFound(beingPlant);
 
   addBreadCrumbs();
 });
