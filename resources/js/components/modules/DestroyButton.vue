@@ -31,7 +31,10 @@ const router = useRouter();
 const plant = useStorePlant();
 
 const props = defineProps({
-  destroyPlantId: String,
+  destroyPlantId: {
+    type: Number,
+    required: true,
+  },
 });
 
 const dialog = ref(false);

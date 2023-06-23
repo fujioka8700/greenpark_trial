@@ -54,12 +54,14 @@
       </v-card>
     </v-col>
   </v-row>
-  <div v-if="auth.user && auth.user.id === plantInfo.user_id">
-    <DestroyButton :destroyPlantId="plantId" />
+  <div v-if="auth.user && auth.user.id === plantInfo.user_id" class="d-flex">
+    <UpdateButton :updatePlantId="Number(plantId)" />
+    <DestroyButton :destroyPlantId="Number(plantId)" />
   </div>
 </template>
 
 <script setup>
+import UpdateButton from "./UpdateButton.vue";
 import DestroyButton from "./DestroyButton.vue";
 import { useStoreAuth } from "../../store/auth";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
