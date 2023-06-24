@@ -200,6 +200,22 @@ class PlantControllerTest extends TestCase
     $this->assertEquals(Plant::all()->count(), $plants->count() - 1);
   }
 
+  public function test_1つの植物を更新する(): void
+  {
+    Storage::fake('local');
+
+    // リレーションする 白、黄 を取り出す
+    $colors = Color::query()->where('id', '<=', 2)->get();
+
+    // リレーションする 街路、生け垣 を取り出す
+    $places = Place::query()->where('id', '<=', 2)->get();
+
+    Plant::factory()
+      ->for($this->user)
+      ->hasAttached($colors)
+      ->hasAttached($places)->create();
+  }
+
   /**
    * 色と生育場所を関連付けした、植物たちを作成する
    * @param int $number
