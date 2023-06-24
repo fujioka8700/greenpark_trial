@@ -205,15 +205,36 @@ class PlantControllerTest extends TestCase
     Storage::fake('local');
 
     // リレーションする 白、黄 を取り出す
-    $colors = Color::query()->where('id', '<=', 2)->get();
+    $colors = Color::query()->whereIn('name', ['白', '黄'])->get();
 
     // リレーションする 街路、生け垣 を取り出す
-    $places = Place::query()->where('id', '<=', 2)->get();
+    $places = Place::query()->whereIn('name', ['街路', '生け垣'])->get();
 
-    Plant::factory()
+    $plant = Plant::factory()
       ->for($this->user)
       ->hasAttached($colors)
       ->hasAttached($places)->create();
+
+    // 修正する内容
+    $newName = 'ソメイヨシノ';
+    $newDescription = 'ソメイヨシノの花はピンク色です。';
+    $newColors = Color::query()->whereIn('name', ['ピンク', '赤'])->get();
+    $newPlaces = Place::query()->whereIn('name', ['市街地', '公園'])->get();
+
+    $response = $this->actingAs($this->user)->patchJson(
+      "/api/plants/{$plant->id}",
+      [
+        'name' => $newName,
+        'description' => $newDescription,
+        'places' => $newPlaces->pluck('id')->toArray(),
+        'colors' => $newColors->pluck('id')->toArray(),
+      ],
+    );
+
+    $response->assertStatus(200)->assertJson([
+      'name' => $newName,
+      'description' => $newDescription,
+    ]);
   }
 
   /**

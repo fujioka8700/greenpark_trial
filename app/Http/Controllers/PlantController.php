@@ -62,7 +62,15 @@ class PlantController extends Controller
    */
   public function update(Request $request, Plant $plant)
   {
-    //
+    $plant->fill($request->all())->save();
+
+    $plant->colors()->sync($request->colors);
+
+    $plant->places()->sync($request->places);
+
+    $newPlant = Plant::find($plant->id);
+
+    return response()->json($newPlant, Response::HTTP_OK);
   }
 
   /**
