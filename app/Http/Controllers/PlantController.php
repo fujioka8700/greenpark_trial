@@ -7,6 +7,7 @@ use App\Services\PlantService;
 use App\Http\Requests\StorePlantPostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class PlantController extends Controller
@@ -62,13 +63,23 @@ class PlantController extends Controller
    */
   public function update(Request $request, Plant $plant)
   {
-    $filePath = $this->plantService->saveImageFile($request);
-    $convertedFilePath = $this->plantService->convertFilePath($filePath);
+    $existsFile = Storage::exists("public/images/{$request->file->name}");
+
+    if ($existsFile === false) {
+      // 以前のファイルを削除
+      $deleteFile = preg_replace('/(.*)images\//', '', $plant->file_path);
+      Storage::delete("public/images/{$deleteFile}");
+
+      // 新しいファイルを保存
+      $filePath = $this->plantService->saveImageFile($request);
+
+      $convertedFilePath = $this->plantService->convertFilePath($filePath);
+      $plant->file_path = $convertedFilePath;
+      $plant->save();
+    }
 
     $plant->name = $request->input('name');
     $plant->description = $request->input('description');
-    $plant->file_path = $convertedFilePath;
-
     $plant->save();
 
     $plant->colors()->sync($request->colors);
