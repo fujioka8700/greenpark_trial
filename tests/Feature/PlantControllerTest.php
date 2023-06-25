@@ -233,6 +233,12 @@ class PlantControllerTest extends TestCase
       'description' => $newDescription,
       'file_path' => $filePath,
     ]);
+
+    $relatedColors = Plant::first()->colors->pluck('name')->toArray();
+    $this->assertEquals($relatedColors, $newColors->pluck('name')->toArray());
+
+    $relatedPlaces = Plant::first()->places->pluck('name')->toArray();
+    $this->assertEquals($relatedPlaces, $newPlaces->pluck('name')->toArray());
   }
 
   /**
