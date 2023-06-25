@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Plant;
 use App\Services\PlantService;
-use App\Http\Requests\StorePlantPostRequest;
+use App\Http\Requests\PlantRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
@@ -37,10 +37,10 @@ class PlantController extends Controller
 
   /**
    * 植物(名前、色、生育地、特徴、ファイル)を登録する。
-   * @param \App\Http\Requests\StorePlantPostRequest $request
+   * @param \App\Http\Requests\PlantRequest $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function store(StorePlantPostRequest $request): JsonResponse
+  public function store(PlantRequest $request): JsonResponse
   {
     $storedPlant = $this->plantService->storeOnePlant($request);
 
@@ -62,7 +62,7 @@ class PlantController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(StorePlantPostRequest $request, Plant $plant)
+  public function update(PlantRequest $request, Plant $plant)
   {
     $existsFile = Storage::exists("public/images/{$request->file->name}");
 
