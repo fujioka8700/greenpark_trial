@@ -204,6 +204,43 @@ class PlantControllerTest extends TestCase
   {
     Storage::fake('local');
 
+    $plant = $this->fixedRelationPlant();
+
+    // 修正する内容
+    $newName = 'ソメイヨシノ';
+    $newDescription = 'ソメイヨシノの花はピンク色です。';
+    $newColors = Color::query()->whereIn('name', ['ピンク', '赤'])->get();
+    $newPlaces = Place::query()->whereIn('name', ['市街地', '公園'])->get();
+    $newDummyImage = UploadedFile::fake()->image('dummy.jpg', 640, 480);
+
+    $response = $this->actingAs($this->user)->patchJson(
+      "/api/plants/{$plant->id}",
+      [
+        'name' => $newName,
+        'description' => $newDescription,
+        'places' => $newPlaces->pluck('id')->toArray(),
+        'colors' => $newColors->pluck('id')->toArray(),
+        'file' => $newDummyImage,
+      ],
+    );
+
+    Storage::disk('local')->assertExists("public/images/{$newDummyImage->hashName()}");
+
+    $filePath = Plant::first()->file_path;
+
+    $response->assertStatus(200)->assertJson([
+      'name' => $newName,
+      'description' => $newDescription,
+      'file_path' => $filePath,
+    ]);
+  }
+
+  /**
+   * 色と生育場所を関連付けした、植物を作成する
+   * @return \App\Models\Plant
+   */
+  public function fixedRelationPlant(): Plant
+  {
     // リレーションする 白、黄 を取り出す
     $colors = Color::query()->whereIn('name', ['白', '黄'])->get();
 
@@ -215,30 +252,11 @@ class PlantControllerTest extends TestCase
       ->hasAttached($colors)
       ->hasAttached($places)->create();
 
-    // 修正する内容
-    $newName = 'ソメイヨシノ';
-    $newDescription = 'ソメイヨシノの花はピンク色です。';
-    $newColors = Color::query()->whereIn('name', ['ピンク', '赤'])->get();
-    $newPlaces = Place::query()->whereIn('name', ['市街地', '公園'])->get();
-
-    $response = $this->actingAs($this->user)->patchJson(
-      "/api/plants/{$plant->id}",
-      [
-        'name' => $newName,
-        'description' => $newDescription,
-        'places' => $newPlaces->pluck('id')->toArray(),
-        'colors' => $newColors->pluck('id')->toArray(),
-      ],
-    );
-
-    $response->assertStatus(200)->assertJson([
-      'name' => $newName,
-      'description' => $newDescription,
-    ]);
+    return $plant;
   }
 
   /**
-   * 色と生育場所を関連付けした、植物たちを作成する
+   * 色と生育場所を、ランダムに関連付けした、植物たちを作成する
    * @param int $number
    * @return \Illuminate\Database\Eloquent\Collection
    */

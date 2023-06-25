@@ -62,15 +62,19 @@ class PlantController extends Controller
    */
   public function update(Request $request, Plant $plant)
   {
-    $plant->fill($request->all())->save();
+    $filePath = $this->plantService->saveImageFile($request);
+    $convertedFilePath = $this->plantService->convertFilePath($filePath);
+
+    $plant->name = $request->input('name');
+    $plant->description = $request->input('description');
+    $plant->file_path = $convertedFilePath;
+
+    $plant->save();
 
     $plant->colors()->sync($request->colors);
-
     $plant->places()->sync($request->places);
 
-    $newPlant = Plant::find($plant->id);
-
-    return response()->json($newPlant, Response::HTTP_OK);
+    return response()->json($plant, Response::HTTP_OK);
   }
 
   /**
