@@ -218,8 +218,8 @@ class PlantControllerTest extends TestCase
       [
         'name' => $newName,
         'description' => $newDescription,
-        'places' => $newPlaces->pluck('id')->toArray(),
-        'colors' => $newColors->pluck('id')->toArray(),
+        'places' => implode(',', $newPlaces->pluck('id')->toArray()),
+        'colors' => implode(',', $newColors->pluck('id')->toArray()),
         'file' => $newDummyImage,
       ],
     );

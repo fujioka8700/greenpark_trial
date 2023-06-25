@@ -20,6 +20,7 @@ class PlantController extends Controller
     $this->middleware('auth')->only([
       'store',
       'destroy',
+      'update',
     ]);
 
     $this->plant = new Plant();
@@ -61,7 +62,7 @@ class PlantController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Plant $plant)
+  public function update(StorePlantPostRequest $request, Plant $plant)
   {
     $existsFile = Storage::exists("public/images/{$request->file->name}");
 
@@ -82,8 +83,8 @@ class PlantController extends Controller
     $plant->description = $request->input('description');
     $plant->save();
 
-    $plant->colors()->sync($request->colors);
-    $plant->places()->sync($request->places);
+    $plant->colors()->sync(explode(',', $request->colors));
+    $plant->places()->sync(explode(',', $request->places));
 
     return response()->json($plant, Response::HTTP_OK);
   }
