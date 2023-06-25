@@ -60,11 +60,14 @@ class PlantController extends Controller
   }
 
   /**
-   * Update the specified resource in storage.
+   * 1つ植物の情報を修正する。
+   * @param \App\Http\Requests\PlantRequest $request
+   * @param \App\Models\Plant $plant
+   * @return \Illuminate\Http\JsonResponse
    */
-  public function update(PlantRequest $request, Plant $plant)
+  public function update(PlantRequest $request, Plant $plant): JsonResponse
   {
-    $existsFile = Storage::exists("public/images/{$request->file->name}");
+    $existsFile = Storage::exists("public/images/{$request->file('file')->getClientOriginalName()}");
 
     if ($existsFile === false) {
       // 以前のファイルを削除

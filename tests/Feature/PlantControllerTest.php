@@ -213,7 +213,7 @@ class PlantControllerTest extends TestCase
     $newPlaces = Place::query()->whereIn('name', ['市街地', '公園'])->get();
     $newDummyImage = UploadedFile::fake()->image('dummy.jpg', 640, 480);
 
-    $response = $this->actingAs($this->user)->patchJson(
+    $response = $this->actingAs($this->user)->putJson(
       "/api/plants/{$plant->id}",
       [
         'name' => $newName,
