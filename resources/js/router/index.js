@@ -76,6 +76,14 @@ const router = createRouter({
       component: () => import("../components/pages/StorePlant.vue"),
     },
     {
+      path: "/plants/:plantId/update",
+      name: "UpdatePlant",
+      props: (route) => ({
+        plantId: Number(route.params.plantId),
+      }),
+      component: () => import("../components/pages/UpdatePlant.vue"),
+    },
+    {
       path: "/:pathMatch(.*)*",
       name: "NotFound",
       component: () => import("../components/pages/NotFound.vue"),
