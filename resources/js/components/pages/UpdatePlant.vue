@@ -22,8 +22,13 @@
           @keydown="clearError('name')"
         ></v-text-field>
         <p>植物の写真</p>
+        <v-checkbox
+          v-model="imageChange"
+          label="画像を変更する場合は、チェックしてください"
+        ></v-checkbox>
         <v-file-input
           v-model="image"
+          :disabled="!imageChange"
           clearable
           accept="image/*"
           label="ファイルを選んでください"
@@ -42,7 +47,10 @@
             <v-img :src="url" max-width="250"></v-img>
           </template>
           <template v-else>
-            <p class="text-body-2">ここに植物の写真が表示されます</p>
+            <v-img
+              :src="`../../${plantInfo.file_path}`"
+              max-width="250"
+            ></v-img>
           </template>
         </v-sheet>
         <div>
@@ -174,6 +182,9 @@ const image = ref(null);
 
 /** @type {boolean} フォームの入力確認 */
 const form = ref(false);
+
+/** @type {boolean} 画像変更の入力許可 */
+const imageChange = ref(false);
 
 /**
  * バリデーション、必須入力
