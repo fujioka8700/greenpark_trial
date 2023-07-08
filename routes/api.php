@@ -38,6 +38,9 @@ Route::get('/plants/search-places', [PlantController::class, 'searchPlaces'])->n
 // TOP画面「注目の植物たち」で表示する植物
 Route::get('/plants/recommend', [PlantController::class, 'recommendPlants'])->name('recommend.plants');
 
+// 修正画面で、植物の画像ファイルをダウンロードする
+Route::get('/plants/fetch-image', [PlantController::class, 'fetchImage'])->name('fetchImage.plants');
+
 Route::apiResource('plants', PlantController::class, ['except' => ['index']]);
 Route::apiResource('colors', ColorController::class, ['only' => ['index']]);
 Route::apiResource('places', PlaceController::class, ['only' => ['index']]);

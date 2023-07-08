@@ -241,6 +241,20 @@ class PlantControllerTest extends TestCase
     $this->assertEquals($relatedPlaces, $newPlaces->pluck('name')->toArray());
   }
 
+  public function test_修正画面で、植物の画像ファイルをダウンロードする()
+  {
+    Storage::fake('local');
+
+    $plant = $this->fixedRelationPlant();
+
+    $response = $this->getJson(route(
+      'fetchImage.plants',
+      ['plantId' => $plant->id],
+    ));
+
+    $response->assertStatus(200);
+  }
+
   /**
    * 色と生育場所を関連付けした、植物を作成する
    * @return \App\Models\Plant

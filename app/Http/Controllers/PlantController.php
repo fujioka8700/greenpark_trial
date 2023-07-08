@@ -60,6 +60,23 @@ class PlantController extends Controller
   }
 
   /**
+   * 「植物を修正する」時、もともと設定している植物の写真をダウンロードする。
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function fetchImage(Request $request): JsonResponse
+  {
+    $plantId = $request->input('plantId');
+    $plant = Plant::find($plantId);
+
+    $fileName = preg_replace('/(.*)images\//', '', $plant->file_path);
+    $image = Storage::get("public/images/{$fileName}");
+    $imageText = base64_encode($image);
+
+    return response()->json($imageText, Response::HTTP_OK);
+  }
+
+  /**
    * 1つ植物の情報を修正する。
    * @param \App\Http\Requests\PlantRequest $request
    * @param \App\Models\Plant $plant
