@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Plant;
 use App\Services\PlantService;
 use App\Http\Requests\PlantRequest;
+use App\Http\Requests\UpdatePlantRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
@@ -61,31 +62,38 @@ class PlantController extends Controller
 
   /**
    * 1つ植物の情報を修正する。
-   * @param \App\Http\Requests\PlantRequest $request
+   * @param \App\Http\Requests\UpdatePlantRequest $request
    * @param \App\Models\Plant $plant
    * @return \Illuminate\Http\JsonResponse
    */
-  public function update(PlantRequest $request, Plant $plant): JsonResponse
+  public function update(UpdatePlantRequest $request, Plant $plant): JsonResponse
   {
-    $existsFile = Storage::exists("public/images/{$request->file('file')->getClientOriginalName()}");
+    // 新しい画像が、送信されてきたか確認
+    if (isset($request->file)) {
+      // 保存されている画像と被っていないか確認
+      $existsFile = Storage::exists("public/images/{$request->file('file')->getClientOriginalName()}");
 
-    if ($existsFile === false) {
-      // 以前のファイルを削除
-      $deleteFile = preg_replace('/(.*)images\//', '', $plant->file_path);
-      Storage::delete("public/images/{$deleteFile}");
+      if ($existsFile === false) {
+        // 以前の画像ファイルを削除
+        $deleteFile = preg_replace('/(.*)images\//', '', $plant->file_path);
+        Storage::delete("public/images/{$deleteFile}");
 
-      // 新しいファイルを保存
-      $filePath = $this->plantService->saveImageFile($request);
+        // 新しい画像ファイルを保存
+        $filePath = $this->plantService->saveImageFile($request);
 
-      $convertedFilePath = $this->plantService->convertFilePath($filePath);
-      $plant->file_path = $convertedFilePath;
-      $plant->save();
+        // 新しい画像ファイルのパスへ更新
+        $convertedFilePath = $this->plantService->convertFilePath($filePath);
+        $plant->file_path = $convertedFilePath;
+        $plant->save();
+      }
     }
 
+    // 名前、説明の更新
     $plant->name = $request->input('name');
     $plant->description = $request->input('description');
     $plant->save();
 
+    // よく生えている場所、花の色の更新
     $plant->colors()->sync(explode(',', $request->colors));
     $plant->places()->sync(explode(',', $request->places));
 

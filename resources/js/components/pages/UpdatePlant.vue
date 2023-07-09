@@ -288,15 +288,26 @@ const storePlant = (formData) => {
 };
 
 /**
+ * 新しい画像を選択していれば、その画像を送信する
+ * @param {*} formData
+ */
+const changeToNewImage = (formData) => {
+  if (fileInfo.value.size !== undefined) {
+    formData.append("file", fileInfo.value);
+  }
+};
+
+/**
  * 植物を登録するボタン
  */
 const sendButton = () => {
   /** @type {Object} 登録する植物の情報 */
   const formData = new FormData();
 
+  changeToNewImage(formData);
+
   // 植物の情報を formData に追加する
   formData.append("name", name.value);
-  formData.append("file", fileInfo.value);
   formData.append("description", description.value);
   formData.append("places", placesCheckedValues.value);
   formData.append("colors", colorsCheckedValues.value);
