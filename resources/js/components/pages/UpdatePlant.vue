@@ -22,10 +22,10 @@
           @keydown="clearError('name')"
         ></v-text-field>
         <p>植物の写真</p>
-        <v-checkbox
+        <v-switch
+          label="写真を変更する場合は、スイッチをオンしてください"
           v-model="imageChange"
-          label="画像を変更する場合は、チェックしてください"
-        ></v-checkbox>
+        ></v-switch>
         <v-file-input
           v-model="image"
           :disabled="!imageChange"
