@@ -1,4 +1,11 @@
 <template>
+  <div
+    v-if="auth.user && auth.user.id === plantInfo.user_id"
+    class="d-flex justify-end mb-2"
+  >
+    <UpdateButton :updatePlantId="Number(plantId)" class="mr-2" />
+    <DestroyButton :destroyPlantId="Number(plantId)" />
+  </div>
   <v-row>
     <v-col cols="12" sm="6">
       <v-img cover :src="`../${plantInfo.file_path}`"></v-img>
@@ -54,10 +61,6 @@
       </v-card>
     </v-col>
   </v-row>
-  <div v-if="auth.user && auth.user.id === plantInfo.user_id" class="d-flex">
-    <UpdateButton :updatePlantId="Number(plantId)" />
-    <DestroyButton :destroyPlantId="Number(plantId)" />
-  </div>
 </template>
 
 <script setup>
