@@ -114,15 +114,21 @@
           ></v-textarea>
         </div>
 
-        <v-btn
-          type="submit"
-          block
-          :disabled="!form"
-          color="light-blue-darken-1"
-          class="mt-2"
-        >
-          植物を修正する
-        </v-btn>
+        <div class="d-flex justify-space-evenly">
+          <v-btn
+            type="submit"
+            :disabled="!form"
+            color="light-blue-darken-1"
+            class="mt-2"
+            >植物を修正する</v-btn
+          >
+          <v-btn
+            color="blue-grey-lighten-5"
+            class="mt-2"
+            @click="$router.back()"
+            >キャンセル</v-btn
+          >
+        </div>
       </v-form>
     </v-sheet>
   </div>
