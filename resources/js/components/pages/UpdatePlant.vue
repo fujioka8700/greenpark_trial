@@ -280,7 +280,8 @@ const storePlant = (formData) => {
   axios
     .post(`/api/plants/${props.plantId}`, formData, config)
     .then((result) => {
-      router.push({ name: "PlantPlaces" });
+      // 修正完了後は、1つの植物ページへ遷移する
+      router.back();
     })
     .catch((err) => {
       const response = err.response;
