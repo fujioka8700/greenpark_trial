@@ -52,4 +52,12 @@ class User extends Authenticatable
   {
     return $this->hasMany(Plant::class);
   }
+
+  /**
+   * １対多 commentsテーブル
+   */
+  public function comments(): HasMany
+  {
+    return $this->hasMany(\App\Models\Comment::class);
+  }
 }
