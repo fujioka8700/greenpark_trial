@@ -6,7 +6,7 @@
       variant="underlined"
       clearable
     ></v-text-field>
-    <div class="text-right">
+    <div class="text-right mb-5">
       <v-btn
         type="submit"
         :disabled="!comment"

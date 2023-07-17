@@ -60,6 +60,7 @@
         </v-card-text>
       </v-card>
       <CommentField />
+      <WriteComments />
     </v-col>
   </v-row>
 </template>
@@ -68,6 +69,7 @@
 import UpdateButton from "./UpdateButton.vue";
 import DestroyButton from "./DestroyButton.vue";
 import CommentField from "./CommentField.vue";
+import WriteComments from "./WriteComments.vue";
 import { useStoreAuth } from "../../store/auth";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { watch, onMounted, ref } from "vue";
