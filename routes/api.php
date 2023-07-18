@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PlantController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\PlaceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,5 +37,6 @@ Route::get('/plants/search-places', [PlantController::class, 'searchPlaces'])->n
 Route::get('/plants/recommend', [PlantController::class, 'recommendPlants'])->name('recommend.plants');
 
 Route::apiResource('plants', PlantController::class, ['except' => ['index']]);
-Route::apiResource('colors', ColorController::class, ['only' => ['index']]);
-Route::apiResource('places', PlaceController::class, ['only' => ['index']]);
+Route::apiResource('colors', \App\Http\Controllers\ColorController::class, ['only' => ['index']]);
+Route::apiResource('places', \App\Http\Controllers\PlaceController::class, ['only' => ['index']]);
+Route::apiResource('comments', \App\Http\Controllers\CommentController::class, ['only' => ['store']]);
