@@ -63,7 +63,7 @@
         :plantId="Number(plantId)"
         @isNotification="commentedEvent"
       />
-      <WriteComments />
+      <WriteComments :plantId="Number(plantId)" />
     </v-col>
   </v-row>
 </template>

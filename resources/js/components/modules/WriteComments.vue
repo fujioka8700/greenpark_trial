@@ -1,15 +1,54 @@
 <template>
-  <div class="mb-5" v-for="item in 5">
+  <div class="mb-5" v-for="comment in comments">
     <p class="text-body-2">
-      <span class="font-weight-bold mr-2">田中太郎</span>
-      <span class="text-grey">2023/07/17 17:29</span>
+      <span class="font-weight-bold mr-2">{{ comment.user.name }}</span>
+      <span class="text-grey">{{ comment.created_at }}</span>
     </p>
-    <p class="text-body-1">
-      綺麗な花ですね。綺麗な花ですね。綺麗な花ですね。綺麗な花ですね。
-    </p>
+    <p class="text-body-1">{{ comment.comment }}</p>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+const props = defineProps({
+  plantId: {
+    type: Number,
+    default: null,
+  },
+});
+
+const comments = ref(null);
+
+watch(route, () => {
+  // ページ遷移時、コメント一覧を取得する。
+  getComments(route.params.plantId);
+});
+
+/**
+ * コメント一覧を取得し、更新する。
+ * @param {Number} plantId
+ */
+const getComments = (plantId) => {
+  axios
+    .get("/api/comments", {
+      params: {
+        plant_id: plantId,
+      },
+    })
+    .then((result) => {
+      comments.value = result.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+// created時、コメント一覧を取得する。
+getComments(props.plantId);
+</script>
 
 <style lang="scss" scoped></style>

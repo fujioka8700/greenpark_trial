@@ -20,6 +20,15 @@ class Comment extends Model
   ];
 
   /**
+   * 日付のフォーマットを変更する
+   */
+  protected $casts = [
+    'email_verified_at' => 'datetime',
+    'created_at'        => 'datetime:Y-m-d H:i:s',
+    'updated_at'        => 'datetime:Y-m-d H:i:s',
+  ];
+
+  /**
    * １対多（逆）／所属 plantsテーブル
    */
   public function plant(): BelongsTo
