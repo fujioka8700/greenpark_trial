@@ -31,14 +31,43 @@ import { storeToRefs } from "pinia";
 const auth = useStoreAuth();
 const { user } = storeToRefs(auth);
 
+const emit = defineEmits(["isNotification"]);
+
+const props = defineProps({
+  plantId: {
+    type: Number,
+    default: null,
+  },
+});
+
 /** @type {string} 送信する前のコメント */
 const comment = ref("");
 
 /**
- * コメントを送信する
+ * コメントを送信する。
+ * コメントの書き込み成功時emitし、
+ * WriteCommentsコンポーネントの、
+ * コメント一覧を更新する。
  */
 const sendButton = () => {
-  console.log(comment.value);
+  axios
+    .post("/api/comments", {
+      user_id: user.value.id,
+      plant_id: props.plantId,
+      comment: comment.value,
+    })
+    .then((result) => {
+      console.log(result.data);
+
+      emit("isNotification");
+    })
+    .catch((err) => {
+      const response = err.response;
+
+      console.log(response.data);
+    });
+
+  // 入力していたコメントを消す
   comment.value = "";
 };
 </script>

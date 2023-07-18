@@ -59,7 +59,10 @@
           {{ plantInfo.description }}
         </v-card-text>
       </v-card>
-      <CommentField />
+      <CommentField
+        :plantId="Number(plantId)"
+        @isNotification="commentedEvent"
+      />
       <WriteComments />
     </v-col>
   </v-row>
@@ -133,6 +136,14 @@ const addBreadCrumbs = () => {
       },
     });
   }
+};
+
+/**
+ * CommentFieldコンポーネントから、
+ * コメント書き込みの、emitを受け取り時に実行する
+ */
+const commentedEvent = () => {
+  console.log("コメント書き込みの通知");
 };
 
 watch(route, async () => {
