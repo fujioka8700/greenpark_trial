@@ -39,4 +39,4 @@ Route::get('/plants/recommend', [PlantController::class, 'recommendPlants'])->na
 Route::apiResource('plants', PlantController::class, ['except' => ['index']]);
 Route::apiResource('colors', \App\Http\Controllers\ColorController::class, ['only' => ['index']]);
 Route::apiResource('places', \App\Http\Controllers\PlaceController::class, ['only' => ['index']]);
-Route::apiResource('comments', \App\Http\Controllers\CommentController::class, ['only' => ['store']]);
+Route::apiResource('comments', \App\Http\Controllers\CommentController::class, ['only' => ['index', 'store']]);

@@ -15,11 +15,17 @@ class CommentController extends Controller
   }
 
   /**
-   * Display a listing of the resource.
+   * 1つの植物のコメント一覧を取得する
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\JsonResponse
    */
-  public function index()
+  public function index(Request $request): JsonResponse
   {
-    //
+    $plantId = $request->input('plant_id');
+
+    $comments = Comment::where('plant_id', $plantId)->with('user')->latest()->get();
+
+    return response()->json($comments, Response::HTTP_OK);
   }
 
   /**

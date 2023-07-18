@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Plant;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -45,6 +46,27 @@ class CommentControllerTest extends TestCase
       'comment' => $comment,
       'user_id' => $this->user->id,
       'plant_id' => $this->plant->id,
+    ]);
+  }
+
+  public function test_植物1つのコメント一覧を取得する(): void
+  {
+    $comment = Comment::factory()->create();
+    $user = User::find($comment->user_id);
+
+    $response = $this->getJson(route(
+      'comments.index',
+      ['plant_id' => $comment->plant_id],
+    ));
+
+    $response->assertStatus(200)->assertJson([
+      [
+        'id' => $comment->id,
+        'comment' => $comment->comment,
+        'user' => [
+          'name' => $user->name,
+        ],
+      ],
     ]);
   }
 }
