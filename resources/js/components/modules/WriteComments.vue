@@ -49,6 +49,10 @@ const getComments = (plantId) => {
 
 // created時、コメント一覧を取得する。
 getComments(props.plantId);
+
+// 非親子コンポーネントから、
+// メソッドを実行できるようにする。
+defineExpose({ getComments });
 </script>
 
 <style lang="scss" scoped></style>

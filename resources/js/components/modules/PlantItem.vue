@@ -63,7 +63,7 @@
         :plantId="Number(plantId)"
         @isNotification="commentedEvent"
       />
-      <WriteComments :plantId="Number(plantId)" />
+      <WriteComments :plantId="Number(plantId)" ref="writeComments" />
     </v-col>
   </v-row>
 </template>
@@ -93,6 +93,9 @@ const props = defineProps({
 
 /** @type {Object} 植物の情報 */
 const plantInfo = ref({});
+
+/** @type {Object} 非親子間で、メソッドを実行用 */
+const writeComments = ref();
 
 /**
  * 植物が存在しなければ、NotFoundページへ遷移する
@@ -141,9 +144,10 @@ const addBreadCrumbs = () => {
 /**
  * CommentFieldコンポーネントから、
  * コメント書き込みの、emitを受け取り時に実行する
+ * @param {Number} plantId
  */
-const commentedEvent = () => {
-  console.log("コメント書き込みの通知");
+const commentedEvent = (plantId) => {
+  writeComments.value.getComments(plantId);
 };
 
 watch(route, async () => {

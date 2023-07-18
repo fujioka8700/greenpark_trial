@@ -57,9 +57,7 @@ const sendButton = () => {
       comment: comment.value,
     })
     .then((result) => {
-      console.log(result.data);
-
-      emit("isNotification");
+      emit("isNotification", result.data.plant_id);
     })
     .catch((err) => {
       const response = err.response;
