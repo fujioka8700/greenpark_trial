@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-5" v-for="comment in comments">
+  <div class="mb-5" v-for="comment in comments" :key="comment.id">
     <p class="text-body-2">
       <span class="font-weight-bold mr-2">{{ comment.user.name }}</span>
       <span class="text-grey">{{ comment.created_at }}</span>
