@@ -1,15 +1,35 @@
 <template>
-  <div class="mb-5" v-for="comment in comments" :key="comment.id">
-    <p class="text-body-2">
-      <span class="font-weight-bold mr-2">{{ comment.user.name }}</span>
-      <span class="text-grey">{{ comment.created_at }}</span>
+  <div class="mb-5" v-for="(comment, index) in comments" :key="comment.id">
+    <div v-if="index < COMMENT_COUNT">
+      <OneComment>
+        <template v-slot:user_name>{{ comment.user.name }}</template>
+        <template v-slot:created_at>{{ comment.created_at }}</template>
+        <template v-slot:comment>{{ comment.comment }}</template>
+      </OneComment>
+    </div>
+    <div v-else :class="{ comment_section__body: showAllComments }">
+      <OneComment>
+        <template v-slot:user_name>{{ comment.user.name }}</template>
+        <template v-slot:created_at>{{ comment.created_at }}</template>
+        <template v-slot:comment>{{ comment.comment }}</template>
+      </OneComment>
+    </div>
+  </div>
+  <div v-if="toggleComment">
+    <p
+      class="text-decoration-underline"
+      @click="showAllComments = !showAllComments"
+    >
+      <template v-if="showAllComments">コメントを全て表示する</template>
+      <template v-else>コメントを閉じる</template>
     </p>
-    <p class="text-body-1">{{ comment.comment }}</p>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { COMMENT_COUNT } from "../../util";
+import OneComment from "./OneComment.vue";
+import { ref, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -21,11 +41,20 @@ const props = defineProps({
   },
 });
 
-const comments = ref(null);
+/** @type {Object} コメント */
+const comments = ref([]);
+
+/** @type {Boolean} コメント全件表示 */
+const showAllComments = ref(true);
 
 watch(route, () => {
   // ページ遷移時、コメント一覧を取得する。
   getComments(route.params.plantId);
+});
+
+/** @type {Boolean} 規定数以上なら「コメントを全て表示する」を表示する */
+const toggleComment = computed(() => {
+  return comments.value.length > COMMENT_COUNT;
 });
 
 /**
@@ -55,4 +84,8 @@ getComments(props.plantId);
 defineExpose({ getComments });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.comment_section__body {
+  display: none;
+}
+</style>
