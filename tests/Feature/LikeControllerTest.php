@@ -48,4 +48,18 @@ class LikeControllerTest extends TestCase
 
     $this->assertFalse($likeExists);
   }
+
+  public function test_既にlikeしたか確認したあと、いいねする（重複させない）(): void
+  {
+    // seeder 時点の「いいね」を解除する
+    $this->user->likes()->detach($this->plant->id);
+
+    $response = $this->actingAs($this->user)->postJson("/api/plants/{$this->plant->id}/like");
+
+    $response->assertStatus(201)->assertSee('like!');
+
+    $likeExists = $this->user->isLiked($this->plant->id);
+
+    $this->assertTrue($likeExists);
+  }
 }

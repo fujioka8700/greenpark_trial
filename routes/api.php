@@ -37,6 +37,9 @@ Route::get('/plants/search-places', [PlantController::class, 'searchPlaces'])->n
 // TOP画面「注目の植物たち」で表示する植物
 Route::get('/plants/recommend', [PlantController::class, 'recommendPlants'])->name('recommend.plants');
 
+// 既にlikeしたか確認したあと、いいねする（重複させない）
+Route::post('/plants/{plant}/like', [LikeController::class, 'store']);
+
 // 既にlikeしたか確認して、もししていたら解除する
 Route::post('/plants/{plant}/unlike', [LikeController::class, 'destroy']);
 

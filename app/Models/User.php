@@ -80,6 +80,18 @@ class User extends Authenticatable
   }
 
   /**
+   * 既にlikeしたか確認したあと、いいねする（重複させない）
+   */
+  public function like(int $plantId): void
+  {
+    if ($this->isLiked($plantId)) {
+      //もし既に「いいね」していたら何もしない
+    } else {
+      $this->likes()->attach($plantId);
+    }
+  }
+
+  /**
    * 既にlikeしたか確認して、もししていたら解除する
    */
   public function unlike(int $plantId): void
