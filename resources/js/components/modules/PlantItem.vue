@@ -9,17 +9,7 @@
   <v-row>
     <v-col cols="12" sm="6" class="pb-0">
       <v-img cover :src="`../${plantInfo.file_path}`"></v-img>
-      <!-- いいねボタン始まり -->
-      <div class="d-flex justify-end align-center">
-        <v-btn
-          class="mt-2"
-          variant="text"
-          icon="mdi-thumb-up"
-          color="blue-lighten-2"
-        ></v-btn>
-        <span class="mt-2 mr-3">100</span>
-      </div>
-      <!-- いいねボタン終わり -->
+      <ThumbUp :plantId="Number(plantId)" />
     </v-col>
     <v-col cols="12" sm="6" class="pb-0">
       <v-table>
@@ -80,6 +70,7 @@
 </template>
 
 <script setup>
+import ThumbUp from "./ThumbUp.vue";
 import UpdateButton from "./UpdateButton.vue";
 import DestroyButton from "./DestroyButton.vue";
 import CommentField from "./CommentField.vue";
