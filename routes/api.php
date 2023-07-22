@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PlantController;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,9 @@ Route::get('/plants/search-places', [PlantController::class, 'searchPlaces'])->n
 
 // TOP画面「注目の植物たち」で表示する植物
 Route::get('/plants/recommend', [PlantController::class, 'recommendPlants'])->name('recommend.plants');
+
+// 既にlikeしたか確認して、もししていたら解除する
+Route::post('/plants/{plant}/unlike', [LikeController::class, 'destroy']);
 
 Route::apiResource('plants', PlantController::class, ['except' => ['index']]);
 Route::apiResource('colors', \App\Http\Controllers\ColorController::class, ['only' => ['index']]);

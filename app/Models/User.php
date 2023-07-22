@@ -70,4 +70,23 @@ class User extends Authenticatable
   {
     return $this->belongsToMany(\App\Models\Plant::class, 'likes', 'user_id', 'plant_id')->withTimestamps();
   }
+
+  /**
+   * この植物に対して既にlikeしたかどうかを判別する
+   */
+  public function isLiked(int $plantId): bool
+  {
+    return $this->likes()->where('plant_id', $plantId)->exists();
+  }
+
+  /**
+   * 既にlikeしたか確認して、もししていたら解除する
+   */
+  public function unlike(int $plantId): void
+  {
+    if ($this->isLiked($plantId)) {
+      //もし既に「いいね」していたら消す
+      $this->likes()->detach($plantId);
+    }
+  }
 }
