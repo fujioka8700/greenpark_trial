@@ -6,6 +6,7 @@ use App\Models\Plant;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -59,5 +60,14 @@ class User extends Authenticatable
   public function comments(): HasMany
   {
     return $this->hasMany(\App\Models\Comment::class);
+  }
+
+  /**
+   * 多対多 plantsテーブル
+   * 中間テーブル likesテーブル
+   */
+  public function likes(): BelongsToMany
+  {
+    return $this->belongsToMany(\App\Models\Plant::class, 'likes', 'user_id', 'plant_id')->withTimestamps();
   }
 }

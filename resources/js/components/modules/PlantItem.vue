@@ -7,10 +7,21 @@
     <DestroyButton :destroyPlantId="Number(plantId)" />
   </div>
   <v-row>
-    <v-col cols="12" sm="6">
+    <v-col cols="12" sm="6" class="pb-0">
       <v-img cover :src="`../${plantInfo.file_path}`"></v-img>
+      <!-- いいねボタン始まり -->
+      <div class="d-flex justify-end align-center">
+        <v-btn
+          class="mt-2"
+          variant="text"
+          icon="mdi-thumb-up"
+          color="blue-lighten-2"
+        ></v-btn>
+        <span class="mt-2 mr-3">100</span>
+      </div>
+      <!-- いいねボタン終わり -->
     </v-col>
-    <v-col cols="12" sm="6">
+    <v-col cols="12" sm="6" class="pb-0">
       <v-table>
         <tbody>
           <tr>
@@ -46,7 +57,7 @@
     </v-col>
   </v-row>
   <v-row>
-    <v-col cols="12">
+    <v-col cols="12" class="pt-0">
       <v-card variant="text">
         <v-card-item>
           <v-card-title
