@@ -8,7 +8,7 @@
       :disabled="!user"
       @click="clickedLike"
     ></v-btn>
-    <span class="mt-2 mr-3">100</span>
+    <span class="mt-2 mr-3">{{ totalLikes }}</span>
   </div>
 </template>
 
@@ -32,10 +32,14 @@ const props = defineProps({
 
 watch(route, () => {
   likeStatusCheck(route.params.plantId);
+  totalLikesCheck(route.params.plantId);
 });
 
 /** @type {boolean} いいね、されているか */
 const likeStatus = ref(false);
+
+/** @type {Number} 1つの植物に対しての、いいね合計数 */
+const totalLikes = ref(null);
 
 /**
  * いいね、されていたら、青色にする
@@ -54,14 +58,18 @@ const toggleLikeStatus = () => {
 };
 
 /**
- * いいねボタンを押すと、いいねか、いいね解除する
+ * いいねボタンを押すと、いいね・いいね解除する
  * その後、いいねボタンの色も切り替える
  */
 const clickedLike = () => {
   if (likeStatus.value) {
+    // いいね解除し、いいね数を減らす
     unLike();
+    totalLikes.value--;
   } else {
+    // いいねし、いいね数を増やす
     like();
+    totalLikes.value++;
   }
 
   toggleLikeStatus();
@@ -113,7 +121,23 @@ const likeStatusCheck = (plantId = props.plantId) => {
   }
 };
 
+/**
+ * 1つの植物に対して、いいね合計数を確認する
+ * @param {Number} plantId
+ */
+const totalLikesCheck = (plantId = props.plantId) => {
+  axios
+    .get(`/api/plants/${plantId}/like-count`)
+    .then((result) => {
+      totalLikes.value = result.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 likeStatusCheck();
+totalLikesCheck();
 </script>
 
 <style lang="scss" scoped></style>
