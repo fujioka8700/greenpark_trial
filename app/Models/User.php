@@ -65,10 +65,11 @@ class User extends Authenticatable
   /**
    * 多対多 plantsテーブル
    * 中間テーブル likesテーブル
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
    */
   public function likes(): BelongsToMany
   {
-    return $this->belongsToMany(\App\Models\Plant::class, 'likes', 'user_id', 'plant_id')->withTimestamps();
+    return $this->belongsToMany(Plant::class, 'likes', 'user_id', 'plant_id')->withTimestamps();
   }
 
   /**

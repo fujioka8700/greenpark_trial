@@ -72,4 +72,16 @@ class LikeControllerTest extends TestCase
 
     $this->assertTrue($likeExists);
   }
+
+  public function test_1つの植物に対して、いいね合計数を返す(): void
+  {
+    // 1つの植物に対して、
+    // 違うユーザーでいいね3回する(ここでは2回追加している)
+    $users = User::factory(2)->create();
+    $users->each(function ($user) {
+      $user->likes()->attach($this->plant->id);
+    });
+
+    $this->assertEquals($this->plant->users->count(), 3);
+  }
 }

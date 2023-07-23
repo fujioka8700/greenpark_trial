@@ -36,6 +36,16 @@ class Plant extends Model
   }
 
   /**
+   * 多対多 usersテーブル
+   * 中間テーブル likesテーブル
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+   */
+  public function users(): BelongsToMany
+  {
+    return $this->belongsToMany(User::class, 'likes', 'plant_id', 'user_id')->withTimestamps();
+  }
+
+  /**
    * 多対多 plants と colors
    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
    */
