@@ -38,6 +38,16 @@ class LikeControllerTest extends TestCase
     $this->assertTrue($likeExists);
   }
 
+  public function test_ログインユーザーのいいね状態を確認する(): void
+  {
+    // 「いいね」をする
+    $this->user->likes()->attach($this->plant->id);
+
+    $response = $this->actingAs($this->user)->getJson("/api/plants/{$this->plant->id}/like-status");
+
+    $response->assertStatus(200)->assertSee('true');
+  }
+
   public function test_既にlikeしたか確認して、もししていたら解除する(): void
   {
     $response = $this->actingAs($this->user)->postJson("/api/plants/{$this->plant->id}/unlike");

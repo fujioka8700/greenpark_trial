@@ -11,13 +11,28 @@ class LikeController extends Controller
   public function __construct()
   {
     $this->middleware('auth')->only([
+      'show',
       'store',
       'destroy',
     ]);
   }
 
   /**
+   * ログインユーザーのいいね状態を確認する
+   * @param int $plantId
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function show(int $plantId): JsonResponse
+  {
+    $likeStatus = Auth::user()->isLiked($plantId);
+
+    return response()->json($likeStatus, Response::HTTP_OK);
+  }
+
+  /**
    * いいねをする
+   * @param int $plantId
+   * @return \Illuminate\Http\JsonResponse
    */
   public function store(int $plantId): JsonResponse
   {
@@ -30,6 +45,8 @@ class LikeController extends Controller
 
   /**
    * いいねを解除する
+   * @param int $plantId
+   * @return \Illuminate\Http\JsonResponse
    */
   public function destroy(int $plantId): JsonResponse
   {

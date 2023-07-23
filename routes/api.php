@@ -38,11 +38,14 @@ Route::get('/plants/search-places', [PlantController::class, 'searchPlaces'])->n
 Route::get('/plants/recommend', [PlantController::class, 'recommendPlants'])->name('recommend.plants');
 
 Route::group(['prefix' => 'plants', 'as' => 'plants.'], function () {
+  // ログインユーザーのいいね状態を確認する
+  Route::get('{plant}/like-status', [LikeController::class, 'show'])->name('like.status');
+
   // 既にlikeしたか確認したあと、いいねする（重複させない）
-  Route::post('{plant}/like', [LikeController::class, 'store'])->name('store');
+  Route::post('{plant}/like', [LikeController::class, 'store'])->name('like.store');
 
   // 既にlikeしたか確認して、もししていたら解除する
-  Route::post('{plant}/unlike', [LikeController::class, 'destroy'])->name('destroy');
+  Route::post('{plant}/unlike', [LikeController::class, 'destroy'])->name('like.destroy');
 });
 
 Route::apiResource('plants', PlantController::class, ['except' => ['index']]);
