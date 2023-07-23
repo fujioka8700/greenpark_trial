@@ -82,6 +82,10 @@ class LikeControllerTest extends TestCase
       $user->likes()->attach($this->plant->id);
     });
 
-    $this->assertEquals($this->plant->users->count(), 3);
+    $totalLikes = $this->plant->users->count();
+
+    $response = $this->getJson("/api/plants/{$this->plant->id}/like-count");
+
+    $response->assertStatus(200)->assertSee($totalLikes);
   }
 }

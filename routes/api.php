@@ -38,6 +38,9 @@ Route::get('/plants/search-places', [PlantController::class, 'searchPlaces'])->n
 Route::get('/plants/recommend', [PlantController::class, 'recommendPlants'])->name('recommend.plants');
 
 Route::group(['prefix' => 'plants', 'as' => 'plants.'], function () {
+  // 1つの植物に対しての、いいね合計数
+  Route::get('{plant}/like-count', [LikeController::class, 'index'])->name('like.count');
+
   // ログインユーザーのいいね状態を確認する
   Route::get('{plant}/like-status', [LikeController::class, 'show'])->name('like.status');
 

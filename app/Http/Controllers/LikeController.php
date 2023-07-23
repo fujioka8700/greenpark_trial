@@ -18,6 +18,18 @@ class LikeController extends Controller
   }
 
   /**
+   * 1つの植物に対しての、いいね合計数
+   * @param \App\Models\Plant $plant
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function index(\App\Models\Plant $plant): JsonResponse
+  {
+    $totalLikes = $plant->users->count();
+
+    return response()->json($totalLikes, Response::HTTP_OK);
+  }
+
+  /**
    * ログインユーザーのいいね状態を確認する
    * @param int $plantId
    * @return \Illuminate\Http\JsonResponse
