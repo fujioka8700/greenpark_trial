@@ -8,6 +8,7 @@ use App\Models\Place;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,6 +36,16 @@ class Plant extends Model
   }
 
   /**
+   * 多対多 usersテーブル
+   * 中間テーブル likesテーブル
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+   */
+  public function users(): BelongsToMany
+  {
+    return $this->belongsToMany(User::class, 'likes', 'plant_id', 'user_id')->withTimestamps();
+  }
+
+  /**
    * 多対多 plants と colors
    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
    */
@@ -50,6 +61,14 @@ class Plant extends Model
   public function places(): BelongsToMany
   {
     return $this->belongsToMany(Place::class)->withTimestamps();
+  }
+
+  /**
+   * １対多 commentsテーブル
+   */
+  public function comments(): HasMany
+  {
+    return $this->hasMany(\App\Models\Comment::class);
   }
 
   /**

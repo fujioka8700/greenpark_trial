@@ -1,9 +1,17 @@
 <template>
+  <div
+    v-if="auth.user && auth.user.id === plantInfo.user_id"
+    class="d-flex justify-end mb-2"
+  >
+    <UpdateButton :updatePlantId="Number(plantId)" class="mr-2" />
+    <DestroyButton :destroyPlantId="Number(plantId)" />
+  </div>
   <v-row>
-    <v-col cols="12" sm="6">
+    <v-col cols="12" sm="6" class="pb-0">
       <v-img cover :src="`../${plantInfo.file_path}`"></v-img>
+      <ThumbUp :plantId="Number(plantId)" />
     </v-col>
-    <v-col cols="12" sm="6">
+    <v-col cols="12" sm="6" class="pb-0">
       <v-table>
         <tbody>
           <tr>
@@ -39,7 +47,7 @@
     </v-col>
   </v-row>
   <v-row>
-    <v-col cols="12">
+    <v-col cols="12" class="pt-0">
       <v-card variant="text">
         <v-card-item>
           <v-card-title
@@ -52,17 +60,21 @@
           {{ plantInfo.description }}
         </v-card-text>
       </v-card>
+      <CommentField
+        :plantId="Number(plantId)"
+        @isNotification="commentedEvent"
+      />
+      <WriteComments :plantId="Number(plantId)" ref="writeComments" />
     </v-col>
   </v-row>
-  <div v-if="auth.user && auth.user.id === plantInfo.user_id" class="d-flex">
-    <UpdateButton :updatePlantId="Number(plantId)" />
-    <DestroyButton :destroyPlantId="Number(plantId)" />
-  </div>
 </template>
 
 <script setup>
+import ThumbUp from "./ThumbUp.vue";
 import UpdateButton from "./UpdateButton.vue";
 import DestroyButton from "./DestroyButton.vue";
+import CommentField from "./CommentField.vue";
+import WriteComments from "./WriteComments.vue";
 import { useStoreAuth } from "../../store/auth";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { watch, onMounted, ref } from "vue";
@@ -83,6 +95,9 @@ const props = defineProps({
 
 /** @type {Object} 植物の情報 */
 const plantInfo = ref({});
+
+/** @type {Object} 非親子間で、メソッドを実行用 */
+const writeComments = ref();
 
 /**
  * 植物が存在しなければ、NotFoundページへ遷移する
@@ -126,6 +141,15 @@ const addBreadCrumbs = () => {
       },
     });
   }
+};
+
+/**
+ * CommentFieldコンポーネントから、
+ * コメント書き込みの、emitを受け取り時に実行する
+ * @param {Number} plantId
+ */
+const commentedEvent = (plantId) => {
+  writeComments.value.getComments(plantId);
 };
 
 watch(route, async () => {

@@ -1,5 +1,8 @@
 export const HTTP_OK = 200;
 
+/** @type {Number} 植物の初期コメント数 */
+export const COMMENT_COUNT = 5;
+
 /** @type {Array} 生育場所ボタンの設定 */
 export const placeLinks = [
   [
