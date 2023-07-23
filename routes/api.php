@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PlantController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +37,21 @@ Route::get('/plants/search-places', [PlantController::class, 'searchPlaces'])->n
 // TOP画面「注目の植物たち」で表示する植物
 Route::get('/plants/recommend', [PlantController::class, 'recommendPlants'])->name('recommend.plants');
 
+Route::group(['prefix' => 'plants', 'as' => 'plants.'], function () {
+  // 1つの植物に対しての、いいね合計数
+  Route::get('{plant}/like-count', [LikeController::class, 'index'])->name('like.count');
+
+  // ログインユーザーのいいね状態を確認する
+  Route::get('{plant}/like-status', [LikeController::class, 'show'])->name('like.status');
+
+  // 既にlikeしたか確認したあと、いいねする（重複させない）
+  Route::post('{plant}/like', [LikeController::class, 'store'])->name('like.store');
+
+  // 既にlikeしたか確認して、もししていたら解除する
+  Route::post('{plant}/unlike', [LikeController::class, 'destroy'])->name('like.destroy');
+});
+
 Route::apiResource('plants', PlantController::class, ['except' => ['index']]);
-Route::apiResource('colors', ColorController::class, ['only' => ['index']]);
-Route::apiResource('places', PlaceController::class, ['only' => ['index']]);
+Route::apiResource('colors', \App\Http\Controllers\ColorController::class, ['only' => ['index']]);
+Route::apiResource('places', \App\Http\Controllers\PlaceController::class, ['only' => ['index']]);
+Route::apiResource('comments', \App\Http\Controllers\CommentController::class, ['only' => ['index', 'store']]);

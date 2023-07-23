@@ -22,8 +22,13 @@
           @keydown="clearError('name')"
         ></v-text-field>
         <p>植物の写真</p>
+        <v-switch
+          label="写真を変更する場合は、スイッチをオンしてください"
+          v-model="imageChange"
+        ></v-switch>
         <v-file-input
           v-model="image"
+          :disabled="!imageChange"
           clearable
           accept="image/*"
           label="ファイルを選んでください"
@@ -42,7 +47,10 @@
             <v-img :src="url" max-width="250"></v-img>
           </template>
           <template v-else>
-            <p class="text-body-2">ここに植物の写真が表示されます</p>
+            <v-img
+              :src="`../../${plantInfo.file_path}`"
+              max-width="250"
+            ></v-img>
           </template>
         </v-sheet>
         <div>
@@ -106,15 +114,21 @@
           ></v-textarea>
         </div>
 
-        <v-btn
-          type="submit"
-          block
-          :disabled="!form"
-          color="light-blue-darken-1"
-          class="mt-2"
-        >
-          植物を修正する
-        </v-btn>
+        <div class="d-flex justify-space-evenly">
+          <v-btn
+            type="submit"
+            :disabled="!form"
+            color="light-blue-darken-1"
+            class="mt-2"
+            >植物を修正する</v-btn
+          >
+          <v-btn
+            color="blue-grey-lighten-5"
+            class="mt-2"
+            @click="$router.back()"
+            >キャンセル</v-btn
+          >
+        </div>
       </v-form>
     </v-sheet>
   </div>
@@ -174,6 +188,9 @@ const image = ref(null);
 
 /** @type {boolean} フォームの入力確認 */
 const form = ref(false);
+
+/** @type {boolean} 画像変更の入力許可 */
+const imageChange = ref(false);
 
 /**
  * バリデーション、必須入力
@@ -263,7 +280,8 @@ const storePlant = (formData) => {
   axios
     .post(`/api/plants/${props.plantId}`, formData, config)
     .then((result) => {
-      router.push({ name: "PlantPlaces" });
+      // 修正完了後は、1つの植物ページへ遷移する
+      router.back();
     })
     .catch((err) => {
       const response = err.response;
@@ -277,15 +295,26 @@ const storePlant = (formData) => {
 };
 
 /**
+ * 新しい画像を選択していれば、その画像を送信する
+ * @param {*} formData
+ */
+const changeToNewImage = (formData) => {
+  if (fileInfo.value.size !== undefined) {
+    formData.append("file", fileInfo.value);
+  }
+};
+
+/**
  * 植物を登録するボタン
  */
 const sendButton = () => {
   /** @type {Object} 登録する植物の情報 */
   const formData = new FormData();
 
+  changeToNewImage(formData);
+
   // 植物の情報を formData に追加する
   formData.append("name", name.value);
-  formData.append("file", fileInfo.value);
   formData.append("description", description.value);
   formData.append("places", placesCheckedValues.value);
   formData.append("colors", colorsCheckedValues.value);
