@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class DatabaseSeeder extends Seeder
 {
   const USERS_COUNT = 5; // 作成するユーザー数
-  const PLANTS_COUNT = 10; // 作成する植物数
+  const PLANTS_COUNT = 50; // 作成する植物数
 
   /**
    * Seed the application's database.

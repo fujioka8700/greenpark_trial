@@ -59,16 +59,27 @@ const searchResults = ref({});
 provide("searchResults", searchResults);
 
 /**
- * 子コンポーネントで検索した結果を表示する
+ * PlantItemsへ遷移し、検索した結果を表示する
  * @param {Object} result 検索結果
+ * @param {Array} places 生育場所
  */
-const changeResults = (result) => {
+const changeResults = (result, places) => {
   searchResults.value = result;
 
   // 検索結果は、/plants/search で表示する
-  router.push({ name: "PlantItems" });
+  router.push({ name: "PlantItems", query: { places } });
 };
 provide("changeResults", changeResults);
+
+/**
+ * ページネーションからの検索結果から、
+ * 植物一覧を更新する。
+ * @param {Object} result
+ */
+const updateListDisplay = (result) => {
+  searchResults.value = result;
+};
+provide("updateListDisplay", updateListDisplay);
 
 watch(route, () => {
   // 「図鑑トップ」をクリックした時、

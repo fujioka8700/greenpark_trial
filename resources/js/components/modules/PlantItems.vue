@@ -32,16 +32,28 @@
       </RouterLink>
     </li>
   </ul>
+  <Pagination
+    :lastPage="searchResults.last_page"
+    :path="searchResults.path"
+    :query="query"
+  />
 </template>
 
 <script setup>
+import Pagination from "./Pagination.vue";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
-import { onMounted, inject } from "vue";
+import { ref, onMounted, inject } from "vue";
+import { useRoute } from "vue-router";
 
 const searchResults = inject("searchResults");
 
+const route = useRoute();
+
 // パンくずリストはStoreに保存している
 const breadCrumbs = useStoreBreadCrumbs();
+
+/** @type {Array} ページネーションへ渡すクエリ */
+const query = ref(route.query);
 
 onMounted(() => {
   // パンくずリストに、「植物名」か「検索結果」があれば、
