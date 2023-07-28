@@ -19,13 +19,13 @@ const page = ref();
 
 const props = defineProps({
   /** @type {String} 検索用URL */
-  path: { type: String, required: true },
+  path: { type: String, required: false },
 
   /** @type {Number} 最後のページ*/
-  lastPage: { type: Number, required: true },
+  lastPage: { type: Number, required: false },
 
   /** @type {Object} 検索用キーワード */
-  query: { type: Object, required: true },
+  query: { type: Object, required: false },
 });
 
 /**

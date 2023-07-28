@@ -46,6 +46,7 @@ import { ref, onMounted, inject } from "vue";
 import { useRoute } from "vue-router";
 
 const searchResults = inject("searchResults");
+const changeResults = inject("changeResults");
 
 const route = useRoute();
 
@@ -54,6 +55,26 @@ const breadCrumbs = useStoreBreadCrumbs();
 
 /** @type {Array} ページネーションへ渡すクエリ */
 const query = ref(route.query);
+
+/**
+ * ブラウザを更新した時、クエリパラメータから、
+ * 検索する「生育場所」を引数として、植物一覧を更新する
+ * @param {Array} places
+ */
+const plantListUpdate = (places) => {
+  axios
+    .get("/api/plants/search-places", {
+      params: {
+        places,
+      },
+    })
+    .then((result) => {
+      changeResults(result.data, places);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 onMounted(() => {
   // パンくずリストに、「植物名」か「検索結果」があれば、
@@ -64,6 +85,13 @@ onMounted(() => {
 
   // パンくずリストに「図鑑検索結果」を追加する
   breadCrumbs.push({ text: "検索結果", to: { name: "PlantItems" } });
+
+  //  植物一覧で、ブラウザを更新した時の処理
+  if (searchResults.value.data === undefined) {
+    const places = route.query.places;
+
+    plantListUpdate(places);
+  }
 });
 </script>
 
