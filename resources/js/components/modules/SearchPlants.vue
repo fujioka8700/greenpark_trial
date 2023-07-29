@@ -20,11 +20,7 @@
       <div>
         <v-row>
           <v-col cols="12" sm="8">
-            <v-breadcrumbs
-              class="text-caption"
-              :items="breadCrumbs.items"
-              divider=">"
-            ></v-breadcrumbs>
+            <Breadcrumbs />
             <RouterView />
           </v-col>
 
@@ -40,16 +36,12 @@
 </template>
 
 <script setup>
+import Breadcrumbs from "./Breadcrumbs.vue";
 import Recommend from "./Recommend.vue";
-import { ref, provide, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
+import { ref, provide } from "vue";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
-const route = useRoute();
-
-// パンくずリストはStoreに保存している
-const breadCrumbs = useStoreBreadCrumbs();
 
 /** @type {string} 検索する植物名 */
 const keyword = ref("");
@@ -59,24 +51,27 @@ const searchResults = ref({});
 provide("searchResults", searchResults);
 
 /**
- * 子コンポーネントで検索した結果を表示する
+ * PlantItemsへ遷移し、検索した結果を表示する
  * @param {Object} result 検索結果
+ * @param {Array} places 生育場所
  */
-const changeResults = (result) => {
+const changeResults = (result, places) => {
   searchResults.value = result;
 
   // 検索結果は、/plants/search で表示する
-  router.push({ name: "PlantItems" });
+  router.push({ name: "PlantItems", query: { places } });
 };
 provide("changeResults", changeResults);
 
-watch(route, () => {
-  // 「図鑑トップ」をクリックした時、
-  // パンくずリストのStoreをリセットする
-  if (route.path === "/") {
-    breadCrumbs.$reset();
-  }
-});
+/**
+ * ページネーションからの検索結果から、
+ * 植物一覧を更新する。
+ * @param {Object} result
+ */
+const updateListDisplay = (result) => {
+  searchResults.value = result;
+};
+provide("updateListDisplay", updateListDisplay);
 
 /**
  * 登録している植物を検索する

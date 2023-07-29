@@ -32,26 +32,60 @@
       </RouterLink>
     </li>
   </ul>
+  <Pagination
+    :currentPage="searchResults.current_page"
+    :lastPage="searchResults.last_page"
+    :path="searchResults.path"
+    :query="query"
+  />
 </template>
 
 <script setup>
+import Pagination from "./Pagination.vue";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
-import { onMounted, inject } from "vue";
+import { ref, onMounted, inject } from "vue";
+import { useRoute } from "vue-router";
 
 const searchResults = inject("searchResults");
+const changeResults = inject("changeResults");
 
-// パンくずリストはStoreに保存している
+const route = useRoute();
+
 const breadCrumbs = useStoreBreadCrumbs();
+const { addToBreadcrumbs } = breadCrumbs;
+
+/** @type {Array} ページネーションへ渡すクエリ */
+const query = ref(route.query);
+
+/**
+ * ブラウザを更新した時、クエリパラメータから、
+ * 検索する「生育場所」を引数として、植物一覧を更新する
+ * @param {Array} places
+ */
+const plantListUpdate = (places) => {
+  axios
+    .get("/api/plants/search-places", {
+      params: {
+        places,
+      },
+    })
+    .then((result) => {
+      changeResults(result.data, places);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 onMounted(() => {
-  // パンくずリストに、「植物名」か「検索結果」があれば、
-  // パンくずリストをリセットする
-  if (breadCrumbs.items.length >= 2) {
-    breadCrumbs.$reset();
+  //  植物一覧で、ブラウザを更新した時の処理
+  if (searchResults.value.data === undefined) {
+    const places = route.query.places;
+
+    plantListUpdate(places);
   }
 
-  // パンくずリストに「図鑑検索結果」を追加する
-  breadCrumbs.push({ text: "検索結果", to: { name: "PlantItems" } });
+  addToBreadcrumbs("検索結果");
 });
 </script>
 
