@@ -33,6 +33,7 @@
     </li>
   </ul>
   <Pagination
+    :currentPage="searchResults.current_page"
     :lastPage="searchResults.last_page"
     :path="searchResults.path"
     :query="query"
@@ -41,7 +42,7 @@
 
 <script setup>
 import Pagination from "./Pagination.vue";
-import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
+import { useStoreNewBreadCrumbs } from "../../store/newBreadCrumbs";
 import { ref, onMounted, inject } from "vue";
 import { useRoute } from "vue-router";
 
@@ -50,8 +51,8 @@ const changeResults = inject("changeResults");
 
 const route = useRoute();
 
-// パンくずリストはStoreに保存している
-const breadCrumbs = useStoreBreadCrumbs();
+const newBreadCrumbs = useStoreNewBreadCrumbs();
+const { addToBreadcrumbs } = newBreadCrumbs;
 
 /** @type {Array} ページネーションへ渡すクエリ */
 const query = ref(route.query);
@@ -77,21 +78,14 @@ const plantListUpdate = (places) => {
 };
 
 onMounted(() => {
-  // パンくずリストに、「植物名」か「検索結果」があれば、
-  // パンくずリストをリセットする
-  if (breadCrumbs.items.length >= 2) {
-    breadCrumbs.$reset();
-  }
-
-  // パンくずリストに「図鑑検索結果」を追加する
-  breadCrumbs.push({ text: "検索結果", to: { name: "PlantItems" } });
-
   //  植物一覧で、ブラウザを更新した時の処理
   if (searchResults.value.data === undefined) {
     const places = route.query.places;
 
     plantListUpdate(places);
   }
+
+  addToBreadcrumbs("検索結果");
 });
 </script>
 

@@ -20,11 +20,7 @@
       <div>
         <v-row>
           <v-col cols="12" sm="8">
-            <v-breadcrumbs
-              class="text-caption"
-              :items="breadCrumbs.items"
-              divider=">"
-            ></v-breadcrumbs>
+            <Breadcrumbs />
             <RouterView />
           </v-col>
 
@@ -40,16 +36,12 @@
 </template>
 
 <script setup>
+import Breadcrumbs from "./Breadcrumbs.vue";
 import Recommend from "./Recommend.vue";
-import { ref, provide, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
+import { ref, provide } from "vue";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
-const route = useRoute();
-
-// パンくずリストはStoreに保存している
-const breadCrumbs = useStoreBreadCrumbs();
 
 /** @type {string} 検索する植物名 */
 const keyword = ref("");
@@ -80,14 +72,6 @@ const updateListDisplay = (result) => {
   searchResults.value = result;
 };
 provide("updateListDisplay", updateListDisplay);
-
-watch(route, () => {
-  // 「図鑑トップ」をクリックした時、
-  // パンくずリストのStoreをリセットする
-  if (route.path === "/") {
-    breadCrumbs.$reset();
-  }
-});
 
 /**
  * 登録している植物を検索する

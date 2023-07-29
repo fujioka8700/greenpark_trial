@@ -75,8 +75,8 @@ import UpdateButton from "./UpdateButton.vue";
 import DestroyButton from "./DestroyButton.vue";
 import CommentField from "./CommentField.vue";
 import WriteComments from "./WriteComments.vue";
+import { useStoreNewBreadCrumbs } from "../../store/newBreadCrumbs";
 import { useStoreAuth } from "../../store/auth";
-import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { watch, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -85,8 +85,8 @@ const router = useRouter();
 
 const auth = useStoreAuth();
 
-// パンくずリストはStoreに保存している
-const breadCrumbs = useStoreBreadCrumbs();
+const newBreadCrumbs = useStoreNewBreadCrumbs();
+const { addToBreadcrumbs } = newBreadCrumbs;
 
 const props = defineProps({
   /** @type {String} 植物のid */
@@ -127,23 +127,6 @@ const getPlant = async (plantId) => {
 };
 
 /**
- * パンくずリストに検索結果か、植物名を追加する
- */
-const addBreadCrumbs = () => {
-  if (plantInfo.value.name !== undefined) {
-    breadCrumbs.push({
-      text: plantInfo.value.name,
-      to: {
-        name: "PlantItem",
-        params: {
-          plantId: plantInfo.value.id,
-        },
-      },
-    });
-  }
-};
-
-/**
  * CommentFieldコンポーネントから、
  * コメント書き込みの、emitを受け取り時に実行する
  * @param {Number} plantId
@@ -161,11 +144,7 @@ watch(route, async () => {
   if (plantId !== undefined) {
     await getPlant(plantId);
 
-    // パンくずリストが永遠に追加されるため、
-    // パンくずリストの末尾を消しておく
-    breadCrumbs.items.pop();
-
-    addBreadCrumbs();
+    addToBreadcrumbs(plantInfo.value.name);
   }
 });
 
@@ -177,7 +156,7 @@ onMounted(async () => {
 
   moveToNotFound(beingPlant);
 
-  addBreadCrumbs();
+  addToBreadcrumbs(plantInfo.value.name);
 });
 </script>
 

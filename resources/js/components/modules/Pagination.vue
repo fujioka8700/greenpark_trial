@@ -15,11 +15,14 @@ import { ref, inject } from "vue";
 const updateListDisplay = inject("updateListDisplay");
 
 /** @type {Number} 現在のページ*/
-const page = ref();
+const page = ref(props.currentPage);
 
 const props = defineProps({
   /** @type {String} 検索用URL */
   path: { type: String, required: false },
+
+  /** @type {Number} 現在のページ*/
+  currentPage: { type: Number, required: false },
 
   /** @type {Number} 最後のページ*/
   lastPage: { type: Number, required: false },
