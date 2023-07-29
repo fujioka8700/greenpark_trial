@@ -43,7 +43,7 @@
 <script setup>
 import Pagination from "./Pagination.vue";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
-import { ref, onMounted, inject } from "vue";
+import { onMounted, inject, computed } from "vue";
 import { useRoute } from "vue-router";
 
 const searchResults = inject("searchResults");
@@ -55,14 +55,16 @@ const breadCrumbs = useStoreBreadCrumbs();
 const { addToBreadcrumbs } = breadCrumbs;
 
 /** @type {Array} ページネーションへ渡すクエリ */
-const query = ref(route.query);
+const query = computed(() => {
+  return route.query;
+});
 
 /**
  * ブラウザを更新した時、クエリパラメータから、
  * 検索する「生育場所」を引数として、植物一覧を更新する
  * @param {Array} places
  */
-const plantListUpdate = (places) => {
+const updatePlantListByLocation = (places) => {
   axios
     .get("/api/plants/search-places", {
       params: {
@@ -77,12 +79,40 @@ const plantListUpdate = (places) => {
     });
 };
 
-onMounted(() => {
-  //  植物一覧で、ブラウザを更新した時の処理
-  if (searchResults.value.data === undefined) {
-    const places = route.query.places;
+/**
+ * ブラウザを更新した時、クエリパラメータから、
+ * 検索キーワードを引数として、植物一覧を更新する
+ * @param {String} keyword
+ */
+const updatePlantListByKeyword = (keyword) => {
+  axios
+    .get("/api/plants/search", {
+      params: {
+        keyword,
+      },
+    })
+    .then((result) => {
+      changeResults(result.data, keyword);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
-    plantListUpdate(places);
+onMounted(() => {
+  //  植物一覧で、ブラウザをリロードした時の処理
+  if (searchResults.value.data === undefined) {
+    if (route.query.hasOwnProperty("places")) {
+      const places = route.query.places;
+
+      updatePlantListByLocation(places);
+    }
+
+    if (route.query.hasOwnProperty("keyword")) {
+      const keyword = route.query.keyword;
+
+      updatePlantListByKeyword(keyword);
+    }
   }
 
   addToBreadcrumbs("検索結果");
