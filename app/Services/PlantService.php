@@ -131,7 +131,7 @@ class PlantService
     $plantQuery = '';
 
     if (!empty($searchKeyword)) {
-      $plantQuery = $this->plant->createPlantNameQuery($searchKeyword);
+      $plantQuery = $this->plant->createPlantNameAndDescriptionQuery($searchKeyword);
     } else {
       $plantQuery = $this->plant->createPlantQueryBuilder();
     }

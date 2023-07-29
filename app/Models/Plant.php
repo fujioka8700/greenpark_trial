@@ -105,9 +105,10 @@ class Plant extends Model
    * @param string $searchKeyword
    * @return \Illuminate\Database\Eloquent\Builder
    */
-  public function createPlantNameQuery(string $searchKeyword): Builder
+  public function createPlantNameAndDescriptionQuery(string $searchKeyword): Builder
   {
-    return $this->query()->where('name', 'like', '%' . $searchKeyword . '%');
+    return $this->query()->where('name', 'like', '%' . $searchKeyword . '%')
+      ->orWhere('description', 'like', '%' . $searchKeyword . '%');
   }
 
   /**

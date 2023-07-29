@@ -5,7 +5,7 @@
         <v-form class="d-flex align-center" @submit.prevent="searchPlants">
           <v-text-field
             class="mr-3"
-            label="花の名前から検索する"
+            label="花の名前・特徴から検索する"
             v-model="keyword"
             hide-details="auto"
             density="comfortable"
@@ -55,11 +55,14 @@ provide("searchResults", searchResults);
  * @param {Object} result 検索結果
  * @param {Array} places 生育場所
  */
-const changeResults = (result, places) => {
+const changeResults = (result, query) => {
   searchResults.value = result;
 
-  // 検索結果は、/plants/search で表示する
-  router.push({ name: "PlantItems", query: { places } });
+  if (Array.isArray(query)) {
+    router.push({ name: "PlantItems", query: { places: query } });
+  } else {
+    router.push({ name: "PlantItems", query: { keyword: query } });
+  }
 };
 provide("changeResults", changeResults);
 
@@ -88,7 +91,12 @@ const searchPlants = () => {
       searchResults.value = result.data;
 
       // 検索結果は、/plants/search で表示する
-      router.push({ name: "PlantItems" });
+      router.push({
+        name: "PlantItems",
+        query: {
+          keyword: keyword.value,
+        },
+      });
     })
     .catch((err) => {
       console.log(err);
