@@ -35,7 +35,9 @@ const searchPlaces = (places) => {
     })
     .then((result) => {
       // Provide の searchResults を変更し、検索結果を表示する
-      changeResults(result.data);
+      // ページネーションに「生育場所」で、
+      // 検索をできるようにするため、places も投げる
+      changeResults(result.data, places);
     })
     .catch((err) => {
       console.log(err);

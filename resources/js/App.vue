@@ -11,6 +11,19 @@
 
 <script setup>
 import Header from "./components/modules/Header.vue";
+import { useStoreBreadCrumbs } from "./store/breadCrumbs";
+import { watch } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+const breadCrumbs = useStoreBreadCrumbs();
+
+watch(route, () => {
+  if (route.path === "/") {
+    breadCrumbs.$reset();
+  }
+});
 </script>
 
 <style lang="scss" scoped></style>
