@@ -5,7 +5,7 @@
         <v-form class="d-flex align-center" @submit.prevent="searchPlants">
           <v-text-field
             class="mr-3"
-            label="花の名前・特徴から検索する"
+            label="植物の名前・特徴から検索する"
             v-model="keyword"
             hide-details="auto"
             density="comfortable"
