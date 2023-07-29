@@ -75,7 +75,7 @@ import UpdateButton from "./UpdateButton.vue";
 import DestroyButton from "./DestroyButton.vue";
 import CommentField from "./CommentField.vue";
 import WriteComments from "./WriteComments.vue";
-import { useStoreNewBreadCrumbs } from "../../store/newBreadCrumbs";
+import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { useStoreAuth } from "../../store/auth";
 import { watch, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -85,8 +85,8 @@ const router = useRouter();
 
 const auth = useStoreAuth();
 
-const newBreadCrumbs = useStoreNewBreadCrumbs();
-const { addToBreadcrumbs } = newBreadCrumbs;
+const breadCrumbs = useStoreBreadCrumbs();
+const { addToBreadcrumbs } = breadCrumbs;
 
 const props = defineProps({
   /** @type {String} 植物のid */

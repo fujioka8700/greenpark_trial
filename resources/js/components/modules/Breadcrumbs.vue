@@ -10,10 +10,10 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { useStoreNewBreadCrumbs } from "../../store/newBreadCrumbs";
+import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 
-const newBreadCrumbs = useStoreNewBreadCrumbs();
-const { items } = storeToRefs(newBreadCrumbs);
+const breadCrumbs = useStoreBreadCrumbs();
+const { items } = storeToRefs(breadCrumbs);
 </script>
 
 <style lang="scss" scoped></style>

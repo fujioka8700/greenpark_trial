@@ -2,27 +2,37 @@ import { defineStore } from "pinia";
 
 export const useStoreBreadCrumbs = defineStore("breadCrumbs", {
   state: () => ({
-    /** @type {Object} パンくずリスト */
     items: [
       {
-        text: "図鑑トップ",
-        to: { name: "PlantPlaces" },
+        title: "図鑑トップ",
+        disabled: true,
+        to: "/",
       },
     ],
   }),
   actions: {
     /**
-     * パンくずリストを追加する
-     * @param {Object} url リンクするテキストとURL
+     * パンくずリスト2個目を追加する
+     * クリックはできないようにしている
+     * @param {String} title
      */
-    push(url) {
-      /** @type {Object} パンくずリストの末尾 */
-      const last = this.items.slice(-1)[0];
+    addToBreadcrumbs(title) {
+      this.enableTop();
 
-      // 被っていなければ、パンくずリストに追加する
-      if (last.text !== url.text) {
-        this.items.push(url);
+      if (this.items.length >= 2) {
+        this.items.pop();
       }
+
+      this.items.push({
+        title,
+        disabled: true,
+      });
+    },
+    /**
+     * 「図鑑トップ」をクリックできるようにする
+     */
+    enableTop() {
+      this.items[0].disabled = false;
     },
   },
 });

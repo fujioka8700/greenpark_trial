@@ -11,17 +11,17 @@
 
 <script setup>
 import Header from "./components/modules/Header.vue";
-import { useStoreNewBreadCrumbs } from "./store/newBreadCrumbs";
+import { useStoreBreadCrumbs } from "./store/breadCrumbs";
 import { watch } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 
-const newBreadCrumbs = useStoreNewBreadCrumbs();
+const breadCrumbs = useStoreBreadCrumbs();
 
 watch(route, () => {
   if (route.path === "/") {
-    newBreadCrumbs.$reset();
+    breadCrumbs.$reset();
   }
 });
 </script>

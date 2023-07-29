@@ -42,7 +42,7 @@
 
 <script setup>
 import Pagination from "./Pagination.vue";
-import { useStoreNewBreadCrumbs } from "../../store/newBreadCrumbs";
+import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { ref, onMounted, inject } from "vue";
 import { useRoute } from "vue-router";
 
@@ -51,8 +51,8 @@ const changeResults = inject("changeResults");
 
 const route = useRoute();
 
-const newBreadCrumbs = useStoreNewBreadCrumbs();
-const { addToBreadcrumbs } = newBreadCrumbs;
+const breadCrumbs = useStoreBreadCrumbs();
+const { addToBreadcrumbs } = breadCrumbs;
 
 /** @type {Array} ページネーションへ渡すクエリ */
 const query = ref(route.query);
