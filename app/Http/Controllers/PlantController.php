@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PlantController extends Controller
 {
+  const MAX_DISPLAY = 10; // 検索後、表示する植物の最大数
+
   private $plant;
   private $plantService;
 
@@ -151,5 +153,23 @@ class PlantController extends Controller
     }
 
     return response()->json($plants, Response::HTTP_OK);
+  }
+
+  /**
+   * 花の色で検索し、植物一覧を取得する
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function searchColors(Request $request): JsonResponse
+  {
+    $searchColors = $request->query('colors');
+
+    $query = Plant::whereHas('colors', function ($query) use ($searchColors) {
+      $query->whereIn('name', $searchColors);
+    });
+
+    $searchResults = $query->orderBy('created_at', 'desc')->paginate(self::MAX_DISPLAY);
+
+    return response()->json($searchResults, Response::HTTP_OK);
   }
 }
