@@ -17,7 +17,7 @@
   </div>
   <div v-if="toggleComment">
     <p
-      class="text-decoration-underline"
+      class="text-decoration-underline comment__toggle"
       @click="showAllComments = !showAllComments"
     >
       <template v-if="showAllComments">コメントを全て表示する</template>
@@ -87,5 +87,9 @@ defineExpose({ getComments });
 <style lang="scss" scoped>
 .comment_section__body {
   display: none;
+}
+
+.comment__toggle {
+  cursor: pointer;
 }
 </style>

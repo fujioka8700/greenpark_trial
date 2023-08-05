@@ -31,8 +31,15 @@
             </td>
           </tr>
           <tr>
-            <td class="font-weight-bold text-no-wrap">生育地</td>
-            <td>
+            <td
+              colspan="2"
+              class="font-weight-bold text-no-wrap m-plant-item-place--title"
+            >
+              生えている場所
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
               <template
                 v-for="(place, index) in plantInfo.places"
                 :key="place.id"
@@ -164,5 +171,9 @@ onMounted(async () => {
 .m-plant-item-description {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+.m-plant-item-place--title {
+  border-bottom: none !important;
 }
 </style>

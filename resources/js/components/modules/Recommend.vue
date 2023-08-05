@@ -15,7 +15,7 @@
         ></v-img>
         <div class="pl-1">
           <p>{{ plant.name }}</p>
-          <p class="pl-1">
+          <p class="pl-1 text-subtitle-2">
             {{ omittedText20(plant.description) }}
           </p>
         </div>

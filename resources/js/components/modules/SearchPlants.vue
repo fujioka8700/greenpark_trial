@@ -25,7 +25,7 @@
           </v-col>
 
           <v-col cols="12" sm="4">
-            <p class="pt-4 pb-2">注目の植物たち</p>
+            <p class="pt-4 pb-2 text-center text-h6">注目の植物たち</p>
             <v-divider thickness="3" />
             <Recommend />
           </v-col>
