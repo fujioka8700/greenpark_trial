@@ -48,6 +48,7 @@ import { useRoute } from "vue-router";
 
 const searchResults = inject("searchResults");
 const changeResults = inject("changeResults");
+const changeColorResults = inject("changeColorResults");
 
 const route = useRoute();
 
@@ -99,19 +100,49 @@ const updatePlantListByKeyword = (keyword) => {
     });
 };
 
+/**
+ * ブラウザを更新した時、クエリパラメータから、
+ * 花の色を引数として、植物一覧を更新する
+ * @param {String} color
+ */
+const updatePlantListByColor = (colors) => {
+  axios
+    .get("/api/plants/search-colors", {
+      params: {
+        colors,
+      },
+    })
+    .then((result) => {
+      changeColorResults(result.data, colors);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 onMounted(() => {
   //  植物一覧で、ブラウザをリロードした時の処理
   if (searchResults.value.data === undefined) {
+    // 「生えている場所」を選択していた時
     if (route.query.hasOwnProperty("places")) {
       const places = route.query.places;
 
       updatePlantListByLocation(places);
     }
 
+    // 「植物の名前・特徴」から検索していた時
     if (route.query.hasOwnProperty("keyword")) {
       const keyword = route.query.keyword;
 
       updatePlantListByKeyword(keyword);
+    }
+
+    // 「花の色」を選択していた時
+    if (route.query.hasOwnProperty("colors")) {
+      const colors = [];
+      colors.push(route.query.colors);
+
+      updatePlantListByColor(colors);
     }
   }
 

@@ -1,23 +1,58 @@
 <template>
-  <v-row>
-    <v-col v-for="placeLink in placeLinks" :key="placeLink" cols="12" sm="4">
-      <v-card
-        class="mx-auto"
-        max-width="344"
-        link
-        @click.stop.prevent="createSearchPlaces(placeLink[0])"
-      >
-        <v-img :src="placeLink[1]" max-height="130" cover></v-img>
+  <v-card flat>
+    <v-tabs
+      v-model="tab"
+      color="deep-purple-accent-4"
+      bg-color="grey-lighten-4"
+      fixed-tabs
+      align-tabs="center"
+    >
+      <v-tab value="one">生えている場所</v-tab>
+      <v-tab value="two">花の色</v-tab>
+    </v-tabs>
+    <v-window v-model="tab" class="py-5">
+      <v-window-item value="one">
+        <!-- 「生えている場所」タブのコンテンツ、始まり -->
+        <v-row>
+          <v-col
+            v-for="placeLink in placeLinks"
+            :key="placeLink"
+            cols="12"
+            sm="4"
+          >
+            <v-card
+              class="mx-auto"
+              max-width="344"
+              link
+              @click.stop.prevent="createSearchPlaces(placeLink[0])"
+            >
+              <v-img :src="placeLink[1]" max-height="130" cover></v-img>
 
-        <v-card-title class="text-body-1">{{ placeLink[0] }}</v-card-title>
-      </v-card>
-    </v-col>
-  </v-row>
+              <v-card-title class="text-body-1">{{
+                placeLink[0]
+              }}</v-card-title>
+            </v-card>
+          </v-col>
+        </v-row>
+        <!-- 「生えている場所」タブのコンテンツ、終わり -->
+      </v-window-item>
+
+      <v-window-item value="two">
+        <!-- 「花の色」タブのコンテンツ、始まり -->
+        <PlantColors />
+        <!-- 「花の色」タブのコンテンツ、終わり -->
+      </v-window-item>
+    </v-window>
+  </v-card>
 </template>
 
 <script setup>
+import PlantColors from "./PlantColors.vue";
 import { placeLinks } from "../../util";
-import { inject } from "vue";
+import { ref, inject } from "vue";
+
+/** @type {Object} タブの切り替え */
+const tab = ref(null);
 
 /** @type {Function} Provide の searchResults を変更する */
 const changeResults = inject("changeResults");

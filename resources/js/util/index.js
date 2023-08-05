@@ -1,3 +1,4 @@
+/** @type {Number} リクエストが成功 */
 export const HTTP_OK = 200;
 
 /** @type {Number} 植物の初期コメント数 */
@@ -37,4 +38,17 @@ export const placeLinks = [
     "水辺・海辺",
     "https://images.unsplash.com/photo-1515238152791-8216bfdf89a7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1472&q=80",
   ],
+];
+
+/** @type {Array} 花の色 */
+export const plantColors = [
+  "白",
+  "黄",
+  "橙",
+  "ピンク",
+  "赤",
+  "青",
+  "紫",
+  "緑",
+  "その他",
 ];

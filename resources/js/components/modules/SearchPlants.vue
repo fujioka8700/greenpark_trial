@@ -51,20 +51,37 @@ const searchResults = ref({});
 provide("searchResults", searchResults);
 
 /**
- * PlantItemsへ遷移し、検索した結果を表示する
+ * 「生えている場所」「植物の名前・特徴から検索する」
+ * で、植物一覧を更新する場合に、使用する
  * @param {Object} result 検索結果
- * @param {Array} places 生育場所
+ * @param {Array | String} query 生育場所、検索キーワード
  */
 const changeResults = (result, query) => {
   searchResults.value = result;
 
+  // 生育場所は配列になっている
   if (Array.isArray(query)) {
     router.push({ name: "PlantItems", query: { places: query } });
-  } else {
-    router.push({ name: "PlantItems", query: { keyword: query } });
+    return;
   }
+
+  // キーワードは文字列のみである
+  router.push({ name: "PlantItems", query: { keyword: query } });
 };
 provide("changeResults", changeResults);
+
+/**
+ * 「花の色」で植物一覧を更新し、
+ * クエリをcolorsにし、PlantItemsへ遷移する
+ * @param {Object} result
+ * @param {Array} query
+ */
+const changeColorResults = (result, query) => {
+  searchResults.value = result;
+
+  router.push({ name: "PlantItems", query: { colors: query } });
+};
+provide("changeColorResults", changeColorResults);
 
 /**
  * ページネーションからの検索結果から、
@@ -87,7 +104,6 @@ const searchPlants = () => {
       },
     })
     .then((result) => {
-      // 検索結果を provide で使用する
       searchResults.value = result.data;
 
       // 検索結果は、/plants/search で表示する
