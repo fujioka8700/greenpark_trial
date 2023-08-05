@@ -34,6 +34,9 @@ Route::get('/plants/search', [PlantController::class, 'search'])->name('search.p
 // 生育場所で植物を検索する
 Route::get('/plants/search-places', [PlantController::class, 'searchPlaces'])->name('search.places');
 
+// 花の色で植物を検索する
+Route::get('/plants/search-colors', [PlantController::class, 'searchColors'])->name('search.colors');
+
 // TOP画面「注目の植物たち」で表示する植物
 Route::get('/plants/recommend', [PlantController::class, 'recommendPlants'])->name('recommend.plants');
 
