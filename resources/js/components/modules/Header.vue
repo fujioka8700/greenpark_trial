@@ -5,8 +5,15 @@
         <RouterLink
           class="text-decoration-none text-white"
           :to="{ name: 'PlantPlaces' }"
-          >植物図鑑</RouterLink
         >
+          <div class="d-flex align-center">
+            <img
+              src="../../../../../storage/design/logo.png"
+              style="width: 38px"
+            />
+            <h1 class="text-h4 pl-2 p-header-logo">GreenPark</h1>
+          </div>
+        </RouterLink>
       </v-app-bar-title>
 
       <div>
@@ -55,4 +62,10 @@ const auth = useStoreAuth();
 const { user } = storeToRefs(auth);
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.v-application {
+  .p-header-logo {
+    font-family: "Righteous", cursive !important;
+  }
+}
+</style>
