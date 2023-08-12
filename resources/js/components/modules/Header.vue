@@ -35,12 +35,7 @@
 import MainNavigation from "./MainNavigation.vue";
 import HamburgerMenu from "./HamburgerMenu.vue";
 import DrawerMenu from "./DrawerMenu.vue";
-import { useStoreAuth } from "../../store/auth";
-import { storeToRefs } from "pinia";
 import { ref } from "vue";
-
-const auth = useStoreAuth();
-const { user } = storeToRefs(auth);
 
 const drawerMenu = ref();
 
