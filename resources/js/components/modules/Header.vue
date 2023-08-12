@@ -9,14 +9,15 @@
           <div class="d-flex align-center">
             <img
               src="../../../../../storage/design/logo.png"
-              style="width: 38px"
+              class="p-header-img"
             />
             <h1 class="text-h4 pl-2 p-header-logo">GreenPark</h1>
           </div>
         </RouterLink>
       </v-app-bar-title>
 
-      <div>
+      <!-- PC版メニュー、始まり -->
+      <div class="d-none d-sm-flex">
         <template v-if="user">
           <v-btn variant="text">
             <RouterLink
@@ -50,22 +51,46 @@
           >
         </template>
       </div>
+      <!-- PC版メニュー、終わり -->
+      <div class="d-flex d-sm-none">
+        <HamburgerMenu @drawerParent="toggleDrawer" />
+      </div>
     </v-container>
   </v-app-bar>
+  <DrawerMenu ref="drawerMenu" />
 </template>
 
 <script setup>
+import HamburgerMenu from "./HamburgerMenu.vue";
+import DrawerMenu from "./DrawerMenu.vue";
 import { useStoreAuth } from "../../store/auth";
 import { storeToRefs } from "pinia";
+import { ref } from "vue";
 
 const auth = useStoreAuth();
 const { user } = storeToRefs(auth);
+
+const drawerMenu = ref();
+
+/**
+ * テンプレート参照にて、
+ * DrawerMenuコンポーネントのtoggleDrawerメソッドを実行する。
+ */
+const toggleDrawer = () => {
+  drawerMenu.value.toggleDrawer();
+};
 </script>
 
 <style lang="scss" scoped>
 .v-application {
-  .p-header-logo {
-    font-family: "Righteous", cursive !important;
+  .p-header {
+    &-img {
+      width: 38px;
+    }
+
+    &-logo {
+      font-family: "Righteous", cursive !important;
+    }
   }
 }
 </style>
