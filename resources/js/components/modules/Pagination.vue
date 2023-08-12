@@ -8,6 +8,9 @@
       @click="navBtnClick"
     ></v-pagination>
   </div>
+  <!-- pageUpdate は何も表示しない -->
+  <!-- 算出プロパティで、現在ページを更新するために使用 -->
+  {{ pageUpdate }}
 </template>
 
 <script setup>
@@ -30,13 +33,21 @@ const props = defineProps({
 });
 
 /** @type {Number} 現在のページ*/
-const page = ref(props.currentPage);
+const page = ref();
 
 /** @type {Boolean} モバイルとPC切り替え */
 const mobileView = ref(true);
 
 /** @type {Number} ディスプレイの横幅 */
 const windowWidth = ref(0);
+
+// ページネーションの、現在ページ更新に使用
+const pageUpdate = computed({
+  get() {
+    page.value = props.currentPage;
+    return;
+  },
+});
 
 /** @type {String} ページネーションのサイズを切り替える */
 const toggleDensity = computed(() => {
