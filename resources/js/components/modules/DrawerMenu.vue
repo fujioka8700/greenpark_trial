@@ -25,6 +25,7 @@
 </template>
 
 <script setup>
+import { menuItems } from "../../util";
 import { useStoreAuth } from "../../store/auth";
 import { storeToRefs } from "pinia";
 import { ref, computed } from "vue";
@@ -37,15 +38,6 @@ const router = useRouter();
 
 /** @type {boolean} ドロワーメニューの開閉 */
 const drawer = ref(false);
-
-/** @type {Array{}} 遷移するページ */
-const menuItems = [
-  { title: "TOPページ", dest: "top", icon: "mdi-home" },
-  { title: "会員登録", dest: "register", icon: "mdi-plus" },
-  { title: "ログイン", dest: "login", icon: "mdi-login" },
-  { title: "植物登録", dest: "storePlant", icon: "mdi-tree" },
-  { title: "ユーザー", dest: "about", icon: "mdi-account" },
-];
 
 /**
  * 未ログインなら、

@@ -11,45 +11,14 @@
               src="../../../../../storage/design/logo.png"
               class="p-header-img"
             />
-            <h1 class="text-h4 pl-2 p-header-logo">GreenPark</h1>
+            <h1 class="text-h4 pl-2 logo">GreenPark</h1>
           </div>
         </RouterLink>
       </v-app-bar-title>
 
       <!-- PC版メニュー、始まり -->
       <div class="d-none d-sm-flex">
-        <template v-if="user">
-          <v-btn variant="text">
-            <RouterLink
-              class="text-decoration-none text-white"
-              :to="{ name: 'StorePlant' }"
-              >植物登録</RouterLink
-            ></v-btn
-          >
-          <v-btn variant="text">
-            <RouterLink
-              class="text-decoration-none text-white"
-              :to="{ name: 'About' }"
-              >{{ user.name }}</RouterLink
-            ></v-btn
-          >
-        </template>
-        <template v-else>
-          <v-btn variant="text">
-            <RouterLink
-              class="text-decoration-none text-white"
-              :to="{ name: 'Register' }"
-              >会員登録</RouterLink
-            ></v-btn
-          >
-          <v-btn variant="text">
-            <RouterLink
-              class="text-decoration-none text-white"
-              :to="{ name: 'Login' }"
-              >ログイン</RouterLink
-            ></v-btn
-          >
-        </template>
+        <MainNavigation />
       </div>
       <!-- PC版メニュー、終わり -->
       <div class="d-flex d-sm-none">
@@ -57,10 +26,13 @@
       </div>
     </v-container>
   </v-app-bar>
+  <!-- スマホ版メニュー、始まり -->
   <DrawerMenu ref="drawerMenu" />
+  <!-- スマホ版メニュー、終わり -->
 </template>
 
 <script setup>
+import MainNavigation from "./MainNavigation.vue";
 import HamburgerMenu from "./HamburgerMenu.vue";
 import DrawerMenu from "./DrawerMenu.vue";
 import { useStoreAuth } from "../../store/auth";
@@ -82,14 +54,12 @@ const toggleDrawer = () => {
 </script>
 
 <style lang="scss" scoped>
+$logo-size: 38px;
+
 .v-application {
   .p-header {
     &-img {
-      width: 38px;
-    }
-
-    &-logo {
-      font-family: "Righteous", cursive !important;
+      width: $logo-size;
     }
   }
 }

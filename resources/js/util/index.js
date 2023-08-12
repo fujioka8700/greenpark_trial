@@ -82,3 +82,12 @@ export const plantColorImages = [
   // その他
   "https://lovegreen.net/wp-content/uploads/2022/05/3505241_s.jpg",
 ];
+
+/** @type {Array{}} メニューから遷移するページ */
+export const menuItems = [
+  { title: "TOPページ", dest: "top", icon: "mdi-home" },
+  { title: "会員登録", dest: "register", icon: "mdi-plus" },
+  { title: "ログイン", dest: "login", icon: "mdi-login" },
+  { title: "植物登録", dest: "storePlant", icon: "mdi-tree" },
+  { title: "ユーザー", dest: "about", icon: "mdi-account" },
+];
