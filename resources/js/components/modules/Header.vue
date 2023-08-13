@@ -7,10 +7,7 @@
           :to="{ name: 'PlantPlaces' }"
         >
           <div class="d-flex align-center">
-            <img
-              src="../../../../../storage/design/logo.png"
-              class="p-header-img"
-            />
+            <img src="storage/design/logo.png" class="p-header-img" />
             <h1 class="text-h4 pl-2 logo">GreenPark</h1>
           </div>
         </RouterLink>

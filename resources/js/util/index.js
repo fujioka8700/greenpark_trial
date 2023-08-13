@@ -88,6 +88,6 @@ export const menuItems = [
   { title: "TOPページ", dest: "top", icon: "mdi-home" },
   { title: "会員登録", dest: "register", icon: "mdi-plus" },
   { title: "ログイン", dest: "login", icon: "mdi-login" },
-  { title: "植物登録", dest: "storePlant", icon: "mdi-tree" },
+  { title: "植物登録", dest: "storePlant", icon: "mdi-sprout" },
   { title: "ユーザー", dest: "about", icon: "mdi-account" },
 ];
