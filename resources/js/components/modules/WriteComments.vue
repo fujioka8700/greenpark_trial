@@ -1,14 +1,22 @@
 <template>
   <div class="mb-5" v-for="(comment, index) in comments" :key="comment.id">
     <div v-if="index < COMMENT_COUNT">
-      <OneComment>
+      <OneComment
+        :commentId="Number(comment.id)"
+        :commentUserId="Number(comment.user_id)"
+        @deleteCommentNotification="getComments(plantId)"
+      >
         <template v-slot:user_name>{{ comment.user.name }}</template>
         <template v-slot:created_at>{{ comment.created_at }}</template>
         <template v-slot:comment>{{ comment.comment }}</template>
       </OneComment>
     </div>
     <div v-else :class="{ comment_section__body: showAllComments }">
-      <OneComment>
+      <OneComment
+        :commentId="Number(comment.id)"
+        :commentUserId="Number(comment.user_id)"
+        @deleteCommentNotification="getComments(plantId)"
+      >
         <template v-slot:user_name>{{ comment.user.name }}</template>
         <template v-slot:created_at>{{ comment.created_at }}</template>
         <template v-slot:comment>{{ comment.comment }}</template>

@@ -18,7 +18,13 @@
           </div>
         </v-col>
         <v-col cols="3" sm="2" class="d-flex justify-center align-center">
-          <CommentDestroyButton />
+          <!-- 書き込みした本人のみ「削除」ボタンを表示する -->
+          <template v-if="auth.user && auth.user.id === commentUserId">
+            <CommentDestroyButton
+              :commentId="Number(commentId)"
+              @deleteCommentNotification="deleteCommentNotification"
+            />
+          </template>
         </v-col>
       </v-row>
     </v-container>
@@ -26,7 +32,31 @@
 </template>
 
 <script setup>
+import { useStoreAuth } from "../../store/auth";
 import CommentDestroyButton from "./CommentDestroyButton.vue";
+
+const auth = useStoreAuth();
+
+const emit = defineEmits(["deleteCommentNotification"]);
+
+const props = defineProps({
+  commentId: {
+    type: Number,
+    required: true,
+  },
+  commentUserId: {
+    type: Number,
+    required: true,
+  },
+});
+
+/**
+ * コメント1つ削除した事を、
+ * 親コンポーネントに通知する
+ */
+const deleteCommentNotification = () => {
+  emit("deleteCommentNotification");
+};
 </script>
 
 <style lang="scss" scoped>
