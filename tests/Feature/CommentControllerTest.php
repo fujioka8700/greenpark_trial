@@ -69,4 +69,25 @@ class CommentControllerTest extends TestCase
       ],
     ]);
   }
+
+  public function test_コメントを1つ削除する(): void
+  {
+    $createComment = 3;
+    $expectedComment = $createComment - 1;
+
+    // コメント1,2,3 (User1, 植物1 と紐付け) 作成
+    Comment::factory($createComment)
+      ->for($this->user)
+      ->for($this->plant)
+      ->create();
+
+    $deleteComment = Comment::find(2);
+
+    $response = $this->actingAs($this->user)
+      ->deleteJson("/api/comments/{$deleteComment->id}");
+
+    $response->assertOk()->assertSee(1);
+
+    $this->assertEquals(Comment::count(), $expectedComment);
+  }
 }

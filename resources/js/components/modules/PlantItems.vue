@@ -23,8 +23,8 @@
             </v-avatar>
 
             <div>
-              <v-card-text class="pa-3 pl-0 text-caption">
-                {{ item.description }}
+              <v-card-text class="pa-3 pl-0 text-subtitle-2">
+                {{ omittedText65(item.description) }}
               </v-card-text>
             </div>
           </div>
@@ -59,6 +59,15 @@ const { addToBreadcrumbs } = breadCrumbs;
 const query = computed(() => {
   return route.query;
 });
+
+/**
+ * 65字以上の説明は、3点リーダーにする
+ * @param {string} text 説明
+ * @return {string} 省略した説明
+ */
+const omittedText65 = (text) => {
+  return text.length > 65 ? text.slice(0, 65) + "..." : text;
+};
 
 /**
  * ブラウザを更新した時、クエリパラメータから、

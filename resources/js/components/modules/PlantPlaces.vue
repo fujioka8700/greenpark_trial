@@ -28,9 +28,9 @@
             >
               <v-img :src="placeLink[1]" max-height="130" cover></v-img>
 
-              <v-card-title class="text-body-1">{{
-                placeLink[0]
-              }}</v-card-title>
+              <v-card-title class="text-body-1 text-center">
+                {{ placeLink[0] }}
+              </v-card-title>
             </v-card>
           </v-col>
         </v-row>

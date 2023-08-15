@@ -1,14 +1,22 @@
 <template>
   <div class="mb-5" v-for="(comment, index) in comments" :key="comment.id">
     <div v-if="index < COMMENT_COUNT">
-      <OneComment>
+      <OneComment
+        :commentId="Number(comment.id)"
+        :commentUserId="Number(comment.user_id)"
+        @deleteCommentNotification="getComments(plantId)"
+      >
         <template v-slot:user_name>{{ comment.user.name }}</template>
         <template v-slot:created_at>{{ comment.created_at }}</template>
         <template v-slot:comment>{{ comment.comment }}</template>
       </OneComment>
     </div>
     <div v-else :class="{ comment_section__body: showAllComments }">
-      <OneComment>
+      <OneComment
+        :commentId="Number(comment.id)"
+        :commentUserId="Number(comment.user_id)"
+        @deleteCommentNotification="getComments(plantId)"
+      >
         <template v-slot:user_name>{{ comment.user.name }}</template>
         <template v-slot:created_at>{{ comment.created_at }}</template>
         <template v-slot:comment>{{ comment.comment }}</template>
@@ -17,7 +25,7 @@
   </div>
   <div v-if="toggleComment">
     <p
-      class="text-decoration-underline"
+      class="text-decoration-underline comment__toggle"
       @click="showAllComments = !showAllComments"
     >
       <template v-if="showAllComments">コメントを全て表示する</template>
@@ -87,5 +95,9 @@ defineExpose({ getComments });
 <style lang="scss" scoped>
 .comment_section__body {
   display: none;
+}
+
+.comment__toggle {
+  cursor: pointer;
 }
 </style>

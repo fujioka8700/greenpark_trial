@@ -1,17 +1,13 @@
 <template>
   <v-row>
-    <v-col v-for="color in plantColors" :key="color" cols="12" sm="4">
+    <v-col v-for="(color, index) in plantColors" :key="index" cols="12" sm="4">
       <v-card
         class="mx-auto"
         max-width="344"
         link
         @click="chooseFlowerColor(color)"
       >
-        <v-img
-          src="https://lovegreen.net/wp-content/uploads/2020/12/c8c593c9d3528f2d0e0803a375d0bfc7.jpg"
-          max-height="130"
-          cover
-        ></v-img>
+        <v-img :src="plantColorImages[index]" max-height="130" cover></v-img>
 
         <v-card-title class="text-body-1 text-center">{{ color }}</v-card-title>
       </v-card>
@@ -21,6 +17,7 @@
 
 <script setup>
 import { plantColors } from "../../util";
+import { plantColorImages } from "../../util";
 import { inject } from "vue";
 
 const changeColorResults = inject("changeColorResults");
