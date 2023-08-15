@@ -1,3 +1,5 @@
 *
+!design/
+!design/*
 !images/
 !.gitignore

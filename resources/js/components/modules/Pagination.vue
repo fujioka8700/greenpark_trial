@@ -3,14 +3,18 @@
     <v-pagination
       v-model="page"
       :length="lastPage"
+      :density="toggleDensity"
       rounded="circle"
       @click="navBtnClick"
     ></v-pagination>
   </div>
+  <!-- pageUpdate は何も表示しない -->
+  <!-- 算出プロパティで、現在ページを更新するために使用 -->
+  {{ pageUpdate }}
 </template>
 
 <script setup>
-import { ref, inject } from "vue";
+import { ref, inject, computed, onMounted } from "vue";
 
 const updateListDisplay = inject("updateListDisplay");
 
@@ -29,7 +33,35 @@ const props = defineProps({
 });
 
 /** @type {Number} 現在のページ*/
-const page = ref(props.currentPage);
+const page = ref();
+
+/** @type {Boolean} モバイルとPC切り替え */
+const mobileView = ref(true);
+
+/** @type {Number} ディスプレイの横幅 */
+const windowWidth = ref(0);
+
+// ページネーションの、現在ページ更新に使用
+const pageUpdate = computed({
+  get() {
+    page.value = props.currentPage;
+    return;
+  },
+});
+
+/** @type {String} ページネーションのサイズを切り替える */
+const toggleDensity = computed(() => {
+  return mobileView.value === true ? "comfortable" : "default";
+});
+
+/**
+ * ディスプレイの横幅で、モバイルとPC切り替える
+ */
+const calculateWindowWidth = () => {
+  windowWidth.value = window.innerWidth;
+
+  mobileView.value = windowWidth.value < 600;
+};
 
 /**
  * ナビボタンのいずれかを押すと、
@@ -73,6 +105,11 @@ const navBtnClick = async () => {
 
   moveToTop();
 };
+
+onMounted(() => {
+  // resizeイベントでウィンドウサイズ変更を検知する
+  window.addEventListener("resize", calculateWindowWidth);
+});
 </script>
 
 <style lang="scss" scoped></style>

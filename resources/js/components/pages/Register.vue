@@ -27,8 +27,8 @@
             会員に登録すると、下記のサービスの機能がご利用になれます。
           </v-card-text>
 
-          <v-card-text class="text-h5 text-center font-weight-bold">
-            植物図鑑
+          <v-card-text class="text-h4 text-center font-weight-bold logo">
+            GreenPark
           </v-card-text>
         </v-card-item>
 

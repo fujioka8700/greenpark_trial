@@ -7,7 +7,7 @@
         </v-avatar>
       </v-img>
 
-      <v-card-title class="text-center">{{ user.name }}&nbsp;様</v-card-title>
+      <v-card-title class="text-center">{{ user.name }}</v-card-title>
 
       <v-card-text class="text-center">
         <v-icon icon="mdi-email"></v-icon>&nbsp;{{ user.email }}
