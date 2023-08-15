@@ -11,7 +11,7 @@ class CommentController extends Controller
 {
   public function __construct()
   {
-    $this->middleware('auth')->only(['store']);
+    $this->middleware('auth')->only(['store', 'destroy']);
   }
 
   /**
@@ -57,10 +57,14 @@ class CommentController extends Controller
   }
 
   /**
-   * Remove the specified resource from storage.
+   * コメントを1つ削除する。
+   * @param string $id 削除するコメントのid
+   * @return \Illuminate\Http\JsonResponse
    */
-  public function destroy(string $id)
+  public function destroy(string $id): JsonResponse
   {
-    //
+    $deleteResult = Comment::destroy($id);
+
+    return response()->json($deleteResult, Response::HTTP_OK);
   }
 }
