@@ -44,7 +44,7 @@
                 v-for="(place, index) in plantInfo.places"
                 :key="place.id"
               >
-                {{ place.name }}
+                <FlowerPlaceSearch :place="place.name" />
                 <span v-if="index < plantInfo.places.length - 1"> 、</span>
               </template>
             </td>
@@ -77,6 +77,7 @@
 </template>
 
 <script setup>
+import FlowerPlaceSearch from "./FlowerPlaceSearch.vue";
 import FlowerColorSearch from "./FlowerColorSearch.vue";
 import ThumbUp from "./ThumbUp.vue";
 import UpdateButton from "./UpdateButton.vue";
