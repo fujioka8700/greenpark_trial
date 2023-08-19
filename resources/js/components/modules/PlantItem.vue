@@ -25,13 +25,7 @@
                 v-for="(color, index) in plantInfo.colors"
                 :key="color.id"
               >
-                <a
-                  href="javaScript:void(0)"
-                  class="text-decoration-underline"
-                  @click.stop="chooseFlowerColor(color.name)"
-                >
-                  {{ color.name }}
-                </a>
+                <FlowerColorSearch :color="color.name" />
                 <span v-if="index < plantInfo.colors.length - 1"> 、</span>
               </template>
             </td>
@@ -83,6 +77,7 @@
 </template>
 
 <script setup>
+import FlowerColorSearch from "./FlowerColorSearch.vue";
 import ThumbUp from "./ThumbUp.vue";
 import UpdateButton from "./UpdateButton.vue";
 import DestroyButton from "./DestroyButton.vue";
@@ -90,15 +85,13 @@ import CommentField from "./CommentField.vue";
 import WriteComments from "./WriteComments.vue";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { useStoreAuth } from "../../store/auth";
-import { watch, onMounted, ref, inject } from "vue";
+import { watch, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
 
 const auth = useStoreAuth();
-
-const changeColorResults = inject("changeColorResults");
 
 const breadCrumbs = useStoreBreadCrumbs();
 const { addToBreadcrumbs } = breadCrumbs;
@@ -113,36 +106,6 @@ const plantInfo = ref({});
 
 /** @type {Object} 非親子間で、メソッドを実行用 */
 const writeComments = ref();
-
-/**
- * 選択した色から、植物一覧のデータを受け取る
- * @param {Array} colors
- */
-const getFlowerColorList = (colors) => {
-  axios
-    .get("/api/plants/search-colors", {
-      params: {
-        colors,
-      },
-    })
-    .then((result) => {
-      changeColorResults(result.data, colors);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-
-/**
- * 花の色から、色を選択する
- * @param {String} color
- */
-const chooseFlowerColor = (color) => {
-  const colors = [];
-  colors.push(color);
-
-  getFlowerColorList(colors);
-};
 
 /**
  * 植物が存在しなければ、NotFoundページへ遷移する
