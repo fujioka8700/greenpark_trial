@@ -129,12 +129,29 @@ const updatePlantListByColor = (colors) => {
     });
 };
 
+/**
+ * 生えている場所を、配列に変換し
+ * laravel で検索できるようにする
+ * @param {String | Array} places 生えている場所
+ * @return {Array}
+ */
+const checkOnePlace = (places) => {
+  if (typeof places === "string") {
+    const newPlaces = [];
+    newPlaces.push(places);
+
+    places = newPlaces;
+  }
+
+  return places;
+};
+
 onMounted(() => {
   //  植物一覧で、ブラウザをリロードした時の処理
   if (searchResults.value.data === undefined) {
     // 「生えている場所」を選択していた時
     if (route.query.hasOwnProperty("places")) {
-      const places = route.query.places;
+      const places = checkOnePlace(route.query.places);
 
       updatePlantListByLocation(places);
     }
