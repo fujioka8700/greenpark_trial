@@ -26,7 +26,7 @@
               link
               @click.stop.prevent="createSearchPlaces(placeLink[0])"
             >
-              <v-img :src="placeLink[1]" max-height="130" cover></v-img>
+              <v-img :src="placeLink[1]" max-height="120" cover></v-img>
 
               <v-card-title class="text-body-1 text-center">
                 {{ placeLink[0] }}

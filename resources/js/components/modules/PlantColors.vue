@@ -7,7 +7,7 @@
         link
         @click="chooseFlowerColor(color)"
       >
-        <v-img :src="plantColorImages[index]" max-height="130" cover></v-img>
+        <v-img :src="plantColorImages[index]" max-height="120" cover></v-img>
 
         <v-card-title class="text-body-1 text-center">{{ color }}</v-card-title>
       </v-card>

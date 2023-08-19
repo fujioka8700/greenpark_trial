@@ -25,7 +25,13 @@
                 v-for="(color, index) in plantInfo.colors"
                 :key="color.id"
               >
-                {{ color.name }}
+                <a
+                  href="javaScript:void(0)"
+                  class="text-decoration-underline"
+                  @click.stop="chooseFlowerColor(color.name)"
+                >
+                  {{ color.name }}
+                </a>
                 <span v-if="index < plantInfo.colors.length - 1"> 、</span>
               </template>
             </td>
@@ -84,13 +90,15 @@ import CommentField from "./CommentField.vue";
 import WriteComments from "./WriteComments.vue";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { useStoreAuth } from "../../store/auth";
-import { watch, onMounted, ref } from "vue";
+import { watch, onMounted, ref, inject } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
 
 const auth = useStoreAuth();
+
+const changeColorResults = inject("changeColorResults");
 
 const breadCrumbs = useStoreBreadCrumbs();
 const { addToBreadcrumbs } = breadCrumbs;
@@ -105,6 +113,36 @@ const plantInfo = ref({});
 
 /** @type {Object} 非親子間で、メソッドを実行用 */
 const writeComments = ref();
+
+/**
+ * 選択した色から、植物一覧のデータを受け取る
+ * @param {Array} colors
+ */
+const getFlowerColorList = (colors) => {
+  axios
+    .get("/api/plants/search-colors", {
+      params: {
+        colors,
+      },
+    })
+    .then((result) => {
+      changeColorResults(result.data, colors);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+/**
+ * 花の色から、色を選択する
+ * @param {String} color
+ */
+const chooseFlowerColor = (color) => {
+  const colors = [];
+  colors.push(color);
+
+  getFlowerColorList(colors);
+};
 
 /**
  * 植物が存在しなければ、NotFoundページへ遷移する
@@ -152,6 +190,12 @@ watch(route, async () => {
     await getPlant(plantId);
 
     addToBreadcrumbs(plantInfo.value.name);
+  }
+
+  // PlantItem から、花の色を選択した時、
+  // パンくずリストの最後を、「検索結果」にする
+  if (route.path === "/plants/search") {
+    addToBreadcrumbs("検索結果");
   }
 });
 
