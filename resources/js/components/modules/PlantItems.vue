@@ -1,6 +1,10 @@
 <template>
   <h4>検索結果</h4>
 
+  <SearchResults
+    :total="Number(searchResults.total)"
+    :currentPage="Number(searchResults.current_page)"
+  />
   <ul>
     <li
       class="my-3"
@@ -41,6 +45,7 @@
 </template>
 
 <script setup>
+import SearchResults from "./SearchResults.vue";
 import Pagination from "./Pagination.vue";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { onMounted, inject, computed } from "vue";
