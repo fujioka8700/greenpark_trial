@@ -2,7 +2,7 @@
   <v-card flat>
     <v-tabs
       v-model="tab"
-      color="deep-purple-accent-4"
+      color="blue-darken-1"
       bg-color="grey-lighten-4"
       fixed-tabs
       align-tabs="center"
