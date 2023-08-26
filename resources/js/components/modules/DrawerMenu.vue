@@ -2,6 +2,7 @@
   <div>
     <v-navigation-drawer v-model="drawer" location="right" temporary>
       <v-list>
+        <!-- メインコンテンツ、始まり -->
         <v-list-item
           v-for="(item, index) in menuList"
           :key="index"
@@ -19,13 +20,34 @@
             <v-list-item-title v-text="item.title"></v-list-item-title>
           </template>
         </v-list-item>
+        <!-- メインコンテンツ、終わり -->
+
+        <!-- 補足情報、始まり -->
+        <v-list-item
+          variant="tonal"
+          v-for="(link, index) in links"
+          :key="index"
+          @click.stop="movePage(link.dest)"
+          link
+        >
+          <template v-slot:prepend>
+            <v-icon :icon="link.icon"></v-icon>
+          </template>
+          <v-list-item-title v-text="link.title"></v-list-item-title>
+        </v-list-item>
+        <!-- 補足情報、終わり -->
       </v-list>
+
+      <!-- Copyright -->
+      <p class="text-caption drawer_menu_copyright">
+        &copy; {{ new Date().getFullYear() }} GreenPark
+      </p>
     </v-navigation-drawer>
   </div>
 </template>
 
 <script setup>
-import { menuItems } from "../../util";
+import { menuItems, links } from "../../util";
 import { useStoreAuth } from "../../store/auth";
 import { storeToRefs } from "pinia";
 import { ref, computed } from "vue";
@@ -84,6 +106,15 @@ const movePage = (dest) => {
     case "about":
       router.push({ name: "About" });
       break;
+    case "information":
+      router.push({ name: "Information" });
+      break;
+    case "rules":
+      router.push({ name: "Rules" });
+      break;
+    case "privacy":
+      router.push({ name: "Privacy" });
+      break;
     default:
       break;
   }
@@ -96,4 +127,11 @@ defineExpose({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.drawer_menu_copyright {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+}
+</style>

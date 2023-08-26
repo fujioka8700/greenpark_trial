@@ -56,14 +56,29 @@ const router = createRouter({
       },
     },
     {
+      path: "/info",
+      name: "Information",
+      component: () => import("../components/pages/Information.vue"),
+    },
+    {
       path: "/login",
       name: "Login",
       component: () => import("../components/pages/Login.vue"),
     },
     {
+      path: "/privacy",
+      name: "Privacy",
+      component: () => import("../components/pages/Privacy.vue"),
+    },
+    {
       path: "/register",
       name: "Register",
       component: () => import("../components/pages/Register.vue"),
+    },
+    {
+      path: "/rules",
+      name: "Rules",
+      component: () => import("../components/pages/Rules.vue"),
     },
     {
       path: "/sample",
