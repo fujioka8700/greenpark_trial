@@ -94,11 +94,10 @@ export const menuItems = [
 
 /** @type {Array{}} 補足情報へのリンク */
 export const links = [
-  { title: "GreenParkとは", dest: "information", icon: "mdi-menu-right" },
   {
     title: "ご利用にあたって",
     dest: "rules",
     icon: "mdi-menu-right",
   },
-  { title: "お問い合わせ", dest: "privacy", icon: "mdi-menu-right" },
+  { title: "お問い合わせ", dest: "contact", icon: "mdi-menu-right" },
 ];

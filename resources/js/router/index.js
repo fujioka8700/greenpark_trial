@@ -56,6 +56,11 @@ const router = createRouter({
       },
     },
     {
+      path: "/contact",
+      name: "Contact",
+      component: () => import("../components/pages/Contact.vue"),
+    },
+    {
       path: "/info",
       name: "Information",
       component: () => import("../components/pages/Information.vue"),
@@ -64,11 +69,6 @@ const router = createRouter({
       path: "/login",
       name: "Login",
       component: () => import("../components/pages/Login.vue"),
-    },
-    {
-      path: "/privacy",
-      name: "Privacy",
-      component: () => import("../components/pages/Privacy.vue"),
     },
     {
       path: "/register",
