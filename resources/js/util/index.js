@@ -95,7 +95,7 @@ export const menuItems = [
 /** @type {Array{}} 補足情報へのリンク */
 export const links = [
   {
-    title: "ご利用にあたって",
+    title: "ご利用規則",
     dest: "rules",
     icon: "mdi-menu-right",
   },
