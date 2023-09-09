@@ -17,6 +17,6 @@ class ContactController extends Controller
       'body' => $request->body,
     ];
 
-    \Mail::to('admin@example.com')->send(new Contacted($params));
+    \Mail::to(config('mail.admin'))->send(new Contacted($params));
   }
 }
