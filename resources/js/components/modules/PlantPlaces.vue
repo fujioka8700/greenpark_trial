@@ -10,7 +10,7 @@
       <v-tab value="one">生えている場所</v-tab>
       <v-tab value="two">花の色</v-tab>
     </v-tabs>
-    <v-window v-model="tab" class="py-5">
+    <v-window v-model="tab" class="py-5 px-1">
       <v-window-item value="one">
         <!-- 「生えている場所」タブのコンテンツ、始まり -->
         <v-row>
