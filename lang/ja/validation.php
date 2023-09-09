@@ -167,6 +167,7 @@ return [
     'description' => '説明',
     'colors' => '花の色',
     'places' => 'よく生えている場所',
+    'comment' => 'コメント',
   ],
 
 ];
