@@ -25,8 +25,9 @@
           </v-col>
 
           <v-col cols="12" sm="4">
-            <p class="pt-4 pb-2 text-center text-h6">注目の植物たち</p>
-            <v-divider thickness="3" />
+            <p class="pt-4 pb-2 text-center text-h6 attention-text">
+              注目の植物たち
+            </p>
             <Recommend />
           </v-col>
         </v-row>
@@ -120,4 +121,16 @@ const searchPlants = () => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.attention-text {
+  position: relative;
+  padding: 0.25em 0;
+}
+.attention-text:after {
+  content: "";
+  display: block;
+  height: 3px;
+  background: -webkit-linear-gradient(to right, #66bb6a, #dce775);
+  background: linear-gradient(to right, #66bb6a, #dce775);
+}
+</style>
