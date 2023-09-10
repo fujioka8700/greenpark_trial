@@ -32,31 +32,31 @@ export const plantColors = [
 /** @type {Array} 「花の色」タブの花の画像 */
 export const plantColorImages = [
   // 白
-  "https://i.pinimg.com/1200x/9e/4d/b4/9e4db4faaf54b5ac51bd49603cd39a39.jpg",
+  "storage/design/top/colors/daisies.jpg",
 
   // 黄
-  "https://www.medicalherb.or.jp/wp-content/uploads/2021/09/aramanda.jpg",
+  "storage/design/top/colors/oxalis.jpg",
 
   // 橙
-  "https://lovegreen.net/wp-content/uploads/2020/07/1d7640780a73fe25f729cab5255e40c1.jpg",
+  "storage/design/top/colors/dahlia.jpg",
 
   // ピンク
-  "https://yayoi-blog.info/wp-content/uploads/2017/08/tyu-rippunokisetu.jpg",
+  "storage/design/top/colors/tulip.jpg",
 
   // 赤
-  "https://d2v9opmik2a3uk.cloudfront.net/uploads/2015/07/08171806/506ba69fba298ea9504f96f147c72c27.jpg",
+  "storage/design/top/colors/rose.jpg",
 
   // 青
-  "https://storage.minhana.net/wikidata/A1332/picture_users/A1332_picture_users.jpg",
+  "storage/design/top/colors/nemophila.jpg",
 
   // 紫
-  "https://d3pbyuzcd27kd.cloudfront.net/wp-content/uploads/sites/8/2020/02/05143857/ac78eebd9cbed6ca48cdc10dd3e5acab-e1631499860618.jpg",
+  "storage/design/top/colors/pansy.jpg",
 
   // 緑
-  "https://bluegreen.jp/wp-content/uploads/2020/06/IMG_5179-1024x683.jpg",
+  "storage/design/top/colors/hydrangea.jpg",
 
   // その他
-  "https://lovegreen.net/wp-content/uploads/2022/05/3505241_s.jpg",
+  "storage/design/top/colors/black_lily.jpg",
 ];
 
 /** @type {Array{}} メニューから遷移するページ */
