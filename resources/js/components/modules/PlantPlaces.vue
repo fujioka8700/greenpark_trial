@@ -2,7 +2,7 @@
   <v-card flat>
     <v-tabs
       v-model="tab"
-      color="deep-purple-accent-4"
+      color="blue-darken-1"
       bg-color="grey-lighten-4"
       fixed-tabs
       align-tabs="center"
@@ -10,7 +10,7 @@
       <v-tab value="one">生えている場所</v-tab>
       <v-tab value="two">花の色</v-tab>
     </v-tabs>
-    <v-window v-model="tab" class="py-5">
+    <v-window v-model="tab" class="py-5 px-1">
       <v-window-item value="one">
         <!-- 「生えている場所」タブのコンテンツ、始まり -->
         <v-row>
@@ -26,7 +26,7 @@
               link
               @click.stop.prevent="createSearchPlaces(placeLink[0])"
             >
-              <v-img :src="placeLink[1]" max-height="130" cover></v-img>
+              <v-img :src="placeLink[1]" max-height="120" cover></v-img>
 
               <v-card-title class="text-body-1 text-center">
                 {{ placeLink[0] }}

@@ -54,6 +54,9 @@ Route::group(['prefix' => 'plants', 'as' => 'plants.'], function () {
   Route::post('{plant}/unlike', [LikeController::class, 'destroy'])->name('like.destroy');
 });
 
+// お問い合わせメール送信
+Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'send'])->name('mail.send');
+
 Route::apiResource('plants', PlantController::class, ['except' => ['index']]);
 Route::apiResource('colors', \App\Http\Controllers\ColorController::class, ['only' => ['index']]);
 Route::apiResource('places', \App\Http\Controllers\PlaceController::class, ['only' => ['index']]);

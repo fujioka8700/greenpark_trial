@@ -2,15 +2,18 @@
   <div v-if="!!user">
     <v-form @submit.prevent="sendButton">
       <v-text-field
-        v-model="comment"
+        v-model="state.comment"
         prepend-inner-icon="mdi-pencil"
         variant="underlined"
         clearable
+        :error-messages="v$.comment.$errors.map((e) => e.$message)"
+        @input="v$.comment.$touch"
+        @blur="v$.comment.$touch"
       ></v-text-field>
       <div class="text-right mb-5">
         <v-btn
           type="submit"
-          :disabled="!comment"
+          :disabled="!state.comment || state.comment.length > 255"
           color="blue-lighten-1"
           rounded="xl"
           >コメント</v-btn
@@ -24,9 +27,12 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { reactive } from "vue";
 import { useStoreAuth } from "../../store/auth";
 import { storeToRefs } from "pinia";
+import { maxLengthMessage } from "../../plugin/validatorMessage";
+import { useVuelidate } from "@vuelidate/core";
+import { helpers, maxLength } from "@vuelidate/validators";
 
 const auth = useStoreAuth();
 const { user } = storeToRefs(auth);
@@ -40,8 +46,25 @@ const props = defineProps({
   },
 });
 
-/** @type {string} 送信する前のコメント */
-const comment = ref("");
+/* start of vuelidate  */
+
+const initialState = {
+  comment: "",
+};
+
+const state = reactive({
+  ...initialState,
+});
+
+const validations = {
+  comment: {
+    maxLength: helpers.withMessage(maxLengthMessage("255"), maxLength(255)),
+  },
+};
+
+const v$ = useVuelidate(validations, state);
+
+/* end of vuelidate  */
 
 /**
  * コメントを送信する。
@@ -54,7 +77,7 @@ const sendButton = () => {
     .post("/api/comments", {
       user_id: user.value.id,
       plant_id: props.plantId,
-      comment: comment.value,
+      comment: state.comment,
     })
     .then((result) => {
       emit("isNotification", result.data.plant_id);
@@ -66,7 +89,7 @@ const sendButton = () => {
     });
 
   // 入力していたコメントを消す
-  comment.value = "";
+  state.comment = "";
 };
 </script>
 

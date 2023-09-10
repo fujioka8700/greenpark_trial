@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Http\Requests\CommentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,10 +31,10 @@ class CommentController extends Controller
 
   /**
    * コメントを1つ書き込む。
-   * @param \Illuminate\Http\Request $request
+   * @param \App\Http\Requests\CommentRequest $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function store(Request $request): JsonResponse
+  public function store(CommentRequest $request): JsonResponse
   {
     $comment = Comment::create($request->input());
 

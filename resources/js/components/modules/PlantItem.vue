@@ -25,7 +25,7 @@
                 v-for="(color, index) in plantInfo.colors"
                 :key="color.id"
               >
-                {{ color.name }}
+                <FlowerColorSearch :color="color.name" />
                 <span v-if="index < plantInfo.colors.length - 1"> 、</span>
               </template>
             </td>
@@ -44,7 +44,7 @@
                 v-for="(place, index) in plantInfo.places"
                 :key="place.id"
               >
-                {{ place.name }}
+                <FlowerPlaceSearch :place="place.name" />
                 <span v-if="index < plantInfo.places.length - 1"> 、</span>
               </template>
             </td>
@@ -77,6 +77,8 @@
 </template>
 
 <script setup>
+import FlowerPlaceSearch from "./FlowerPlaceSearch.vue";
+import FlowerColorSearch from "./FlowerColorSearch.vue";
 import ThumbUp from "./ThumbUp.vue";
 import UpdateButton from "./UpdateButton.vue";
 import DestroyButton from "./DestroyButton.vue";
@@ -152,6 +154,12 @@ watch(route, async () => {
     await getPlant(plantId);
 
     addToBreadcrumbs(plantInfo.value.name);
+  }
+
+  // PlantItem から、花の色を選択した時、
+  // パンくずリストの最後を、「検索結果」にする
+  if (route.path === "/plants/search") {
+    addToBreadcrumbs("検索結果");
   }
 });
 
