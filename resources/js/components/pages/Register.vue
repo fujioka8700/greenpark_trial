@@ -14,84 +14,82 @@
       </v-card>
     </div>
 
-    <v-sheet color="grey-lighten-3" class="mx-auto pa-2" max-width="650">
-      <v-card class="mx-auto pa-6" max-width="634">
-        <v-card-item class="pt-0">
-          <v-card-title class="font-weight-bold text-center">
-            会員登録
-          </v-card-title>
+    <v-card class="mx-auto pa-6 mb-10" max-width="634" border>
+      <v-card-item class="pt-0">
+        <v-card-title class="font-weight-bold text-center">
+          会員登録
+        </v-card-title>
 
-          <v-card-subtitle class="pt-3">初めてご利用になる方</v-card-subtitle>
+        <v-card-subtitle class="pt-3">初めてご利用になる方</v-card-subtitle>
 
-          <v-card-text>
-            会員に登録すると、下記のサービスの機能がご利用になれます。
-          </v-card-text>
+        <v-card-text>
+          会員に登録すると、下記のサービスの機能がご利用になれます。
+        </v-card-text>
 
-          <v-card-text class="text-h4 text-center font-weight-bold logo">
-            GreenPark
-          </v-card-text>
-        </v-card-item>
+        <v-card-text class="text-h4 text-center font-weight-bold logo">
+          GreenPark
+        </v-card-text>
+      </v-card-item>
 
-        <v-divider class="mb-5"></v-divider>
+      <v-divider class="mb-5"></v-divider>
 
-        <v-sheet class="mx-auto pa-2" max-width="344">
-          <v-form v-model="form" @submit.prevent="onSubmit">
-            <v-text-field
-              v-model="name"
-              type="text"
-              label="名前"
-              :readonly="loading"
-              :rules="[required]"
-              :error="errors.name"
-              :error-messages="errorMessages.name"
-              clearable
-              @keydown="clearError('name')"
-            ></v-text-field>
-            <v-text-field
-              v-model="email"
-              type="email"
-              label="メールアドレス"
-              :readonly="loading"
-              :rules="[required]"
-              :error="errors.email"
-              :error-messages="errorMessages.email"
-              @keydown="clearError('email')"
-              clearable
-            ></v-text-field>
-            <v-text-field
-              v-model="pass"
-              type="password"
-              label="パスワード"
-              :readonly="loading"
-              :rules="[required]"
-              :error="errors.password"
-              :error-messages="errorMessages.password"
-              clearable
-              @keydown="clearError('password')"
-            ></v-text-field>
-            <v-text-field
-              v-model="pass2"
-              type="password"
-              label="パスワード(確認)"
-              :readonly="loading"
-              :rules="[required, pwdConfirm]"
-              clearable
-            ></v-text-field>
-            <v-btn
-              :disabled="!form"
-              :loading="loading"
-              block
-              color="success"
-              size="large"
-              type="submit"
-              variant="elevated"
-            >
-              会員登録する
-            </v-btn>
-          </v-form>
-        </v-sheet>
-      </v-card>
-    </v-sheet>
+      <v-sheet class="mx-auto pa-2" max-width="344">
+        <v-form v-model="form" @submit.prevent="onSubmit">
+          <v-text-field
+            v-model="name"
+            type="text"
+            label="名前"
+            :readonly="loading"
+            :rules="[required]"
+            :error="errors.name"
+            :error-messages="errorMessages.name"
+            clearable
+            @keydown="clearError('name')"
+          ></v-text-field>
+          <v-text-field
+            v-model="email"
+            type="email"
+            label="メールアドレス"
+            :readonly="loading"
+            :rules="[required]"
+            :error="errors.email"
+            :error-messages="errorMessages.email"
+            @keydown="clearError('email')"
+            clearable
+          ></v-text-field>
+          <v-text-field
+            v-model="pass"
+            type="password"
+            label="パスワード"
+            :readonly="loading"
+            :rules="[required]"
+            :error="errors.password"
+            :error-messages="errorMessages.password"
+            clearable
+            @keydown="clearError('password')"
+          ></v-text-field>
+          <v-text-field
+            v-model="pass2"
+            type="password"
+            label="パスワード(確認)"
+            :readonly="loading"
+            :rules="[required, pwdConfirm]"
+            clearable
+          ></v-text-field>
+          <v-btn
+            :disabled="!form"
+            :loading="loading"
+            block
+            color="success"
+            size="large"
+            type="submit"
+            variant="elevated"
+          >
+            会員登録する
+          </v-btn>
+        </v-form>
+      </v-sheet>
+    </v-card>
   </div>
 </template>
 

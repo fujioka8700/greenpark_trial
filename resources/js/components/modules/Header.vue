@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar :elevation="2" color="success" density="compact">
+  <v-app-bar :elevation="2" color="success" density="compact" height="80">
     <v-container class="d-flex align-center">
       <v-app-bar-title>
         <RouterLink
@@ -7,8 +7,17 @@
           :to="{ name: 'PlantPlaces' }"
         >
           <div class="d-flex align-center">
-            <img src="storage/design/logo.png" class="p-header-img" />
-            <h1 class="text-h4 pl-2 logo">GreenPark</h1>
+            <div>
+              <img src="storage/design/logo.png" class="p-header-img" />
+            </div>
+            <div>
+              <div class="text-caption pl-2 logo-text__lead">
+                場所から探す植物図鑑
+              </div>
+              <div>
+                <h1 class="text-h4 pl-2 logo logo-text">GreenPark</h1>
+              </div>
+            </div>
           </div>
         </RouterLink>
       </v-app-bar-title>
@@ -46,12 +55,23 @@ const toggleDrawer = () => {
 </script>
 
 <style lang="scss" scoped>
-$logo-size: 38px;
+$logo-size: 43px;
+$line-height: 1em;
+$letter-spacing: 0.1em;
 
 .v-application {
   .p-header {
     &-img {
       width: $logo-size;
+    }
+  }
+
+  .logo-text {
+    line-height: $line-height;
+
+    &__lead {
+      line-height: $line-height;
+      letter-spacing: $letter-spacing !important;
     }
   }
 }

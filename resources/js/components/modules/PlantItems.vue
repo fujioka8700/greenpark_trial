@@ -1,6 +1,10 @@
 <template>
   <h4>検索結果</h4>
 
+  <SearchResults
+    :total="Number(searchResults.total)"
+    :currentPage="Number(searchResults.current_page)"
+  />
   <ul>
     <li
       class="my-3"
@@ -41,6 +45,7 @@
 </template>
 
 <script setup>
+import SearchResults from "./SearchResults.vue";
 import Pagination from "./Pagination.vue";
 import { useStoreBreadCrumbs } from "../../store/breadCrumbs";
 import { onMounted, inject, computed } from "vue";
@@ -129,12 +134,29 @@ const updatePlantListByColor = (colors) => {
     });
 };
 
+/**
+ * 生えている場所を、配列に変換し
+ * laravel で検索できるようにする
+ * @param {String | Array} places 生えている場所
+ * @return {Array}
+ */
+const checkOnePlace = (places) => {
+  if (typeof places === "string") {
+    const newPlaces = [];
+    newPlaces.push(places);
+
+    places = newPlaces;
+  }
+
+  return places;
+};
+
 onMounted(() => {
   //  植物一覧で、ブラウザをリロードした時の処理
   if (searchResults.value.data === undefined) {
     // 「生えている場所」を選択していた時
     if (route.query.hasOwnProperty("places")) {
-      const places = route.query.places;
+      const places = checkOnePlace(route.query.places);
 
       updatePlantListByLocation(places);
     }
