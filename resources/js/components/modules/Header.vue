@@ -8,7 +8,7 @@
         >
           <div class="d-flex align-center">
             <div>
-              <img src="storage/design/logo.png" class="p-header-img" />
+              <img src="/storage/design/logo.png" class="p-header-img" />
             </div>
             <div>
               <div class="text-caption pl-2 logo-text__lead">
@@ -59,13 +59,11 @@ $logo-size: 43px;
 $line-height: 1em;
 $letter-spacing: 0.1em;
 
-.v-application {
-  .p-header {
-    &-img {
-      width: $logo-size;
-    }
-  }
+.p-header-img {
+  width: $logo-size;
+}
 
+.v-application {
   .logo-text {
     line-height: $line-height;
 
