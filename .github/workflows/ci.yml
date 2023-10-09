@@ -45,5 +45,5 @@ jobs:
 
       - name: Create Database
         run: |
-          mkdir database
+          mkdir -p database
           touch database/database.sqlite
