@@ -1,0 +1,12 @@
+name: greenpark's CD
+run-name: ${{ github.actor }} is CD work
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  app-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
