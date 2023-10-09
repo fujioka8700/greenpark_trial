@@ -1,0 +1,11 @@
+name: greenpark's CI
+run-name: ${{ github.actor }} is CI work
+on: [push]
+
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "Start CI work"
