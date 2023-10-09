@@ -10,3 +10,7 @@ jobs:
   app-deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
+  steps:
+    - name: Preparing for deployment!
+      run: echo "Preparing for deployment!"
