@@ -1,6 +1,9 @@
 name: greenpark's CI
 run-name: ${{ github.actor }} is CI work
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - "*.md"
 
 jobs:
   check-bats-version:
