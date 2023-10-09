@@ -1,5 +1,5 @@
 name: greenpark's CI
-run-name: ${{ github.actor }} is CI work.
+run-name: ${{ github.actor }} is CI work
 
 on:
   push:
