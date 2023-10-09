@@ -1,12 +1,13 @@
 name: greenpark's CI
 run-name: ${{ github.actor }} is CI work
+
 on:
   push:
     paths-ignore:
       - "*.md"
 
 jobs:
-  check-bats-version:
+  laravel-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
